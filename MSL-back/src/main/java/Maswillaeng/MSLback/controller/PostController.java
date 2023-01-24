@@ -6,9 +6,7 @@ import Maswillaeng.MSLback.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PostController {
@@ -20,5 +18,10 @@ public class PostController {
     public ResponseEntity createPost(@RequestBody PostSaveRequestDto post, @TokenRequest String userToken) {
         postService.save(post, userToken);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/posts")
+    public ResponseEntity getPosts(@RequestParam(value = "page") int page) {
+        return ResponseEntity.ok().body(postService.getPosts(page));
     }
 }
