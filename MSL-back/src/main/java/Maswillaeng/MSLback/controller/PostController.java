@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class PostController {
 
-    @Autowired
-    private PostService postService;
+   @Autowired
+   private PostService postService;
 
     @PostMapping("/post")
     public ResponseEntity createPost(@RequestBody PostSaveRequestDto post, @TokenRequest String userToken) {
@@ -36,8 +36,8 @@ public class PostController {
         return ResponseEntity.ok().body(postService.updatedPost((long) postId, userToken,requestDto));
     }
 
-    @DeleteMapping("post/{postId)")
-    public ResponseEntity deletePost(@PathVariable int postId,@TokenRequest String userToken) throws Exception {
+    @DeleteMapping("post")
+    public ResponseEntity deletePost(@RequestParam(value = "id") int postId,@TokenRequest String userToken) throws Exception {
         postService.deletePost((long) postId,userToken);
         return ResponseEntity.ok().build();
     }
