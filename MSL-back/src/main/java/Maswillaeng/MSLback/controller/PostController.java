@@ -24,4 +24,9 @@ public class PostController {
     public ResponseEntity getPosts(@RequestParam(value = "page") int page) {
         return ResponseEntity.ok().body(postService.getPosts(page));
     }
+
+    @GetMapping("/post/{postId}")
+    public ResponseEntity getPost(@PathVariable int postId) throws Exception {
+        return ResponseEntity.ok().body(postService.getPost((long) postId));
+    }
 }

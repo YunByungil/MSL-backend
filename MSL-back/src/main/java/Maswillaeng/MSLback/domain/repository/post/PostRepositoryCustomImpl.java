@@ -25,7 +25,6 @@ public class PostRepositoryCustomImpl extends QuerydslRepositorySupport implemen
     @Override
     public List<Post> postList(int page) {
         List<Post> list = jpaQueryFactory
-                //.select(post)
                 .selectFrom(post)
                 .join(post.user,user).fetchJoin()
                 .orderBy(post.createdAt.desc())

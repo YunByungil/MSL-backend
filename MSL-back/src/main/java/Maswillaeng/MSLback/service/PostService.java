@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,5 +42,15 @@ public class PostService {
         List<PostResponseDto> postList = posts.stream().map(p -> new PostResponseDto(p.getPostId(), p.getUser().getNickName(), p.getTitle(), p.getThumbNail(), p.getModifiedAt())).collect(Collectors.toList());
         int totalCount = (int) postRepository.count();
         return new PostListResponseDto(totalCount, postList);
+    }
+
+    public PostResponseDto getPost(Long postId) throws Exception {
+        Optional<Post> selectedPost = Optional.ofNullable(postRepository.getPost(postId));
+
+        if (selectedPost.isPresent()) {
+            Post p = selectedPost.get();
+            return new PostResponseDto(p.getPostId(), p.getUser().getNickName(), p.getTitle(), p.getContent(), p.getContent(), p.getModifiedAt());
+        } else
+            throw new Exception("게시글이 존재하지 않습니다");
     }
 }
