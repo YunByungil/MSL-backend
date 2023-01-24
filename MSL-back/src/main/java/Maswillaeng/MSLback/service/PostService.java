@@ -6,7 +6,9 @@ import Maswillaeng.MSLback.domain.repository.post.PostRepository;
 import Maswillaeng.MSLback.domain.repository.user.UserRepository;
 import Maswillaeng.MSLback.dto.post.reponse.PostListResponseDto;
 import Maswillaeng.MSLback.dto.post.reponse.PostResponseDto;
+import Maswillaeng.MSLback.dto.post.reponse.PostUpdateResponseDto;
 import Maswillaeng.MSLback.dto.post.request.PostSaveRequestDto;
+import Maswillaeng.MSLback.dto.post.request.PostUpdateRequestDto;
 import Maswillaeng.MSLback.jwt.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +54,21 @@ public class PostService {
             return new PostResponseDto(p.getPostId(), p.getUser().getNickName(), p.getTitle(), p.getContent(), p.getContent(), p.getModifiedAt());
         } else
             throw new Exception("게시글이 존재하지 않습니다");
+    }
+
+    @Transactional
+    public PostUpdateResponseDto updatedPost(Long postId, String userToken, PostUpdateRequestDto requestDto) throws Exception {
+        Claims userClaims = jwtTokenProvider.getAccessClaims(userToken);
+        Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
+
+        Post selectedPost = postRepository.findById(postId).get();
+
+        if (selectedPost.getUser().getUser_id()==(userId)) {
+            selectedPost.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getThumbNail());
+            Post updatedPost = postRepository.save(selectedPost);
+            return new PostUpdateResponseDto(updatedPost);
+        } else {
+            throw new Exception("접근 권한 없음");
+        }
     }
 }

@@ -1,6 +1,7 @@
 package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.dto.post.request.PostSaveRequestDto;
+import Maswillaeng.MSLback.dto.post.request.PostUpdateRequestDto;
 import Maswillaeng.MSLback.jwt.TokenRequest;
 import Maswillaeng.MSLback.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,10 @@ public class PostController {
     @GetMapping("/post/{postId}")
     public ResponseEntity getPost(@PathVariable int postId) throws Exception {
         return ResponseEntity.ok().body(postService.getPost((long) postId));
+    }
+
+    @PutMapping("post/{postId}")
+    public ResponseEntity updatePost(@PathVariable int postId,@TokenRequest String userToken,@RequestBody PostUpdateRequestDto requestDto) throws Exception {
+        return ResponseEntity.ok().body(postService.updatedPost((long) postId, userToken,requestDto));
     }
 }
