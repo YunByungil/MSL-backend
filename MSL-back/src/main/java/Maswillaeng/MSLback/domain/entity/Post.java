@@ -42,7 +42,6 @@ public class Post extends BaseTimeEntity{
 
     }
 
-
     @Builder
     public Post(Long postId, User user, String title, String content,String thumbNail) {
         this.postId = postId;
