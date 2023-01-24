@@ -71,4 +71,17 @@ public class PostService {
             throw new Exception("접근 권한 없음");
         }
     }
+
+    @Transactional
+    public void deletePost(Long postId, String userToken) throws Exception {
+        Claims userClaims = jwtTokenProvider.getAccessClaims(userToken);
+        Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
+
+        Post selectedPost = postRepository.findById(postId).get();
+        if (selectedPost.getUser().getUser_id()==(userId)) {
+            postRepository.delete(selectedPost);
+        }else {
+            throw new Exception("접근권한없음");
+        }
+    }
 }

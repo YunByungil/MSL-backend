@@ -35,4 +35,10 @@ public class PostController {
     public ResponseEntity updatePost(@PathVariable int postId,@TokenRequest String userToken,@RequestBody PostUpdateRequestDto requestDto) throws Exception {
         return ResponseEntity.ok().body(postService.updatedPost((long) postId, userToken,requestDto));
     }
+
+    @DeleteMapping("post/{postId)")
+    public ResponseEntity deletePost(@PathVariable int postId,@TokenRequest String userToken) throws Exception {
+        postService.deletePost((long) postId,userToken);
+        return ResponseEntity.ok().build();
+    }
 }
