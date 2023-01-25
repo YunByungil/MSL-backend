@@ -5,22 +5,21 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
-@Getter
 @NoArgsConstructor
-public class PostSaveRequestDto {
+@Getter
+public class PostsRequestDto {
     private String title;
     private String content;
     private String thumbnail;
 
     @Builder
-    public PostSaveRequestDto(String title, String content, String thumbnail) {
+    public PostsRequestDto(String title, String content, String thumbnail) {
         this.title = title;
         this.content = content;
         this.thumbnail = thumbnail;
     }
 
-    public Posts toEntity() {
+    public Posts toEntity(){
         return Posts.builder()
                 .title(title)
                 .content(content)

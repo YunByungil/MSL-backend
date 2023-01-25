@@ -1,28 +1,25 @@
 package Maswillaeng.MSLback.controller;
 
-import Maswillaeng.MSLback.dto.post.request.PostRequestDto;
-import Maswillaeng.MSLback.dto.post.request.PostSaveRequestDto;
-import Maswillaeng.MSLback.dto.post.request.PostUpdateRequestDto;
+import Maswillaeng.MSLback.dto.post.request.PostsSaveRequestDto;
+import Maswillaeng.MSLback.dto.post.request.PostsUpdateRequestDto;
 import Maswillaeng.MSLback.dto.post.response.PostResponseDto;
 import Maswillaeng.MSLback.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @RestController
-public class PostController {
+public class PostsController {
 
     private final PostService postService;
 
     @PostMapping("/post")
-    public Long save(@RequestBody PostSaveRequestDto requestDto) {
+    public Long save(@RequestBody PostsSaveRequestDto requestDto) {
         return postService.save(requestDto);
     }
 
     @PutMapping("/posts/{id}")
-    public Long update(@PathVariable Long id, @RequestBody PostUpdateRequestDto requestDto) {
+    public Long update(@PathVariable Long id, @RequestBody PostsUpdateRequestDto requestDto) {
         return postService.update(id, requestDto);
     }
 
