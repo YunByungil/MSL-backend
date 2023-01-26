@@ -13,8 +13,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@AllArgsConstructor
-@Builder
 public class User extends BaseTimeEntity{
 
     @Id
@@ -49,13 +47,29 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<Post> posts = new ArrayList<>();
 
+
+
     public void updateRefreshToken(String refreshToken){
         this.refreshToken = refreshToken;
     }
 
     public void destroyRefreshToken(){
-        this.refreshToken = null;
-    }
+        this.refreshToken = null;}
 
+    @Builder
+    public User(Long user_id, String email, String password, String phoneNumber, String nickName, String role, String refreshToken, String userImage, String introduction, int withdrawYn, LocalDateTime withdrawAt, List<Post> posts) {
+        this.user_id = user_id;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.nickName = nickName;
+        this.role = role;
+        this.refreshToken = refreshToken;
+        this.userImage = userImage;
+        this.introduction = introduction;
+        this.withdrawYn = withdrawYn;
+        this.withdrawAt = withdrawAt;
+        this.posts = posts;
+    }
 }
 
