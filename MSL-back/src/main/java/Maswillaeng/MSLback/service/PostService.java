@@ -50,8 +50,6 @@ public class PostService {
 
         Page<PostResponseDto> postList = PageableExecutionUtils.getPage(posts.getContent().stream().map(p -> new PostResponseDto(p.getPostId(), p.getUser().getNickName(), p.getTitle(), p.getThumbNail(), p.getModifiedAt())).collect(Collectors.toList()), pageable, ()->posts.getTotalElements());
       //  int totalCount = (int) postRepository.count();
-
-    //   int totalCount = (int) posts.getTotalElements();
         return postList;
     }
 
