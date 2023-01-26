@@ -28,12 +28,12 @@ public class JwtTokenProvider implements InitializingBean {
         REFRESH_KEY = Base64.getEncoder().encodeToString(REFRESH_KEY.getBytes());
     }
 
-    //? playload 에 들어 갈 것이 email , nickName;
+
     public String createAccessToken(User user) {
         Claims claims = Jwts.claims();//.setSubject(userPk); // JWT payload 에 저장되는 정보단위
         //claims.put("email", user.getEmail());
         claims.put("userId", user.getUser_id());
-       claims.put("nickName", user.getNickName());
+//       claims.put("nickName", user.getNickName());
         claims.put("roles", user.getRole());
 
         Date now = new Date();
