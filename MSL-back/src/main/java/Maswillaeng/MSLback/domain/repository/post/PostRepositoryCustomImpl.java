@@ -4,7 +4,6 @@ import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.entity.QPost;
 import Maswillaeng.MSLback.domain.entity.QUser;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -14,12 +13,13 @@ import java.util.List;
 
 public class PostRepositoryCustomImpl extends QuerydslRepositorySupport implements PostRepositoryCustom {
 
-    public PostRepositoryCustomImpl() {
+    private final JPAQueryFactory jpaQueryFactory;
+
+    public PostRepositoryCustomImpl(JPAQueryFactory jpaQueryFactory) {
         super(Post.class);
+        this.jpaQueryFactory = jpaQueryFactory;
     }
 
-    @Autowired
-    private JPAQueryFactory jpaQueryFactory;
 
     static QPost post = QPost.post;
     static QUser user = QUser.user;
