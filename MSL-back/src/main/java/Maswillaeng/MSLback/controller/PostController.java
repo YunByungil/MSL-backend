@@ -5,15 +5,23 @@ import Maswillaeng.MSLback.dto.post.request.PostUpdateRequestDto;
 import Maswillaeng.MSLback.jwt.TokenRequest;
 import Maswillaeng.MSLback.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 public class PostController {
 
-   @Autowired
-   private PostService postService;
+    //TODO  DI 생성자 주입으로 바꾸기
+    private final PostService postService;
+
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
 
     @PostMapping("/post")
     public ResponseEntity createPost(@RequestBody PostSaveRequestDto post, @TokenRequest String userToken) {
@@ -22,8 +30,8 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity getPosts(@RequestParam(value = "page") int page) {
-        return ResponseEntity.ok().body(postService.getPosts(page));
+    public ResponseEntity getPosts(Pageable pageable) {
+        return ResponseEntity.ok().body(postService.getPosts(pageable));
     }
 
     @GetMapping("/post/{postId}")

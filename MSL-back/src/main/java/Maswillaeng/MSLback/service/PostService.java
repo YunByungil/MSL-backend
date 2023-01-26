@@ -12,6 +12,10 @@ import Maswillaeng.MSLback.dto.post.request.PostUpdateRequestDto;
 import Maswillaeng.MSLback.jwt.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,32 +26,38 @@ import java.util.stream.Collectors;
 @Service
 public class PostService {
 
-    @Autowired
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    public PostService(PostRepository postRepository, UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @Transactional
     public void save(PostSaveRequestDto post, String userToken) {
         Claims userClaims = jwtTokenProvider.getAccessClaims(userToken);
         Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
+        //TODO: userId 있는 지 확인 ?
         User user = userRepository.findById(userId).get();
         postRepository.save(post.toEntity(user));
     }
 
-    public PostListResponseDto getPosts(int page) {
-        List<Post> posts = postRepository.postList(page);
-        List<PostResponseDto> postList = posts.stream().map(p -> new PostResponseDto(p.getPostId(), p.getUser().getNickName(), p.getTitle(), p.getThumbNail(), p.getModifiedAt())).collect(Collectors.toList());
-        int totalCount = (int) postRepository.count();
-        return new PostListResponseDto(totalCount, postList);
+    public Page<PostResponseDto> getPosts(Pageable pageable) {
+        Page<Post> posts = postRepository.postList(pageable);
+
+        Page<PostResponseDto> postList = PageableExecutionUtils.getPage(posts.getContent().stream().map(p -> new PostResponseDto(p.getPostId(), p.getUser().getNickName(), p.getTitle(), p.getThumbNail(), p.getModifiedAt())).collect(Collectors.toList()), pageable, ()->posts.getTotalElements());
+      //  int totalCount = (int) postRepository.count();
+
+    //   int totalCount = (int) posts.getTotalElements();
+        return postList;
     }
 
     public PostResponseDto getPost(Long postId) throws Exception {
         Optional<Post> selectedPost = Optional.ofNullable(postRepository.getPost(postId));
+      //  postRepository.getPost()
 
         if (selectedPost.isPresent()) {
             Post p = selectedPost.get();
