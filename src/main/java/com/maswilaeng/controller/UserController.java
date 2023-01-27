@@ -1,5 +1,6 @@
 package com.maswilaeng.controller;
 
+import com.maswilaeng.Domain.entity.Role;
 import com.maswilaeng.Domain.entity.User;
 import com.maswilaeng.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -30,12 +32,19 @@ public class UserController {
         // 회원가입 API /sign 에서 원하는 정보를 body로 전달하기 위한 form
         User user = new User();
 
-        user.setNickName(form.getNickname());
+        user.setUser_id(form.getUser_id());
         user.setEmail(form.getEmail());
         user.setPw(form.getPw());
+        user.setNickName(form.getNickName());
         user.setPhoneNumber(form.getPhoneNumber());
         user.setUserImage(form.getUserImage());
-        user.setIntroduction(form.getUserImage());
+        user.setIntroduction(form.getIntroduction());
+        user.setWithdraw_yn(form.getWithdraw_yn());
+        user.setRole(form.getRole());
+        user.setRefresh_token(form.getRefresh_token());
+        user.setCreated_at(form.getCreated_at());
+        user.setModified_at(form.getModified_at());
+        user.setWithdraw_at(form.getWithdraw_at());
 
         userService.join(user);
 

@@ -1,6 +1,9 @@
 package com.maswilaeng.controller;
 
+import com.maswilaeng.Domain.entity.Post;
 import com.maswilaeng.dto.post.request.PostRequestDto;
+import com.maswilaeng.dto.post.response.PostResponseDto;
+import com.maswilaeng.dto.user.request.UserRequestDto;
 import com.maswilaeng.dto.user.response.UserResponseDto;
 import com.maswilaeng.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -61,55 +64,28 @@ public class PostController {
 
     /* 글 상세보기 */
     @GetMapping("/posts/read/{id}")
-    public String read(@PathVariable Long id, @LoginUser UserDto.Response user, Model model) {
-        PostsDto.Response dto = postsService.findById(id);
-        List<CommentDto.Response> comments = dto.getComments();
+    public String read(@PathVariable Long id, UserResponseDto user, Model model) {
+        PostResponseDto dto = postService.findById(id);
 
-
-        /* 댓글 관련 */
-        if (comments != null && !comments.isEmpty()) {
-            model.addAttribute("comments", comments);
-        }
-
-        /* 사용자 관련 */
-        if (user != null) {
-            model.addAttribute("user", user);
-
-            /* 게시글 작성자 본인인지 확인 */
-            if (dto.getUserId().equals(user.getId())) {
-                model.addAttribute("writer", true);
-            }
-
-            /* 댓글 작성자 본인인지 확인 */
-            if (comments.stream().anyMatch(s -> s.getUserId().equals(user.getId()))) {
-                model.addAttribute("isWriter", true);
-            }
-/*            for (int i = 0; i < comments.size(); i++) {
-                boolean isWriter = comments.get(i).getUserId().equals(user.getId());
-                model.addAttribute("isWriter",isWriter);
-            }*/
-        }
-
-        postsService.updateView(id); // views ++
-        model.addAttribute("posts", dto);
-        return "posts/posts-read";
+        model.addAttribute("post", dto);
+        return "post/{id}";
     }
 
     @GetMapping("/posts/update/{id}")
-    public String update(@PathVariable Long id, @LoginUser UserDto.Response user, Model model) {
-        PostsDto.Response dto = postsService.findById(id);
+    public String update(@PathVariable Long id, UserRequestDto user, Model model) {
+        PostResponseDto dto = postService.findById(id);
         if (user != null) {
             model.addAttribute("user", user);
         }
-        model.addAttribute("posts", dto);
+        model.addAttribute("post", dto);
 
-        return "posts/posts-update";
+        return "post/posts-update";
     }
 
     @GetMapping("/posts/search")
     public String search(String keyword, Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
-            Pageable pageable, @LoginUser UserDto.Response user) {
-        Page<Posts> searchList = postsService.search(keyword, pageable);
+            Pageable pageable, UserResponseDto user) {
+        Page<Post> searchList = postService.search(keyword, pageable);
 
         if (user != null) {
             model.addAttribute("user", user);
