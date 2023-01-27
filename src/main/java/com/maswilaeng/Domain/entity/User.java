@@ -1,15 +1,19 @@
 package com.maswilaeng.Domain.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
 @Setter
+@Entity
 public class User{
 
     @Id
@@ -28,10 +32,10 @@ public class User{
     @Column(nullable = false, length = 100)
     private Long phoneNumber;
 
-    @Column()
+    @Column
     private String userImage;
 
-    @Column()
+    @Column
     private String introduction;
 
     @Column(nullable = false, length = 100)
@@ -46,11 +50,13 @@ public class User{
     private String refresh_token;
 
     @Column(nullable = false, length = 100)
+    @CreatedDate
     private LocalDateTime created_at;
 
-    @Column()
-    private LocalDateTime modified_at;
+    @Column
+    @LastModifiedDate
+    private LocalDateTime  modified_at;
 
-    @Column()
+    @Column
     private LocalDateTime withdraw_at;
 }

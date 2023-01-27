@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,11 +21,11 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long post_id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @Column(nullable = false)
     private Long user_id;
 
     @Column(nullable = false)
+    @CreatedDate
     private LocalDateTime created_at;
 
     @Column
@@ -36,6 +38,7 @@ public class Post {
     private String content;
 
     @Column
+    @LastModifiedDate
     private LocalDateTime modified_at;
 
     /* 게시글 수정 */

@@ -23,9 +23,9 @@ public class PostService {
 
     /* CREATE */
     @Transactional
-    public Long save(PostRequestDto dto, String nickname) {
+    public Long save(PostRequestDto dto, String nickName) {
         /* User 정보를 가져와 dto에 담아준다. */
-        User user = userRepository.findByNickname(nickname);
+        User user = userRepository.findByNickName(nickName);
         dto.setUser_id(user.getUser_id());
         log.info("PostService save() 실행");
         Post post = dto.toEntity();

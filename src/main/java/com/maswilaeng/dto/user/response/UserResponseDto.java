@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 public class UserResponseDto {
 
-    private Long user_id;
+    private String user_id;
     private String email;
     private String pw;
     private String nickName;
@@ -34,6 +34,7 @@ public class UserResponseDto {
 
     /* DTO -> Entity */
     public UserResponseDto(User user) {
+        //for git
         this.user_id = user_id;
         this.email = email;
         this.email = user.getEmail();
