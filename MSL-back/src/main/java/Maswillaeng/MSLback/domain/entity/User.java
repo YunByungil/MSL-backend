@@ -48,8 +48,6 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<Post> posts = new ArrayList<>();
 
-
-
     public void updateRefreshToken(String refreshToken){
         this.refreshToken = refreshToken;
     }

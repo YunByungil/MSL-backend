@@ -1,7 +1,6 @@
 package Maswillaeng.MSLback.configuration;
 
 import Maswillaeng.MSLback.interceptor.JwtTokenInterceptor;
-import Maswillaeng.MSLback.jwt.TokenArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfiguration implements WebMvcConfigurer {
 
-    private final TokenArgumentResolver tokenArgumentResolver;
+   // private final TokenArgumentResolver tokenArgumentResolver;
 
     @Bean
     public JwtTokenInterceptor jwtTokenInterceptor() {
@@ -29,8 +28,8 @@ public class WebConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(jwtTokenInterceptor()).excludePathPatterns(excludes);
     }
 
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(tokenArgumentResolver);
-    }
+//    @Override
+//    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+//        resolvers.add(tokenArgumentResolver);
+//    }
 }

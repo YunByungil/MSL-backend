@@ -86,6 +86,9 @@ public class UserController {
 
     @PutMapping("/user")
     public ResponseEntity updatedUser(@CookieValue("ACCESS_TOKEN")String userToken,@RequestBody UserUpdateRequestDto requestDto){
+        if(requestDto.getPassword() == null && requestDto.getNickName()==null){
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok().body( userService.updateUser(userToken,requestDto));
     }
 
