@@ -4,7 +4,6 @@ package Maswillaeng.MSLback.controller;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.dto.user.reponse.LoginResponseDto;
 import Maswillaeng.MSLback.dto.user.request.LoginRequestDto;
-import Maswillaeng.MSLback.jwt.TokenRequest;
 import Maswillaeng.MSLback.service.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -65,15 +64,21 @@ public class UserController {
         return ResponseEntity.ok().header("Set-Cookie",responseCookie.toString()).body(user);
     }
 
-    @GetMapping("/test")
-    public String test(@TokenRequest String token){
-        System.out.println("token 확인 :" + token );
-        return "success";
-    }
+//    @GetMapping("/test")
+//    public String test(@TokenRequest String token){
+//        System.out.println("token 확인 :" + token );
+//        return "success";
+//    }
 
     @GetMapping("/updateToken")
     public ResponseEntity updateAccessToken(HttpServletRequest request) throws Exception {
         return ResponseEntity.ok().body(userService.updateAccessToken(request.getHeader("REFRESH_TOKEN"),request.getHeader("ACCESS_TOKEN")));
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity getUser(@CookieValue("ACCESS_TOKEN")String userToken){
+
+        return ResponseEntity.ok().body(userService.getUser(userToken));
     }
 
 
