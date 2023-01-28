@@ -2,7 +2,6 @@ package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.dto.post.request.PostSaveRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostUpdateRequestDto;
-import Maswillaeng.MSLback.jwt.TokenRequest;
 import Maswillaeng.MSLback.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;

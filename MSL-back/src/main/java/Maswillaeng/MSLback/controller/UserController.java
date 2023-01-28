@@ -2,10 +2,12 @@ package Maswillaeng.MSLback.controller;
 
 
 import Maswillaeng.MSLback.domain.entity.User;
+import Maswillaeng.MSLback.dto.post.reponse.PostResponseDto;
 import Maswillaeng.MSLback.dto.user.reponse.LoginResponseDto;
 import Maswillaeng.MSLback.dto.user.request.LoginRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import Maswillaeng.MSLback.service.UserService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -85,6 +87,12 @@ public class UserController {
     @PutMapping("/user")
     public ResponseEntity updatedUser(@CookieValue("ACCESS_TOKEN")String userToken,@RequestBody UserUpdateRequestDto requestDto){
         return ResponseEntity.ok().body( userService.updateUser(userToken,requestDto));
+    }
+
+    @GetMapping("user/postList")
+    public ResponseEntity userPostList(@CookieValue("ACCESS_TOKEN")String userToken, Pageable pageable) throws Exception {
+
+        return ResponseEntity.ok().body(userService.userPostList(userToken,pageable));
     }
 
 

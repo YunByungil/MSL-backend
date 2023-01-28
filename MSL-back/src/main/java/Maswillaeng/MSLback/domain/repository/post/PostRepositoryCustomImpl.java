@@ -35,6 +35,7 @@ public class PostRepositoryCustomImpl extends QuerydslRepositorySupport implemen
                 .limit(pageable.getPageSize())
                 .fetch();
 
+        //전체 게시글 수 세기
          Long count = jpaQueryFactory
                  .select(post.count())
                  .from(post)
@@ -51,6 +52,26 @@ public class PostRepositoryCustomImpl extends QuerydslRepositorySupport implemen
                 .join(post.user, user).fetchJoin()
                 .where(post.postId.eq(postId))
                 .fetchOne();
+    }
+
+    @Override
+    public Page<Post> userPostList(Long userId,Pageable pageable) {
+        List<Post> userPostList = jpaQueryFactory
+                .selectFrom(post)
+                .join(post.user, user).fetchJoin()
+                .where(post.user.user_id.eq(userId))
+                .orderBy(post.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long count = jpaQueryFactory
+                .select(post.count())
+                .from(post)
+                .where(post.user.user_id.eq(userId))
+                .fetchOne();
+
+        return PageableExecutionUtils.getPage(userPostList,pageable,()->count);
     }
 
 
