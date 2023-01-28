@@ -1,5 +1,7 @@
 package Maswillaeng.MSLback.interceptor;
 
+import Maswillaeng.MSLback.domain.entity.User;
+import Maswillaeng.MSLback.domain.repository.user.UserRepository;
 import Maswillaeng.MSLback.jwt.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
@@ -15,12 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @ComponentScan
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class JwtTokenInterceptor implements HandlerInterceptor {
 
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+
+    private UserRepository userRepository;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -44,7 +48,12 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
                 return true;
             else
                 System.out.println("301");
-            response.sendRedirect("/login");
+                Claims claims =  jwtTokenProvider.getRefreshClaims(refreshToken);
+                Long userId = Long.parseLong(String.valueOf(claims.get("userId")));
+                User selectedUser =userRepository.findById(userId).get();
+                selectedUser.destroyRefreshToken();
+                userRepository.save(selectedUser);
+                 response.sendRedirect("/login");
         }
 
 
