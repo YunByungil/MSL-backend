@@ -4,6 +4,7 @@ package Maswillaeng.MSLback.controller;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.dto.user.reponse.LoginResponseDto;
 import Maswillaeng.MSLback.dto.user.request.LoginRequestDto;
+import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import Maswillaeng.MSLback.service.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -79,6 +80,11 @@ public class UserController {
     public ResponseEntity getUser(@CookieValue("ACCESS_TOKEN")String userToken){
 
         return ResponseEntity.ok().body(userService.getUser(userToken));
+    }
+
+    @PutMapping("/user")
+    public ResponseEntity updatedUser(@CookieValue("ACCESS_TOKEN")String userToken,@RequestBody UserUpdateRequestDto requestDto){
+        return ResponseEntity.ok().body( userService.updateUser(userToken,requestDto));
     }
 
 

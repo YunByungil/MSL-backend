@@ -1,5 +1,6 @@
 package Maswillaeng.MSLback.domain.entity;
 
+import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -70,6 +71,14 @@ public class User extends BaseTimeEntity{
         this.withdrawYn = withdrawYn;
         this.withdrawAt = withdrawAt;
         this.posts = posts;
+    }
+
+    public void update(UserUpdateRequestDto requestDto) {
+        this.password = requestDto.getPassword();
+        this.nickName = requestDto.getNickName();
+        this.phoneNumber = requestDto.getPhoneNumber();
+        this.userImage = requestDto.getUserImage();
+        this.introduction = requestDto.getIntroduction();
     }
 }
 

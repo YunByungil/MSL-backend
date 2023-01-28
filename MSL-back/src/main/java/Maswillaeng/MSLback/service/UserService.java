@@ -6,6 +6,7 @@ import Maswillaeng.MSLback.dto.user.reponse.LoginResponseDto;
 import Maswillaeng.MSLback.dto.user.reponse.TokenResponseDto;
 import Maswillaeng.MSLback.dto.user.reponse.UserResponseDto;
 import Maswillaeng.MSLback.dto.user.request.LoginRequestDto;
+import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import Maswillaeng.MSLback.jwt.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,11 +92,23 @@ public class UserService {
 
     public UserResponseDto getUser(String userToken) {
       Claims userClaims =  jwtTokenProvider.getAccessClaims(userToken);
-        Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
+      Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
 
         User user = userRepository.findById(userId).get();
 
         return new UserResponseDto(user);
 
+    }
+
+    @Transactional
+    public UserResponseDto updateUser(String userToken, UserUpdateRequestDto requestDto) {
+        Claims userClaims =  jwtTokenProvider.getAccessClaims(userToken);
+        Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
+
+        User selectedUser = userRepository.findById(userId).get();
+
+        selectedUser.update(requestDto);
+        User updatedUser = userRepository.save(selectedUser);
+        return new UserResponseDto(updatedUser);
     }
 }
