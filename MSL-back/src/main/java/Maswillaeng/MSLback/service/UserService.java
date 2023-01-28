@@ -97,8 +97,9 @@ public class UserService {
     }
 
     public UserResponseDto getUser(String userToken) {
-      Claims userClaims =  jwtTokenProvider.getAccessClaims(userToken);
-      Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
+//      Claims userClaims =  jwtTokenProvider.getAccessClaims(userToken);
+//      Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
+        Long userId = jwtTokenProvider.getUserId(userToken);
 
         User user = userRepository.findById(userId).get();
 

@@ -64,6 +64,11 @@ public class JwtTokenProvider implements InitializingBean {
         return claims;
     }
 
+    public Long getUserId(String token){
+        Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Long.parseLong(String.valueOf(claims.get("userId")));
+    }
+
     public Claims getRefreshClaims(String token){
         Claims claims = Jwts.parser().setSigningKey(REFRESH_KEY).parseClaimsJws(token).getBody();
         return claims;

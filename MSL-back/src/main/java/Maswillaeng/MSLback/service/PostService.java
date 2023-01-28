@@ -38,8 +38,7 @@ public class PostService {
 
     @Transactional
     public void save(PostSaveRequestDto post, String userToken) {
-        Claims userClaims = jwtTokenProvider.getAccessClaims(userToken);
-        Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
+        Long userId = jwtTokenProvider.getUserId(userToken);
         //TODO: userId 있는 지 확인 ?
         User user = userRepository.findById(userId).get();
         postRepository.save(post.toEntity(user));
@@ -66,8 +65,7 @@ public class PostService {
 
     @Transactional
     public PostUpdateResponseDto updatedPost(Long postId, String userToken, PostUpdateRequestDto requestDto) throws Exception {
-        Claims userClaims = jwtTokenProvider.getAccessClaims(userToken);
-        Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
+        Long userId = jwtTokenProvider.getUserId(userToken);
 
         Post selectedPost = postRepository.findById(postId).get();
 
@@ -82,8 +80,7 @@ public class PostService {
 
     @Transactional
     public void deletePost(Long postId, String userToken) throws Exception {
-        Claims userClaims = jwtTokenProvider.getAccessClaims(userToken);
-        Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
+        Long userId = jwtTokenProvider.getUserId(userToken);
 
         Post selectedPost = postRepository.findById(postId).get();
         if (selectedPost.getUser().getUser_id()==(userId)) {
