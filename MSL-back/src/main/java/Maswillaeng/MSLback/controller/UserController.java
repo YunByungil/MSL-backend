@@ -98,6 +98,14 @@ public class UserController {
         return ResponseEntity.ok().body(userService.userPostList(userToken,pageable));
     }
 
+    @DeleteMapping("user")
+    public ResponseEntity userWithDraw(@CookieValue("ACCESS_TOKEN")String userToken){
+        userService.userWithDraw(userToken);
+        return ResponseEntity.ok().build();
+
+
+    }
+
 
 
 }

@@ -129,5 +129,14 @@ public class UserService {
             return postList;
         }
 
+     @Transactional
+    public void userWithDraw(String userToken) {
+        Claims userClaims =  jwtTokenProvider.getAccessClaims(userToken);
+        Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
+
+        User selectedUser = userRepository.findById(userId).get();
+        selectedUser.withdraw();
+        userRepository.save(selectedUser);
     }
+}
 

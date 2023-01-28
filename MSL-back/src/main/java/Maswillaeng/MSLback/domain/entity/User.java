@@ -2,6 +2,7 @@ package Maswillaeng.MSLback.domain.entity;
 
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -41,6 +42,7 @@ public class User extends BaseTimeEntity{
     @Column(length = 100)
     private String introduction;
 
+    @ColumnDefault("1")
     private int withdrawYn;
 
     private LocalDateTime withdrawAt;
@@ -77,6 +79,11 @@ public class User extends BaseTimeEntity{
         this.phoneNumber = requestDto.getPhoneNumber();
         this.userImage = requestDto.getUserImage();
         this.introduction = requestDto.getIntroduction();
+    }
+
+    public void withdraw() {
+        this.withdrawYn = 0;
+        this.withdrawAt = LocalDateTime.now();
     }
 }
 
