@@ -5,6 +5,7 @@ import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.dto.post.reponse.PostResponseDto;
 import Maswillaeng.MSLback.dto.user.reponse.LoginResponseDto;
 import Maswillaeng.MSLback.dto.user.request.LoginRequestDto;
+import Maswillaeng.MSLback.dto.user.request.UserJoinRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import Maswillaeng.MSLback.service.UserService;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +44,7 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public ResponseEntity join(@RequestBody User user) {
+    public ResponseEntity join(@RequestBody UserJoinRequestDto user) {
         if(userService.joinDuplicate(user))
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         else

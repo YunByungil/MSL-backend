@@ -2,10 +2,6 @@ package Maswillaeng.MSLback.domain.entity;
 
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,10 +25,11 @@ public class User extends BaseTimeEntity{
 
     private String phoneNumber;
 
-    @Column(nullable = false, length = 30,unique = true)
+    @Column(nullable = false, length = 30, unique = true)
     private String nickName;
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
 
     @Column(length = 1000)
     private String refreshToken; //RefreshToken
@@ -42,13 +39,13 @@ public class User extends BaseTimeEntity{
     @Column(length = 100)
     private String introduction;
 
-    @ColumnDefault("1")
     private int withdrawYn;
 
     private LocalDateTime withdrawAt;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<Post> posts = new ArrayList<>();
+
 
     public void updateRefreshToken(String refreshToken){
         this.refreshToken = refreshToken;
@@ -58,7 +55,7 @@ public class User extends BaseTimeEntity{
         this.refreshToken = null;}
 
     @Builder
-    public User(Long user_id, String email, String password, String phoneNumber, String nickName, String role, String refreshToken, String userImage, String introduction, int withdrawYn, LocalDateTime withdrawAt, List<Post> posts) {
+    public User(Long user_id, String email, String password, String phoneNumber, String nickName, RoleType role, String refreshToken, String userImage, String introduction, int withdrawYn, LocalDateTime withdrawAt, List<Post> posts) {
         this.user_id = user_id;
         this.email = email;
         this.password = password;
@@ -82,7 +79,7 @@ public class User extends BaseTimeEntity{
     }
 
     public void withdraw() {
-        this.withdrawYn = 0;
+        this.withdrawYn = 1;
         this.withdrawAt = LocalDateTime.now();
     }
 }

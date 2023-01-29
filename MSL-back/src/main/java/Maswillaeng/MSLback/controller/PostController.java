@@ -49,4 +49,5 @@ public class PostController {
         postService.deletePost((long) postId,userToken);
         return ResponseEntity.ok().build();
     }
+
 }

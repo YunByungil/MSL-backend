@@ -23,12 +23,13 @@ public class Post extends BaseTimeEntity{
     private Long postId;
 
     @ManyToOne(targetEntity = User.class,fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "userId",nullable = false)
     private User user;
 
     @Column(nullable = false)
     private String title;
 
+    @Lob
     @Column(nullable = false)
     private String content;
 

@@ -9,6 +9,7 @@ import Maswillaeng.MSLback.dto.user.reponse.LoginResponseDto;
 import Maswillaeng.MSLback.dto.user.reponse.TokenResponseDto;
 import Maswillaeng.MSLback.dto.user.reponse.UserResponseDto;
 import Maswillaeng.MSLback.dto.user.request.LoginRequestDto;
+import Maswillaeng.MSLback.dto.user.request.UserJoinRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import Maswillaeng.MSLback.jwt.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
@@ -41,13 +42,14 @@ public class UserService {
         return userRepository.existsByNickName(nickName);
     }
 
-    public boolean joinDuplicate(User user) {
+    public boolean joinDuplicate(UserJoinRequestDto user) {
         boolean emailDuplicated =   userRepository.existsByEmail(user.getEmail());
         boolean nickNameDuplicated =   userRepository.existsByNickName(user.getNickName());
         return emailDuplicated || nickNameDuplicated;
     }
 
-    public void join(User user) {
+    public void join(UserJoinRequestDto requestDto) {
+       User user = requestDto.toEntity();
         userRepository.save(user);
     }
 
@@ -96,6 +98,7 @@ public class UserService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public UserResponseDto getUser(String userToken) {
 //      Claims userClaims =  jwtTokenProvider.getAccessClaims(userToken);
 //      Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));

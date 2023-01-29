@@ -4,11 +4,8 @@ import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.user.UserRepository;
 import Maswillaeng.MSLback.jwt.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -17,13 +14,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @ComponentScan
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class JwtTokenInterceptor implements HandlerInterceptor {
 
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+    @Autowired
     private UserRepository userRepository;
 
     @Override
