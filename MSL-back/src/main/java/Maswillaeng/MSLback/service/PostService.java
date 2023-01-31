@@ -37,23 +37,21 @@ public class PostService {
     @Transactional
     public void save(PostSaveRequestDto post, String userToken) {
         Long userId = jwtTokenProvider.getUserId(userToken);
-        //TODO: userId 있는 지 확인 ?
         User user = userRepository.findById(userId).get();
         postRepository.save(post.toEntity(user));
     }
 
-    public Page<PostResponseDto> getPosts(Pageable pageable) {
-        Page<Post> posts = postRepository.postList(pageable);
-
-        Page<PostResponseDto> postList = PageableExecutionUtils.getPage(posts.getContent().stream().map(p -> new PostResponseDto(p.getPostId(), p.getUser().getNickName(), p.getTitle(), p.getThumbNail(), p.getModifiedAt())).collect(Collectors.toList()), pageable, ()->posts.getTotalElements());
-      //  int totalCount = (int) postRepository.count();
+    @Transactional(readOnly = true)
+    public Page<PostResponseDto>  getPosts(Pageable pageable) {
+       Page<Post> posts = postRepository.findAll(pageable);
+       Page<PostResponseDto> postList = PageableExecutionUtils.getPage(posts.getContent().stream().map(p -> new PostResponseDto(p.getPostId(), p.getUser().getNickName(), p.getTitle(), p.getThumbNail(), p.getModifiedAt())).collect(Collectors.toList()), pageable, ()->posts.getTotalElements());
         return postList;
     }
 
-    public PostResponseDto getPost(Long postId) throws Exception {
-        Optional<Post> selectedPost = Optional.ofNullable(postRepository.getPost(postId));
-      //  postRepository.getPost()
 
+    @Transactional(readOnly = true)
+    public PostResponseDto getPost(Long postId) throws Exception {
+        Optional<Post> selectedPost = postRepository.findPostsBy(postId);
         if (selectedPost.isPresent()) {
             Post p = selectedPost.get();
             return new PostResponseDto(p.getPostId(), p.getUser().getNickName(), p.getTitle(), p.getContent(), p.getContent(), p.getModifiedAt());
@@ -62,15 +60,14 @@ public class PostService {
     }
 
     @Transactional
-    public PostUpdateResponseDto updatedPost(Long postId, String userToken, PostUpdateRequestDto requestDto) throws Exception {
+    public void updatedPost(Long postId, String userToken, PostUpdateRequestDto requestDto) throws Exception {
         Long userId = jwtTokenProvider.getUserId(userToken);
 
         Post selectedPost = postRepository.findById(postId).get();
 
         if (selectedPost.getUser().getUser_id()==(userId)) {
             selectedPost.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getThumbNail());
-            Post updatedPost = postRepository.save(selectedPost);
-            return new PostUpdateResponseDto(updatedPost);
+           postRepository.save(selectedPost);
         } else {
             throw new Exception("접근 권한 없음");
         }

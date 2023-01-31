@@ -55,19 +55,19 @@ public class UserService {
 
     @Transactional
     public LoginResponseDto login(LoginRequestDto requestDto) throws Exception {
-        System.out.println("requset : " + requestDto.getPassword());
         User selectUser = userRepository.findByEmail(requestDto.getEmail()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
-        System.out.println("userIDDDDD" +selectUser.getUser_id());
-        System.out.println("user :" + selectUser.getPassword());
         if(!selectUser.getPassword().equals(requestDto.getPassword())){
             throw new Exception("비밀번호가 일치하지 않습니다");
+        }else if(selectUser.getWithdrawYn() == 1){
+            throw new Exception("탈퇴한 회원 입니다.");
         }
+
 
         String accessToken = jwtTokenProvider.createAccessToken(selectUser);
         String refreshToken = jwtTokenProvider.createRefreshToken(selectUser);
         selectUser.updateRefreshToken(refreshToken);
         userRepository.save(selectUser);
-       // TokenResponse.builder().ACCESS_TOKEN(accessToken).REFRESH_TOKEN(refreshToken).build();
+
         TokenResponseDto token = TokenResponseDto.builder().ACCESS_TOKEN(accessToken).REFRESH_TOKEN(refreshToken).build();
         return  LoginResponseDto.builder().tokenResponse(token).nickName(selectUser.getNickName()).userImage(selectUser.getUserImage()).build();
 
@@ -100,44 +100,37 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserResponseDto getUser(String userToken) {
-//      Claims userClaims =  jwtTokenProvider.getAccessClaims(userToken);
-//      Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
         Long userId = jwtTokenProvider.getUserId(userToken);
 
         User user = userRepository.findById(userId).get();
-
         return new UserResponseDto(user);
 
     }
 
     @Transactional
-    public UserResponseDto updateUser(String userToken, UserUpdateRequestDto requestDto) {
-        Claims userClaims =  jwtTokenProvider.getAccessClaims(userToken);
-        Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
+    public void updateUser(String userToken, UserUpdateRequestDto requestDto) {
+
+        Long userId = jwtTokenProvider.getUserId(userToken);
 
         User selectedUser = userRepository.findById(userId).get();
 
         selectedUser.update(requestDto);
-        User updatedUser = userRepository.save(selectedUser);
-        return new UserResponseDto(updatedUser);
+        userRepository.save(selectedUser);
     }
 
     // 이 기능이 userService에 있는게 맞나?
     @Transactional(readOnly = true)
-    public  Page<PostResponseDto> userPostList(String userToken, Pageable pageable) throws Exception {
-        Claims userClaims =  jwtTokenProvider.getAccessClaims(userToken);
-        Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
+    public  Page<PostResponseDto> userPostList(String userToken, Pageable pageable){
+        Long userId = jwtTokenProvider.getUserId(userToken);
 
-         Page<Post> userPost =  postRepository.userPostList(userId,pageable);
-            Page<PostResponseDto> postList = PageableExecutionUtils.getPage(userPost.getContent().stream().map(p -> new PostResponseDto(p.getPostId(), p.getUser().getNickName(), p.getTitle(), p.getThumbNail(), p.getModifiedAt())).collect(Collectors.toList()), pageable, ()->userPost.getTotalElements());
+         Page<Post> userPost =  postRepository.findAllByUser(userId,pageable);
+        Page<PostResponseDto> postList = PageableExecutionUtils.getPage(userPost.getContent().stream().map(p -> new PostResponseDto(p.getPostId(), p.getUser().getNickName(), p.getTitle(), p.getThumbNail(), p.getModifiedAt())).collect(Collectors.toList()), pageable, ()->userPost.getTotalElements());
             return postList;
         }
 
      @Transactional
     public void userWithDraw(String userToken) {
-        Claims userClaims =  jwtTokenProvider.getAccessClaims(userToken);
-        Long userId = Long.parseLong(String.valueOf(userClaims.get("userId")));
-
+         Long userId = jwtTokenProvider.getUserId(userToken);
         User selectedUser = userRepository.findById(userId).get();
         selectedUser.withdraw();
         userRepository.save(selectedUser);

@@ -2,6 +2,7 @@ package Maswillaeng.MSLback.domain.entity;
 
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class Post extends BaseTimeEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
+    @JsonManagedReference
     @ManyToOne(targetEntity = User.class,fetch = FetchType.LAZY)
     @JoinColumn(name = "userId",nullable = false)
     private User user;

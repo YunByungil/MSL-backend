@@ -5,6 +5,7 @@ import Maswillaeng.MSLback.dto.post.request.PostUpdateRequestDto;
 import Maswillaeng.MSLback.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class PostController {
 
-    //TODO  DI 생성자 주입으로 바꾸기
     private final PostService postService;
 
     public PostController(PostService postService) {
@@ -29,8 +29,9 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity getPosts(Pageable pageable) {
-        return ResponseEntity.ok().body(postService.getPosts(pageable));
+    public ResponseEntity getPosts(@PageableDefault(sort = "createdAt" ,direction =  Sort.Direction.DESC) Pageable pageable) {
+
+        return  ResponseEntity.ok().body(postService.getPosts(pageable));
     }
 
     @GetMapping("/post/{postId}")
@@ -41,7 +42,8 @@ public class PostController {
     @PutMapping("post/{postId}")
     public ResponseEntity updatePost(@PathVariable int postId,@RequestBody PostUpdateRequestDto requestDto,
                                      @CookieValue("ACCESS_TOKEN") String userToken) throws Exception {
-        return ResponseEntity.ok().body(postService.updatedPost((long) postId, userToken,requestDto));
+        postService.updatedPost((long) postId, userToken,requestDto);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("post")
@@ -49,5 +51,6 @@ public class PostController {
         postService.deletePost((long) postId,userToken);
         return ResponseEntity.ok().build();
     }
+
 
 }

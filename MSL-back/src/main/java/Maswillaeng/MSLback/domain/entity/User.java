@@ -1,6 +1,8 @@
 package Maswillaeng.MSLback.domain.entity;
 
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -43,6 +45,7 @@ public class User extends BaseTimeEntity{
 
     private LocalDateTime withdrawAt;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<Post> posts = new ArrayList<>();
 

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
 
@@ -31,9 +32,7 @@ public class JwtTokenProvider implements InitializingBean {
 
     public String createAccessToken(User user) {
         Claims claims = Jwts.claims();//.setSubject(userPk); // JWT payload 에 저장되는 정보단위
-        //claims.put("email", user.getEmail());
         claims.put("userId", user.getUser_id());
-//       claims.put("nickName", user.getNickName());
         claims.put("roles", user.getRole());
 
         Date now = new Date();
@@ -44,6 +43,7 @@ public class JwtTokenProvider implements InitializingBean {
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)  // 사용할 암호화 알고리즘과
                 .compact();
     }
+
 
     public String createRefreshToken(User user) {
         Claims claims = Jwts.claims();
@@ -73,11 +73,10 @@ public class JwtTokenProvider implements InitializingBean {
         Claims claims = Jwts.parser().setSigningKey(REFRESH_KEY).parseClaimsJws(token).getBody();
         return claims;
     }
+
     public boolean isValidAccessToken(String token) {
         try {
             Claims accessClaims = getAccessClaims(token);
-            System.out.println("Access expireTime: " + accessClaims.getExpiration());
-            System.out.println("Access userNickName: " + accessClaims.get("nickName"));
             return true;
         } catch (ExpiredJwtException exception) {
             System.out.println("ACCESS Token Expired userEmail : " + exception.getClaims().get("email"));
@@ -89,17 +88,20 @@ public class JwtTokenProvider implements InitializingBean {
             System.out.println("Token is null");
             return false;
         }
+
+
     }
 
     public boolean isValidRefreshToken(String token) {
         try {
-            Claims accessClaims = getRefreshClaims(token);
+            Claims refreshClaims = getRefreshClaims(token);
             return true;
         } catch (ExpiredJwtException exception) {
             System.out.println("REFRESH Token Expired userNickName : " + exception.getClaims().get("nickName"));
             return false;
         } catch (JwtException exception) {
-            System.out.println("Token Tampered");
+            System.out.println(exception);
+            System.out.println("Token Tampered"); ///
             return false;
         } catch (NullPointerException exception) {
             System.out.println("Token is null");
