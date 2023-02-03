@@ -1,9 +1,6 @@
 package Maswillaeng.MSLback.domain.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
@@ -36,5 +33,20 @@ public class User extends BaseEntity{
     private String refresh_token;
     private LocalDateTime withdrawAt;
 
-
+    public User(Long id, String email, String password, String nickname,
+                String phoneNumber, String userImage, String introduction,
+                String withdrawYn, String role, String refresh_token,
+                LocalDateTime withdrawAt) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+        this.userImage = userImage;
+        this.introduction = introduction;
+        this.withdrawYn = withdrawYn;
+        this.role = role;
+        this.refresh_token = refresh_token;
+        this.withdrawAt = withdrawAt;
+    }
 }
