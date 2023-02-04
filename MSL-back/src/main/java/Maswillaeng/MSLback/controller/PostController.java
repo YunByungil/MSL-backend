@@ -3,6 +3,7 @@ package Maswillaeng.MSLback.controller;
 import Maswillaeng.MSLback.dto.post.request.PostSaveRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostUpdateRequestDto;
 import Maswillaeng.MSLback.service.PostService;
+import Maswillaeng.MSLback.utils.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,13 +24,13 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity createPost(@RequestBody PostSaveRequestDto post, @CookieValue("ACCESS_TOKEN") String userToken) {
-        postService.save(post, userToken);
+    public ResponseEntity createPost(@RequestBody PostSaveRequestDto post) {
+        postService.save(post, UserContext.userId.get());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/posts")
-    public ResponseEntity getPosts(@PageableDefault(sort = "createdAt" ,direction =  Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity getPosts(@PageableDefault(sort = "createdAt" ,direction =  Sort.Direction.DESC,size = 20) Pageable pageable) {
 
         return  ResponseEntity.ok().body(postService.getPosts(pageable));
     }
@@ -40,15 +41,14 @@ public class PostController {
     }
 
     @PutMapping("post/{postId}")
-    public ResponseEntity updatePost(@PathVariable int postId,@RequestBody PostUpdateRequestDto requestDto,
-                                     @CookieValue("ACCESS_TOKEN") String userToken) throws Exception {
-        postService.updatedPost((long) postId, userToken,requestDto);
+    public ResponseEntity updatePost(@PathVariable int postId,@RequestBody PostUpdateRequestDto requestDto) throws Exception {
+        postService.updatedPost((long) postId,UserContext.userId.get() ,requestDto);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("post")
-    public ResponseEntity deletePost(@RequestParam(value = "id") int postId,@CookieValue("ACCESS_TOKEN") String userToken) throws Exception {
-        postService.deletePost((long) postId,userToken);
+    public ResponseEntity deletePost(@RequestParam(value = "id") int postId) throws Exception {
+        postService.deletePost((long) postId,UserContext.userId.get());
         return ResponseEntity.ok().build();
     }
 

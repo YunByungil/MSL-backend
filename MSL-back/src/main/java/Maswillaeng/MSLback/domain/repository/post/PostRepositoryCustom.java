@@ -8,9 +8,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface PostRepositoryCustom {
-    Page<Post> postList(Pageable pageable);
 
-   Post getPost(Long postId);
+ //  Post getPost(Long postId);
 
-    Page<Post> userPostList(Long userId,Pageable pageable);
+   // Page<Post> userPostList(Long userId,Pageable pageable);
+
 }

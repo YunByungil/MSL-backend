@@ -1,6 +1,7 @@
 package Maswillaeng.MSLback.controller;
 
 
+import Maswillaeng.MSLback.annotation.AuthCheck;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.dto.post.reponse.PostResponseDto;
 import Maswillaeng.MSLback.dto.user.reponse.LoginResponseDto;
@@ -8,6 +9,7 @@ import Maswillaeng.MSLback.dto.user.request.LoginRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserJoinRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import Maswillaeng.MSLback.service.UserService;
+import Maswillaeng.MSLback.utils.UserContext;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -21,6 +23,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+
+
 
 @RestController
 public class UserController {
@@ -77,36 +81,42 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
+    @AuthCheck(role = AuthCheck.Role.USER)
     @GetMapping("/updateToken")
     public ResponseEntity updateAccessToken(@CookieValue("ACCESS_TOKEN")String accessToken, @CookieValue("REFRESH_TOKEN")String refreshToken) throws Exception {
-        return ResponseEntity.ok().body(userService.updateAccessToken(accessToken,refreshToken));
+        System.out.println(refreshToken);
+        ResponseEntity ss = ResponseEntity.ok().body(userService.updateAccessToken(accessToken,refreshToken));
+        return ss;
     }
 
+    @AuthCheck(role = AuthCheck.Role.USER)
     @GetMapping("/user")
-    public ResponseEntity getUser(@CookieValue("ACCESS_TOKEN")String userToken){
+    public ResponseEntity getUser(){
 
-        return ResponseEntity.ok().body(userService.getUser(userToken));
+        return ResponseEntity.ok().body(userService.getUser(UserContext.userId.get()));
     }
 
+    @AuthCheck(role = AuthCheck.Role.USER)
     @PutMapping("/user")
-    public ResponseEntity updatedUser(@CookieValue("ACCESS_TOKEN")String userToken,@RequestBody UserUpdateRequestDto requestDto){
+    public ResponseEntity updatedUser(@RequestBody UserUpdateRequestDto requestDto){
         if(requestDto.getPassword() == null && requestDto.getNickName()==null){
             return ResponseEntity.badRequest().build();
         }
-        userService.updateUser(userToken,requestDto);
+        userService.updateUser(UserContext.userId.get(),requestDto);
         return ResponseEntity.ok().build();
     }
 
-    //post
+    @AuthCheck(role = AuthCheck.Role.USER)
     @GetMapping("user/postList")
-    public ResponseEntity userPostList(@CookieValue("ACCESS_TOKEN")String userToken,@PageableDefault(sort = "createdAt",direction =  Sort.Direction.DESC) Pageable pageable) throws Exception {
+    public ResponseEntity userPostList(@PageableDefault(sort = "createdAt",direction =  Sort.Direction.DESC,size=20) Pageable pageable) throws Exception {
 
-        return ResponseEntity.ok().body(userService.userPostList(userToken,pageable));
+        return ResponseEntity.ok().body(userService.userPostList(UserContext.userId.get(),pageable));
     }
 
+    @AuthCheck(role = AuthCheck.Role.USER)
     @DeleteMapping("user")
-    public ResponseEntity userWithDraw(@CookieValue("ACCESS_TOKEN")String userToken){
-        userService.userWithDraw(userToken);
+    public ResponseEntity userWithDraw(){
+        userService.userWithDraw(UserContext.userId.get());
         return ResponseEntity.ok().build();
 
 

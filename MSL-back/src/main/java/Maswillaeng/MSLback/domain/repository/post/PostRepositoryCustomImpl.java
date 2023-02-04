@@ -11,68 +11,63 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
-public class PostRepositoryCustomImpl extends QuerydslRepositorySupport implements PostRepositoryCustom {
-
-    private final JPAQueryFactory jpaQueryFactory;
-
-    public PostRepositoryCustomImpl(JPAQueryFactory jpaQueryFactory) {
-        super(Post.class);
-        this.jpaQueryFactory = jpaQueryFactory;
-    }
-
-
-    static QPost post = QPost.post;
-    static QUser user = QUser.user;
-
-
-    @Override
-    public Page<Post> postList(Pageable pageable) {
-        List<Post> list = jpaQueryFactory
-                .selectFrom(post)
-                .join(post.user,user).fetchJoin()
-                .orderBy(post.createdAt.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        //전체 게시글 수 세기
-         Long count = jpaQueryFactory
-                 .select(post.count())
-                 .from(post)
-                 .fetchOne();
-        return PageableExecutionUtils.getPage(list,pageable,()->count);
-    }
+//public class PostRepositoryCustomImpl extends QuerydslRepositorySupport implements PostRepositoryCustom {
+//
+//    private final JPAQueryFactory jpaQueryFactory;
+//
+//    public PostRepositoryCustomImpl(JPAQueryFactory jpaQueryFactory) {
+//        super(Post.class);
+//        this.jpaQueryFactory = jpaQueryFactory;
+//    }
+//
+//
+//    static QPost post = QPost.post;
+//    static QUser user = QUser.user;
 
 
+//    @Override
+//    public Page<Post> postList(Pageable pageable) {
+//        List<Post> list = jpaQueryFactory
+//                .selectFrom(post)
+//                .join(post.user,user).fetchJoin()
+//                .orderBy(post.createdAt.desc())
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetch();
+//
+//        return list;
+//
+//    }
 
-    @Override
-    public Post getPost(Long postId) {
-        return jpaQueryFactory
-                .selectFrom(post)
-                .join(post.user, user).fetchJoin()
-                .where(post.postId.eq(postId))
-                .fetchOne();
-    }
+//
+//    @Override
+//    public Post getPost(Long postId) {
+//        return jpaQueryFactory
+//                .selectFrom(post)
+//                .join(post.user, user).fetchJoin()
+//                .where(post.postId.eq(postId))
+//                .fetchOne();
+//    }
 
-    @Override
-    public Page<Post> userPostList(Long userId,Pageable pageable) {
-        List<Post> userPostList = jpaQueryFactory
-                .selectFrom(post)
-                .join(post.user, user).fetchJoin()
-                .where(post.user.user_id.eq(userId))
-                .orderBy(post.createdAt.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+//    @Override
+//    public Page<Post> userPostList(Long userId,Pageable pageable) {
+//        List<Post> userPostList = jpaQueryFactory
+//                .selectFrom(post)
+//                .join(post.user, user).fetchJoin()
+//                .where(post.user.user_id.eq(userId))
+//                .orderBy(post.createdAt.desc())
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetch();
+//
+//        Long count = jpaQueryFactory
+//                .select(post.count())
+//                .from(post)
+//                .where(post.user.user_id.eq(userId))
+//                .fetchOne();
+//
+//        return PageableExecutionUtils.getPage(userPostList,pageable,()->count);
+//    }
 
-        Long count = jpaQueryFactory
-                .select(post.count())
-                .from(post)
-                .where(post.user.user_id.eq(userId))
-                .fetchOne();
 
-        return PageableExecutionUtils.getPage(userPostList,pageable,()->count);
-    }
-
-
-}
+//}

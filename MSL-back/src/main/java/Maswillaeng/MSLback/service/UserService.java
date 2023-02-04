@@ -11,17 +11,15 @@ import Maswillaeng.MSLback.dto.user.reponse.UserResponseDto;
 import Maswillaeng.MSLback.dto.user.request.LoginRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserJoinRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
-import Maswillaeng.MSLback.jwt.JwtTokenProvider;
+import Maswillaeng.MSLback.utils.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -75,11 +73,11 @@ public class UserService {
     }
 
     @Transactional
-    public TokenResponseDto updateAccessToken(String refresh_token, String access_token) throws Exception {
+    public TokenResponseDto updateAccessToken(String access_token, String refresh_token) throws Exception {
         String updateAccessToken;
         if(access_token!=null){
-            Claims claimsToken =  jwtTokenProvider.getRefreshClaims(refresh_token);
-            Long userId = (Long) claimsToken.get("userId");
+           // Claims claimsToken =  jwtTokenProvider.getRefreshClaims(refresh_token);
+            Long userId = jwtTokenProvider.getUserId(refresh_token);
             Optional<User> user=  userRepository.findById(userId);
             String OriginalRefreshToken = user.get().getRefreshToken();
             if(OriginalRefreshToken.equals(refresh_token)){
@@ -99,19 +97,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserResponseDto getUser(String userToken) {
-        Long userId = jwtTokenProvider.getUserId(userToken);
-
+    public UserResponseDto getUser(Long userId) {
         User user = userRepository.findById(userId).get();
         return new UserResponseDto(user);
 
     }
 
     @Transactional
-    public void updateUser(String userToken, UserUpdateRequestDto requestDto) {
-
-        Long userId = jwtTokenProvider.getUserId(userToken);
-
+    public void updateUser(Long userId, UserUpdateRequestDto requestDto) {
         User selectedUser = userRepository.findById(userId).get();
 
         selectedUser.update(requestDto);
@@ -120,17 +113,14 @@ public class UserService {
 
     // 이 기능이 userService에 있는게 맞나?
     @Transactional(readOnly = true)
-    public  Page<PostResponseDto> userPostList(String userToken, Pageable pageable){
-        Long userId = jwtTokenProvider.getUserId(userToken);
-
+    public  Page<PostResponseDto> userPostList(Long userId,Pageable pageable){
          Page<Post> userPost =  postRepository.findAllByUser(userId,pageable);
         Page<PostResponseDto> postList = PageableExecutionUtils.getPage(userPost.getContent().stream().map(p -> new PostResponseDto(p.getPostId(), p.getUser().getNickName(), p.getTitle(), p.getThumbNail(), p.getModifiedAt())).collect(Collectors.toList()), pageable, ()->userPost.getTotalElements());
             return postList;
         }
 
      @Transactional
-    public void userWithDraw(String userToken) {
-         Long userId = jwtTokenProvider.getUserId(userToken);
+    public void userWithDraw(Long userId) {
         User selectedUser = userRepository.findById(userId).get();
         selectedUser.withdraw();
         userRepository.save(selectedUser);

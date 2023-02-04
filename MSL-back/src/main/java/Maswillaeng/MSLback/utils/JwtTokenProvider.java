@@ -1,4 +1,4 @@
-package Maswillaeng.MSLback.jwt;
+package Maswillaeng.MSLback.utils;
 
 import Maswillaeng.MSLback.domain.entity.User;
 import io.jsonwebtoken.*;
@@ -16,8 +16,7 @@ import java.util.Date;
 public class JwtTokenProvider implements InitializingBean {
     @Value("${secret.access}")
     private String SECRET_KEY;// = "sec";
-    @Value("${secret.refresh}")
-    private String REFRESH_KEY;// = "ref";
+
 
     private final long ACCESS_TOKEN_VALID_TIME = 300*1000;
     private final long REFRESH_TOKEN_VALID_TIME = 500*1000;
@@ -26,14 +25,14 @@ public class JwtTokenProvider implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         SECRET_KEY = Base64.getEncoder().encodeToString(SECRET_KEY.getBytes());
-        REFRESH_KEY = Base64.getEncoder().encodeToString(REFRESH_KEY.getBytes());
+
     }
 
 
     public String createAccessToken(User user) {
         Claims claims = Jwts.claims();//.setSubject(userPk); // JWT payload 에 저장되는 정보단위
         claims.put("userId", user.getUser_id());
-        claims.put("roles", user.getRole());
+        claims.put("role", user.getRole());
 
         Date now = new Date();
         return Jwts.builder()
@@ -47,19 +46,19 @@ public class JwtTokenProvider implements InitializingBean {
 
     public String createRefreshToken(User user) {
         Claims claims = Jwts.claims();
-        claims.put("userId", user.getEmail()); //
+        claims.put("userId", user.getUser_id()); //
         Date now = new Date();
         Date expiration = new Date(now.getTime() + REFRESH_TOKEN_VALID_TIME*1000);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.HS256, REFRESH_KEY)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 
 
-    public Claims getAccessClaims(String token){
+    public Claims getClaims(String token){
         Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
         return claims;
     }
@@ -69,43 +68,13 @@ public class JwtTokenProvider implements InitializingBean {
         return Long.parseLong(String.valueOf(claims.get("userId")));
     }
 
-    public Claims getRefreshClaims(String token){
-        Claims claims = Jwts.parser().setSigningKey(REFRESH_KEY).parseClaimsJws(token).getBody();
-        return claims;
-    }
 
-    public boolean isValidAccessToken(String token) {
-        try {
-            Claims accessClaims = getAccessClaims(token);
+
+    public boolean isValidToken(String token) {
+          Claims accessClaims =getClaims(token);
             return true;
-        } catch (ExpiredJwtException exception) {
-            System.out.println("ACCESS Token Expired userEmail : " + exception.getClaims().get("email"));
-            return false;
-        } catch (JwtException exception) {
-            System.out.println("Token Tampered");
-            return false;
-        } catch (NullPointerException exception) {
-            System.out.println("Token is null");
-            return false;
-        }
-
-
     }
 
-    public boolean isValidRefreshToken(String token) {
-        try {
-            Claims refreshClaims = getRefreshClaims(token);
-            return true;
-        } catch (ExpiredJwtException exception) {
-            System.out.println("REFRESH Token Expired userNickName : " + exception.getClaims().get("nickName"));
-            return false;
-        } catch (JwtException exception) {
-            System.out.println(exception);
-            System.out.println("Token Tampered"); ///
-            return false;
-        } catch (NullPointerException exception) {
-            System.out.println("Token is null");
-            return false;
-        }
-    }
+
+
 }

@@ -12,10 +12,12 @@ public class PostResponseDto {
     private String thumbNail;
     private String content;
     private LocalDateTime modifiedAt;
+    private String userImage;
 
-    public PostResponseDto(Long postId,String nickName, String title, String thumbNail, String content,LocalDateTime modifiedAt) {
+    public PostResponseDto(Long postId,String nickName, String userImage, String title, String thumbNail, String content,LocalDateTime modifiedAt) {
         this.postId =postId;
         this.nickName = nickName;
+        this.userImage= userImage;
         this.title = title;
         this.thumbNail = thumbNail;
         this.content = content;
