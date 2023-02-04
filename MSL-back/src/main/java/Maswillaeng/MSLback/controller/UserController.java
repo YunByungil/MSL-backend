@@ -9,6 +9,7 @@ import Maswillaeng.MSLback.dto.user.request.LoginRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserJoinRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import Maswillaeng.MSLback.service.UserService;
+import Maswillaeng.MSLback.utils.JwtTokenProvider;
 import Maswillaeng.MSLback.utils.UserContext;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -64,16 +65,21 @@ public class UserController {
     public ResponseEntity login(@RequestBody LoginRequestDto request, HttpServletResponse response) throws Exception {
         LoginResponseDto dto = userService.login(request);
 
-        Cookie accessToken = new Cookie("ACCESS_TOKEN", dto.getTokenResponse().getACCESS_TOKEN());
-        accessToken.setHttpOnly(true);
-        accessToken.setPath("/");
+        ResponseCookie AccessToken = ResponseCookie.from("ACCESS_TOKEN", dto.getTokenResponse().getACCESS_TOKEN())
+                .path("/")
+                .httpOnly(true)
+                .maxAge(JwtTokenProvider.ACCESS_TOKEN_VALID_TIME)
+                .build();
 
-        Cookie refreshToken = new Cookie("REFRESH_TOKEN", dto.getTokenResponse().getREFRESH_TOKEN());
-        refreshToken.setHttpOnly(true);
-        refreshToken.setPath("/updateToken");
+        ResponseCookie RefreshToken = ResponseCookie.from("REFRESH_TOKEN", dto.getTokenResponse().getREFRESH_TOKEN())
+                .path("/updateToken")
+                .maxAge(JwtTokenProvider.REFRESH_TOKEN_VALID_TIME)
+                .httpOnly(true)
+                .build();
 
-        response.addCookie(accessToken);
-        response.addCookie(refreshToken);
+        response.addHeader("Set-Cookie", AccessToken.toString());
+        response.addHeader("Set-Cookie",  RefreshToken.toString());
+
 
         HashMap<String,String> user = new HashMap<>();
         user.put("nickName",dto.getNickName());
@@ -84,9 +90,8 @@ public class UserController {
     @AuthCheck(role = AuthCheck.Role.USER)
     @GetMapping("/updateToken")
     public ResponseEntity updateAccessToken(@CookieValue("ACCESS_TOKEN")String accessToken, @CookieValue("REFRESH_TOKEN")String refreshToken) throws Exception {
-        System.out.println(refreshToken);
-        ResponseEntity ss = ResponseEntity.ok().body(userService.updateAccessToken(accessToken,refreshToken));
-        return ss;
+
+        return ResponseEntity.ok().body(userService.updateAccessToken(accessToken,refreshToken));
     }
 
     @AuthCheck(role = AuthCheck.Role.USER)
