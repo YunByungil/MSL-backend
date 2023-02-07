@@ -33,11 +33,10 @@ public class User extends BaseEntity{
     private String refresh_token;
     private LocalDateTime withdrawAt;
 
-    public User(Long id, String email, String password, String nickname,
+    public User(String email, String password, String nickname,
                 String phoneNumber, String userImage, String introduction,
                 String withdrawYn, String role, String refresh_token,
                 LocalDateTime withdrawAt) {
-        this.id = id;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
