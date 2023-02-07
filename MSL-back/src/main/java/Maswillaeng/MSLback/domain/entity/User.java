@@ -33,6 +33,7 @@ public class User extends BaseEntity{
     private String refresh_token;
     private LocalDateTime withdrawAt;
 
+    @Builder
     public User(String email, String password, String nickname,
                 String phoneNumber, String userImage, String introduction,
                 String withdrawYn, String role, String refresh_token,
