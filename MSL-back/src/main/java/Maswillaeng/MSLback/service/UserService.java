@@ -17,4 +17,8 @@ public class UserService {
         userRepository.save(user);
         return user.getId();
     }
+
+    public User findOne(Long userId) {
+        return userRepository.findOne(userId);
+    }
 }
