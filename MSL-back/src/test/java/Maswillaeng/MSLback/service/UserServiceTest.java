@@ -26,8 +26,20 @@ class UserServiceTest {
     @Test
     void 회원가입() {
         // given
-        User user = new User( "test@test", "test1", "bang", "010-1234-1234",
-                "dsa", "hi", "n", "ahffk", "dsa", LocalDateTime.now());
+//        User user = new User( "test@test", "test1", "bang", "010-1234-1234",
+//                "dsa", "hi", "n", "ahffk", "dsa", LocalDateTime.now());
+        User user = User.builder()
+                .password("test1")
+                .email("test@test")
+                .nickname("bang")
+                .userImage("dsa")
+                .introduction("hi")
+                .phoneNumber("010-1234-1234")
+                .refresh_token("dsa")
+                .role("ahffk")
+                .withdrawYn("n")
+                .withdrawAt(LocalDateTime.now())
+                .build();
         // when
         Long saveId = userService.join(user);
 
