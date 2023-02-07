@@ -1,6 +1,7 @@
 package Maswillaeng.MSLback.domain.entity;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
@@ -15,21 +16,19 @@ public class User extends BaseEntity{
     @Column(name = "user_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)
     private String password;
     @Column(nullable = false, unique = true)
     private String nickname;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String phoneNumber;
     private String userImage;
     private String introduction;
-    @Column(nullable = false)
+    @ColumnDefault("n")
     private String withdrawYn;
-    @Column(nullable = false)
     private String role;
-    @Column(nullable = false)
     private String refresh_token;
     private LocalDateTime withdrawAt;
 
