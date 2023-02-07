@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public ResponseEntity join(@RequestBody UserJoinRequestDto user) {
+    public ResponseEntity join(@RequestBody UserJoinRequestDto user) throws Exception {
         if(userService.joinDuplicate(user))
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         else

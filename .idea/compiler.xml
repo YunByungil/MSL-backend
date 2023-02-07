@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
@@ -10,7 +11,7 @@
         <module name="Maswillaeng.MSL-back.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.8">
       <module name="MSL-back.MSL-back.main~1" target="1.8" />
       <module name="MSL-back.MSL-back.test~1" target="1.8" />
     </bytecodeTargetLevel>

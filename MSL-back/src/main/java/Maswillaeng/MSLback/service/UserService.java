@@ -11,6 +11,7 @@ import Maswillaeng.MSLback.dto.user.reponse.UserResponseDto;
 import Maswillaeng.MSLback.dto.user.request.LoginRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserJoinRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
+import Maswillaeng.MSLback.utils.AESEncryption;
 import Maswillaeng.MSLback.utils.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,8 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final PostRepository postRepository;
 
+    private final AESEncryption aesEncryption;
+
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
@@ -46,20 +49,21 @@ public class UserService {
         return emailDuplicated || nickNameDuplicated;
     }
 
-    public void join(UserJoinRequestDto requestDto) {
-       User user = requestDto.toEntity();
+    public void join(UserJoinRequestDto requestDto) throws Exception {
+       String encodePw =  aesEncryption.encrypt(requestDto.getPassword());
+       User user = requestDto.toEntity(encodePw);
         userRepository.save(user);
     }
 
     @Transactional
     public LoginResponseDto login(LoginRequestDto requestDto) throws Exception {
         User selectUser = userRepository.findByEmail(requestDto.getEmail()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
-        if(!selectUser.getPassword().equals(requestDto.getPassword())){
+        String decodePw = aesEncryption.decrypt(selectUser.getPassword());
+        if(!requestDto.getPassword().equals(decodePw)){
             throw new Exception("비밀번호가 일치하지 않습니다");
         }else if(selectUser.getWithdrawYn() == 1){
             throw new Exception("탈퇴한 회원 입니다.");
         }
-
 
         String accessToken = jwtTokenProvider.createAccessToken(selectUser);
         String refreshToken = jwtTokenProvider.createRefreshToken(selectUser);
@@ -75,7 +79,7 @@ public class UserService {
     @Transactional
     public TokenResponseDto updateAccessToken(String access_token, String refresh_token) throws Exception {
         String updateAccessToken;
-        if(access_token!=null){
+
            // Claims claimsToken =  jwtTokenProvider.getRefreshClaims(refresh_token);
             Long userId = jwtTokenProvider.getUserId(refresh_token);
             Optional<User> user=  userRepository.findById(userId);
@@ -87,8 +91,6 @@ public class UserService {
                 userRepository.save(user.get());
                 throw new Exception("변조된 토큰");
             }
-        }else
-            throw new Exception("access Token이 없습니다");
 
         return TokenResponseDto.builder()
                 .ACCESS_TOKEN(updateAccessToken)

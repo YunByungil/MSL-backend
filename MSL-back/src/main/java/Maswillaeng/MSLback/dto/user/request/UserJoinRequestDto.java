@@ -16,8 +16,8 @@ public class UserJoinRequestDto {
     private String introduction;
     private RoleType role;
 
-    public User toEntity(){
-      return User.builder().email(email).password(password).nickName(nickName).phoneNumber(phoneNumber).userImage(userImage).introduction(introduction).role(RoleType.USER).build();
+    public User toEntity(String encodePw){
+      return User.builder().email(email).password(encodePw).nickName(nickName).phoneNumber(phoneNumber).userImage(userImage).introduction(introduction).role(RoleType.USER).build();
 
     }
 
