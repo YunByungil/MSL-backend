@@ -17,6 +17,7 @@ public class UserService {
 
     @Transactional
     public Long join(User user) {
+        validateDuplicateEmail(user.getEmail());
         userRepository.save(user);
         return user.getId();
     }
@@ -27,5 +28,12 @@ public class UserService {
 
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    public void validateDuplicateEmail(String email) {
+        List<User> users = userRepository.findAll();
+        if (users.contains(email)) {
+            throw new IllegalStateException("이미 존재하는 Email입니다.");
+        }
     }
 }
