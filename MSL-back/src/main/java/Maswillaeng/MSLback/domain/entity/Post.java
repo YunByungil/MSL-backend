@@ -13,6 +13,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -44,6 +46,7 @@ public class Post extends BaseTimeEntity{
         this.thumbNail =thumbNail;
 
     }
+
 
     @Builder
     public Post(Long postId, User user, String title, String content,String thumbNail) {

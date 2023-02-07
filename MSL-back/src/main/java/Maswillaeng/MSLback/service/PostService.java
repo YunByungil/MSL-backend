@@ -44,7 +44,6 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostResponseDto getPost(Long postId) throws Exception {
         Optional<Post> selectedPost = postRepository.findPostsBy(postId);
-
         if (selectedPost.isPresent()) {
             Post p = selectedPost.get();
             return new PostResponseDto(p.getPostId(), p.getUser().getNickName(), p.getUser().getUserImage(), p.getTitle(), p.getContent(), p.getContent(), p.getModifiedAt());
@@ -64,6 +63,8 @@ public class PostService {
             throw new Exception("접근 권한 없음");
         }
     }
+
+
 
     @Transactional
     public void deletePost(Long postId, Long userId) throws Exception {
