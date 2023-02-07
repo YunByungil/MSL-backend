@@ -26,7 +26,7 @@ class UserServiceTest {
     @Test
     void 회원가입() {
         // given
-        User user = new User(1L, "test@test", "test1", "bang", "010-1234-1234",
+        User user = new User( "test@test", "test1", "bang", "010-1234-1234",
                 "dsa", "hi", "n", "ahffk", "dsa", LocalDateTime.now());
         // when
         Long saveId = userService.join(user);
