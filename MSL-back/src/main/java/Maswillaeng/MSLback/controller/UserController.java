@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 
 @RestController
 @Slf4j
@@ -18,11 +17,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/sign")
-    public ResponseEntity<Object> join(@RequestBody UserJoinDTO userJoinDTO) throws IOException {
+    public ResponseEntity<Object> join(@RequestBody UserJoinDTO userJoinDTO) {
         User user = userJoinDTO.toEntity();
-        System.out.println("user.getEmail() = " + user.getEmail());
-        System.out.println("user.getRole() = " + user.getRole());
-        System.out.println("user.getNickname() = " + user.getNickname());
 
         log.info("userJoinDTO = {}", userJoinDTO);
         userService.join(user);
