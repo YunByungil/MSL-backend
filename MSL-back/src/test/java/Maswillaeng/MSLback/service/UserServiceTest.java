@@ -81,7 +81,7 @@ class UserServiceTest {
     }
     private static User createUser2() {
         User user2 = User.builder()
-                .email("test@t32est")
+                .email("test@test")
                 .password("123")
                 .nickname("6787")
                 .userImage("dsa")
