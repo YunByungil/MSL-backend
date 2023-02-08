@@ -49,10 +49,7 @@ class UserServiceTest {
         User user2 = createUser2();
 
         // when
-        Long id = userService.join(user1);
-        User one = userService.findOne(id);
-        List<User> all = userService.findAll();
-//        userService.join(user2);
+        userService.join(user1);
 //        System.out.println("user1.getEmail() = " + user1.getEmail());
 //        System.out.println("user2.getEmail() = " + user2.getEmail());
 
@@ -63,16 +60,16 @@ class UserServiceTest {
     }
 
     private static User createUser() {
-        User user = User.builder()
-                .email("test@test")
-                .password("test1")
-                .nickname("bang")
-                .userImage("dsa")
-                .introduction("hi")
-                .phoneNumber("010-1234-1234")
-                .refresh_token("dsa")
-                .role("ahffk")
-                .withdrawAt(LocalDateTime.now())
+            User user = User.builder()
+                    .email("test@test")
+                    .password("test1")
+                    .nickname("bang")
+                    .userImage("dsa")
+                    .introduction("hi")
+                    .phoneNumber("010-1234-1234")
+                    .refresh_token("dsa")
+                    .role("ahffk")
+                    .withdrawAt(LocalDateTime.now())
                 .build();
         return user;
     }

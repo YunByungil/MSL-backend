@@ -31,9 +31,10 @@ public class UserService {
     }
 
     public void validateDuplicateEmail(String email) {
-        List<User> users = userRepository.findAll();
-        if (users.contains(email)) {
-            throw new IllegalStateException("이미 존재하는 Email입니다.");
-        }
+        User userEmail = userRepository.findByEmail(email);
+//        System.out.println("userEmail = " + userEmail.getEmail());
+//        if (userEmail != null) {
+//            throw new IllegalStateException("이미 존재하는 Email입니다.");
+//        }
     }
 }
