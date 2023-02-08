@@ -26,4 +26,11 @@ public class UserRepository {
                 .getResultList();
     }
 
+    public User findByEmail(String email) {
+        return em.createQuery("select u from User u where email = :email", User.class)
+                .setParameter("email", email)
+                .getSingleResult();
+
+    }
+
 }

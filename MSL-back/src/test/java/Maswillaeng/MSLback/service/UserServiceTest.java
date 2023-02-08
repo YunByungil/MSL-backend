@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -27,24 +29,14 @@ class UserServiceTest {
     void 회원가입() {
         // given
 //        User user = createUser();
-        User user = User.builder()
-                .email("test@test")
-                .password("test1")
-                .nickname("bang")
-                .userImage("dsa")
-                .introduction("hi")
-                .phoneNumber("010-1234-1234")
-                .refresh_token("dsa")
-                .role("ahffk")
-                .withdrawAt(LocalDateTime.now())
-                .build();
+        User user = createUser();
         // @ColumnDefault 수정해야 됨!!
         // when
         Long saveId = userService.join(user);
 
         User findUser = userService.findOne(saveId);
         // then
-        Assertions.assertThat(saveId).isEqualTo(findUser.getId());
+        assertThat(saveId).isEqualTo(findUser.getId());
         System.out.println("findUser.getWithdrawYn() = " + findUser.getWithdrawYn());
 
     }
@@ -52,12 +44,22 @@ class UserServiceTest {
     @Test
     void 중복_회원() {
         // given
-        createUser();
+        User user1 = createUser();
 
-        createUser();
+        User user2 = createUser2();
+
         // when
+        Long id = userService.join(user1);
+        User one = userService.findOne(id);
+        List<User> all = userService.findAll();
+//        userService.join(user2);
+//        System.out.println("user1.getEmail() = " + user1.getEmail());
+//        System.out.println("user2.getEmail() = " + user2.getEmail());
 
         // then
+//        IllegalStateException ex = assertThrows(IllegalStateException.class, () -> userService.join(user2));
+//        assertEquals("이미 존재하는 Email입니다.", ex.getMessage());
+
     }
 
     private static User createUser() {
@@ -73,5 +75,19 @@ class UserServiceTest {
                 .withdrawAt(LocalDateTime.now())
                 .build();
         return user;
+    }
+    private static User createUser2() {
+        User user2 = User.builder()
+                .email("test@test")
+                .password("123")
+                .nickname("6787")
+                .userImage("dsa")
+                .introduction("hi")
+                .phoneNumber("010-444-1234")
+                .refresh_token("dsa")
+                .role("ahffk")
+                .withdrawAt(LocalDateTime.now())
+                .build();
+        return user2;
     }
 }
