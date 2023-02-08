@@ -73,9 +73,6 @@ class UserServiceTest {
                     .userImage("dsa")
                     .introduction("hi")
                     .phoneNumber("010-1234-1234")
-                    .refresh_token("dsa")
-                    .role("ahffk")
-                    .withdrawAt(LocalDateTime.now())
                 .build();
         return user;
     }
@@ -87,9 +84,6 @@ class UserServiceTest {
                 .userImage("dsa")
                 .introduction("hi")
                 .phoneNumber("010-444-1234")
-                .refresh_token("dsa")
-                .role("ahffk")
-                .withdrawAt(LocalDateTime.now())
                 .build();
         return user2;
     }
