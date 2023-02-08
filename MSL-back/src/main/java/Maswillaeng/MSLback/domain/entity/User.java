@@ -1,5 +1,6 @@
 package Maswillaeng.MSLback.domain.entity;
 
+import Maswillaeng.MSLback.dto.user.request.UserUpdateDTO;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.stereotype.Repository;
@@ -43,5 +44,13 @@ public class User extends BaseEntity{
         this.introduction = introduction;
         this.withdrawYn = "n";
         this.role = "member";
+    }
+
+    public void updateUser(UserUpdateDTO userUpdateDTO) {
+        this.password = userUpdateDTO.getPassword();
+        this.nickname = userUpdateDTO.getNickname();
+        this.phoneNumber = userUpdateDTO.getPhoneNumber();
+        this.userImage = userUpdateDTO.getUserImage();
+        this.introduction = userUpdateDTO.getIntroduction();
     }
 }

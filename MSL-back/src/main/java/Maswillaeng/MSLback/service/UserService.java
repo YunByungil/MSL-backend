@@ -2,6 +2,7 @@ package Maswillaeng.MSLback.service;
 
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
+import Maswillaeng.MSLback.dto.user.request.UserUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,12 @@ public class UserService {
         validateDuplicateEmail(user.getEmail());
         userRepository.save(user);
         return user.getId();
+    }
+
+    @Transactional
+    public void update(Long userId, UserUpdateDTO userUpdateDTO) {
+        User user = userRepository.findOne(userId);
+        user.updateUser(userUpdateDTO);
     }
 
     public User findOne(Long userId) {
