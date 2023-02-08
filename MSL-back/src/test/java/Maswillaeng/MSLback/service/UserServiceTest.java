@@ -26,26 +26,52 @@ class UserServiceTest {
     @Test
     void 회원가입() {
         // given
-//        User user = new User( "test@test", "test1", "bang", "010-1234-1234",
-//                "dsa", "hi", "n", "ahffk", "dsa", LocalDateTime.now());
+//        User user = createUser();
         User user = User.builder()
-                .password("test1")
                 .email("test@test")
+                .password("test1")
                 .nickname("bang")
                 .userImage("dsa")
                 .introduction("hi")
                 .phoneNumber("010-1234-1234")
                 .refresh_token("dsa")
                 .role("ahffk")
-                .withdrawYn("n")
                 .withdrawAt(LocalDateTime.now())
                 .build();
+        // @ColumnDefault 수정해야 됨!!
         // when
         Long saveId = userService.join(user);
 
         User findUser = userService.findOne(saveId);
         // then
         Assertions.assertThat(saveId).isEqualTo(findUser.getId());
+        System.out.println("findUser.getWithdrawYn() = " + findUser.getWithdrawYn());
 
+    }
+
+    @Test
+    void 중복_회원() {
+        // given
+        createUser();
+
+        createUser();
+        // when
+
+        // then
+    }
+
+    private static User createUser() {
+        User user = User.builder()
+                .email("test@test")
+                .password("test1")
+                .nickname("bang")
+                .userImage("dsa")
+                .introduction("hi")
+                .phoneNumber("010-1234-1234")
+                .refresh_token("dsa")
+                .role("ahffk")
+                .withdrawAt(LocalDateTime.now())
+                .build();
+        return user;
     }
 }

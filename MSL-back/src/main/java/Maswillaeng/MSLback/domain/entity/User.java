@@ -26,7 +26,7 @@ public class User extends BaseEntity{
     private String phoneNumber;
     private String userImage;
     private String introduction;
-    @ColumnDefault("n")
+    @ColumnDefault("'n'")
     private String withdrawYn;
     private String role;
     private String refresh_token;
@@ -35,7 +35,7 @@ public class User extends BaseEntity{
     @Builder
     public User(String email, String password, String nickname,
                 String phoneNumber, String userImage, String introduction,
-                String withdrawYn, String role, String refresh_token,
+                String role, String refresh_token,
                 LocalDateTime withdrawAt) {
         this.email = email;
         this.password = password;
@@ -43,7 +43,7 @@ public class User extends BaseEntity{
         this.phoneNumber = phoneNumber;
         this.userImage = userImage;
         this.introduction = introduction;
-        this.withdrawYn = withdrawYn;
+        this.withdrawYn = "n";
         this.role = role;
         this.refresh_token = refresh_token;
         this.withdrawAt = withdrawAt;
