@@ -54,8 +54,14 @@ class UserServiceTest {
 //        System.out.println("user2.getEmail() = " + user2.getEmail());
 
         // then
-//        IllegalStateException ex = assertThrows(IllegalStateException.class, () -> userService.join(user2));
-//        assertEquals("이미 존재하는 Email입니다.", ex.getMessage());
+        IllegalStateException ex = assertThrows(IllegalStateException.class, () -> userService.join(user2));
+        assertEquals("이미 존재하는 Email입니다.", ex.getMessage());
+        System.out.println("ex.getMessage() = " + ex.getMessage());
+//        assertThatThrownBy(() -> userService.join(user2))
+//                .isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> {
+            userService.join(user2);
+        }).isInstanceOf(IllegalStateException.class);
 
     }
 
@@ -75,7 +81,7 @@ class UserServiceTest {
     }
     private static User createUser2() {
         User user2 = User.builder()
-                .email("test@test")
+                .email("test@t32est")
                 .password("123")
                 .nickname("6787")
                 .userImage("dsa")
