@@ -1,6 +1,6 @@
 package Maswillaeng.MSLback.service;
 
-import Maswillaeng.MSLback.domain.entity.Posts;
+import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.repository.PostsRepository;
 import Maswillaeng.MSLback.dto.post.request.PostsSaveRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostsUpdateRequestDto;
@@ -27,7 +27,7 @@ public class PostService {
 
     @Transactional
     public Long update(Long id, PostsUpdateRequestDto requestDto) {
-        Posts posts = postsRepository.findById(id).orElseThrow(
+        Post posts = postsRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id)
         );
 
@@ -38,7 +38,7 @@ public class PostService {
 
     @Transactional
     public void delete(Long id) {
-        Posts post = postsRepository.findById(id)
+        Post post = postsRepository.findById(id)
                 .orElseThrow(
                         () -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id)
                 );
@@ -47,7 +47,7 @@ public class PostService {
     }
 
     public PostResponseDto findById(Long id) {
-        Posts entity = postsRepository.findById(id).orElseThrow(
+        Post entity = postsRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id)
         );
 
@@ -56,7 +56,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public List<PostListResponseDto> findAllDesc() {
-        return postsRepository.findAllDesc().stream()
+        return postsRepository.findAll().stream()
                 .map(PostListResponseDto::new)
                 .collect(Collectors.toList());
     }

@@ -1,6 +1,6 @@
 package Maswillaeng.MSLback.dto.post.request;
 
-import Maswillaeng.MSLback.domain.entity.Posts;
+import Maswillaeng.MSLback.domain.entity.Post;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +10,7 @@ public class PostsListResponseDto {
     private String thumbnail;
     private LocalDateTime modifiedDate;
 
-    public PostsListResponseDto(Posts entity) {
+    public PostsListResponseDto(Post entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.thumbnail = entity.getThumbnail();

@@ -1,6 +1,6 @@
 package Maswillaeng.MSLback.dto.post.response;
 
-import Maswillaeng.MSLback.domain.entity.Posts;
+import Maswillaeng.MSLback.domain.entity.Post;
 import lombok.Getter;
 
 @Getter
@@ -10,7 +10,7 @@ public class PostResponseDto {
     private String title;
     private String content;
 
-    public PostResponseDto(Posts entity) {
+    public PostResponseDto(Post entity) {
         this.Id = entity.getId();
         this.thumbnail = entity.getThumbnail();
         this.title = entity.getTitle();

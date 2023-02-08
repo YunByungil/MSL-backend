@@ -1,6 +1,6 @@
 package Maswillaeng.MSLback.dto.post.request;
 
-import Maswillaeng.MSLback.domain.entity.Posts;
+import Maswillaeng.MSLback.domain.entity.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +20,8 @@ public class PostsSaveRequestDto {
         this.thumbnail = thumbnail;
     }
 
-    public Posts toEntity() {
-        return Posts.builder()
+    public Post toEntity() {
+        return Post.builder()
                 .title(title)
                 .content(content)
                 .thumbnail(thumbnail)

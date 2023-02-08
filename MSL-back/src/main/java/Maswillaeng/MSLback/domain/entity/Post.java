@@ -1,17 +1,13 @@
 package Maswillaeng.MSLback.domain.entity;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Posts extends BaseTimeEntity{
+public class Post extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +23,7 @@ public class Posts extends BaseTimeEntity{
 //    private String delYn;       //삭제여부
 
     @Builder
-    public Posts(String title, String content, String thumbnail) {
+    public Post(String title, String content, String thumbnail) {
         this.title = title;
         this.content = content;
         this.thumbnail = thumbnail;
