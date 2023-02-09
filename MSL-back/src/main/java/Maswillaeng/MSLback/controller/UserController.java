@@ -34,11 +34,16 @@ public class UserController {
 //                .collect(Collectors.toList());
 //        return new Result(collect);
 //    }
+
+    /**
+     * 회원 조회할 때, 반환 값을 어떻게 해야될지,
+     * res에는 분명 배열 형태인데 dto넘기는 건데 왜 배열이지?
+     */
     @GetMapping("/user")
-    public Result member() {
+    public ResponseEntity<Object> member() {
         User user = userService.findOne(1L);
         UserListDTO userListDTO = new UserListDTO(user);
-        return new Result(userListDTO);
+        return ResponseEntity.ok().body(userListDTO);
     }
 
     @PostMapping("/sign")
