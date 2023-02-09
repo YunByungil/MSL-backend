@@ -23,16 +23,22 @@ import java.util.stream.Collectors;
 public class UserController {
     private final UserService userService;
 
-    /**
-     * 모든 회원 조회
-     */
-    @GetMapping("/test")
-    public Result memberList() {
-        List<User> users = userService.findAll();
-        List<UserListDTO> collect = users.stream()
-                .map(u -> new UserListDTO(u))
-                .collect(Collectors.toList());
-        return new Result(collect);
+//    /**
+//     * 모든 회원 조회
+//     */
+//    @GetMapping("/test")
+//    public Result memberList() {
+//        List<User> users = userService.findAll();
+//        List<UserListDTO> collect = users.stream()
+//                .map(u -> new UserListDTO(u))
+//                .collect(Collectors.toList());
+//        return new Result(collect);
+//    }
+    @GetMapping("/user")
+    public Result member() {
+        User user = userService.findOne(1L);
+        UserListDTO userListDTO = new UserListDTO(user);
+        return new Result(userListDTO);
     }
 
     @PostMapping("/sign")
