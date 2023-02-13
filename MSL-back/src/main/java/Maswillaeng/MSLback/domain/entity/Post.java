@@ -1,5 +1,6 @@
 package Maswillaeng.MSLback.domain.entity;
 
+import Maswillaeng.MSLback.dto.post.request.PostsUpdateRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,8 +30,9 @@ public class Post extends BaseTimeEntity{
         this.thumbnail = thumbnail;
     }
 
-    public void update(String title, String content) {
-        this.title = title;
-        this.content = content;
+    public void update(PostsUpdateRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.thumbnail= requestDto.getThumbnail();
     }
 }
