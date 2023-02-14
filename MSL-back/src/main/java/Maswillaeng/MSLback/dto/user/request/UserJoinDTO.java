@@ -15,7 +15,7 @@ public class UserJoinDTO {
     private String userImage;
     private String introduction;
 
-    public User toEntity() {
+    public User toEntity(String password) {
         return User.builder()
                 .email(email)
                 .password(password)

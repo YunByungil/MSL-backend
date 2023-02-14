@@ -27,9 +27,10 @@ public class User extends BaseEntity{
     private String phoneNumber;
     private String userImage;
     private String introduction;
-    @ColumnDefault("'n'")
-    private String withdrawYn;
-    private String role;
+    @ColumnDefault("0")
+    private int withdrawYn;
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
     private String refresh_token;
     private LocalDateTime withdrawAt;
 
@@ -42,8 +43,8 @@ public class User extends BaseEntity{
         this.phoneNumber = phoneNumber;
         this.userImage = userImage;
         this.introduction = introduction;
-        this.withdrawYn = "n";
-        this.role = "member";
+        this.withdrawYn = 0;
+        this.role = RoleType.USER;
     }
 
     public void updateUser(UserUpdateDTO userUpdateDTO) {

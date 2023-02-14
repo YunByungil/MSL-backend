@@ -1,36 +1,11 @@
 package Maswillaeng.MSLback.domain.repository;
 
 import Maswillaeng.MSLback.domain.entity.User;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.persistence.EntityManager;
-import java.util.List;
+import java.util.Optional;
 
-@Repository
-@RequiredArgsConstructor
-public class UserRepository {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    private final EntityManager em;
-
-    public void save(User user) {
-        em.persist(user);
-    }
-
-    public User findOne(Long userId) {
-        return em.find(User.class, userId);
-    }
-
-    public List<User> findAll() {
-        return em.createQuery("select u from User u", User.class)
-                .getResultList();
-    }
-
-    public List<User> findByEmail(String email) {
-        return em.createQuery("select u from User u where u.email = :email", User.class)
-                .setParameter("email", email)
-                .getResultList();
-
-    }
-
+    Optional<User> findByEmail(String email);
 }
