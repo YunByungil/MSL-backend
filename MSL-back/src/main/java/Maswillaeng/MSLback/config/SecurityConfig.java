@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .antMatchers("/api/sign", "/api/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/**").authenticated()
                 .and()
-//                .addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

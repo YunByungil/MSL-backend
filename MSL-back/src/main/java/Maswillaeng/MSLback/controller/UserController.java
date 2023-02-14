@@ -13,6 +13,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -46,6 +47,12 @@ public class UserController {
 //        UserListDTO userListDTO = new UserListDTO(user);
 //        return ResponseEntity.ok().body(userListDTO);
 //    }
+
+    @PostMapping("/test")
+    public ResponseEntity<String> test(Authentication authentication) {
+        log.info("userId = {}", authentication.getName());
+        return ResponseEntity.ok().body(authentication.getName() + "님의 test");
+    }
 
     /**
      * login
