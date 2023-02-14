@@ -58,11 +58,11 @@ public class UserController {
      * login
      */
     @PostMapping("/login")
-    public String login(@RequestBody UserLoginRequestDto dto) {
+    public ResponseEntity<UserLoginResponseDto> login(@RequestBody UserLoginRequestDto dto) {
         // TODO: 토큰 정보 어떻게 뿌릴지?
 
-        String login = userService.login(dto);
-        return login;
+        UserLoginResponseDto userLoginResponseDto = userService.login(dto);
+        return ResponseEntity.ok().body(userLoginResponseDto);
     }
 
     @PostMapping("/sign")

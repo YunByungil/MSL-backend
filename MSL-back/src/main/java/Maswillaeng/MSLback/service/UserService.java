@@ -1,12 +1,11 @@
 package Maswillaeng.MSLback.service;
 
-import Maswillaeng.MSLback.config.EncryptConfig;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
+import Maswillaeng.MSLback.dto.user.reponse.TokenResponse;
 import Maswillaeng.MSLback.dto.user.reponse.UserLoginResponseDto;
 import Maswillaeng.MSLback.dto.user.request.UserJoinDTO;
 import Maswillaeng.MSLback.dto.user.request.UserLoginRequestDto;
-import Maswillaeng.MSLback.dto.user.request.UserUpdateDTO;
 import Maswillaeng.MSLback.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,9 +26,11 @@ public class UserService {
 
     @Value("${jwt.secret}")
     private String secretKey; // 시크릿 키
-    private Long expiredMs = 1000 * 60 * 60L; // AccessToken 시간
+    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L; // AccessToken 시간
+    private static final Long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24L; // RefreshToken 시간
 
-    public String login(UserLoginRequestDto dto) {
+    @Transactional
+    public UserLoginResponseDto login(UserLoginRequestDto dto) {
         /* 유저 존재 여부 확인 */
         User user = validateService.validateExistUser(dto);
 
@@ -39,9 +39,21 @@ public class UserService {
             throw new IllegalStateException("비밀번호 틀림");
         }
 
-        String token = JwtUtil.createJwt(user.getId(), user.getRole(), secretKey, expiredMs);
+        String accessToken = JwtUtil.createJwt(user.getId(), user.getRole(), secretKey, ACCESS_TOKEN_EXPIRE_TIME);
+        String refreshToken = JwtUtil.createRefreshJwt(secretKey, REFRESH_TOKEN_EXPIRE_TIME);
+        user.updateRefreshToken(refreshToken);
+        System.out.println("refreshToken = " + refreshToken);
+//        userRepository.save(user);
+        TokenResponse token = TokenResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
 
-        return token;
+        return UserLoginResponseDto.builder()
+                .tokenResponse(token)
+                .nickName(user.getNickname())
+                .userImage(user.getUserImage())
+                .build();
     }
 
     @Transactional
