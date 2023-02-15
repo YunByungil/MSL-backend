@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserSerivce {
@@ -26,9 +28,8 @@ public class UserSerivce {
 
     @Transactional
     public void updateUser(Long userId, UserUpdateReqDTO userUpdateReqDTO) {
-        User user = userRepository.findById(userId).get();
+        Optional<User> user = userRepository.findById(userId).orElseThrow();
         user.update(userUpdateReqDTO);
-        userRepository.save(user);
     }
 
     public boolean checkEmailDuplicate(String email) {
@@ -48,6 +49,5 @@ public class UserSerivce {
     public void userWithDraw(Long userId) {
         User user = userRepository.findById(userId).get();
         user.withdraw();
-        userRepository.save(user);
     }
 }

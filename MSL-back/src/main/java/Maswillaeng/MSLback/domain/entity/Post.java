@@ -23,8 +23,6 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    // private Category category;
-
     private String thumbnail;
 
     @Column(nullable = false)

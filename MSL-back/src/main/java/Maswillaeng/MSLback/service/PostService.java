@@ -29,7 +29,6 @@ public class PostService {
     public void updatePost(Long postId, PostUpdateReqDTO postUpdateReqDTO) {
         Post post = postRepository.findById(postId).get();
         post.update(postUpdateReqDTO);
-        postRepository.save(post);
     }
 
     @Transactional
