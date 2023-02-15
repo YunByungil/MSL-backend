@@ -20,14 +20,16 @@ public class UserController {
         this.userSerivce = userSerivce;
     }
 
+    // 가입
     @PostMapping("/sign")
-    public ResponseEntity join(@RequestBody UserJoinReqDTO userJoinReqDTO) throws Exception{
+    public ResponseEntity<?> join(@RequestBody UserJoinReqDTO userJoinReqDTO) throws Exception {
         userSerivce.join(userJoinReqDTO);
         return ResponseEntity.ok().build();
     }
 
+    // 이메일 중복 확인
     @GetMapping("/duplicate/user-email")
-    public ResponseEntity checkEmailDuplicate(@RequestParam String email) {
+    public ResponseEntity<?> checkEmailDuplicate(@RequestParam String email) {
         if(email == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -38,8 +40,9 @@ public class UserController {
         }
     }
 
+    // 닉네임 중복 확인
     @GetMapping("/duplicate/nickname")
-    public ResponseEntity checkNickNameDuplicate(@RequestParam String nickName) {
+    public ResponseEntity<?> checkNickNameDuplicate(@RequestParam String nickName) {
         if(nickName == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -50,8 +53,9 @@ public class UserController {
         }
     }
 
+    // 회원 정보 수정
     @PutMapping("/user")
-    public ResponseEntity updateUser(@RequestParam Long userId, @RequestBody UserUpdateReqDTO userUpdateReqDTO) {
+    public ResponseEntity<?> updateUser(@RequestParam Long userId, @RequestBody UserUpdateReqDTO userUpdateReqDTO) {
         if(userUpdateReqDTO.getPassword()==null || userUpdateReqDTO.getNickName() == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -59,14 +63,16 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    // 회원 조회
     @GetMapping("/user")
-    public ResponseEntity getUser(@RequestParam Long userId) {
+    public ResponseEntity<Object> getUser(@RequestParam Long userId) {
         userSerivce.getUser(userId);
         return ResponseEntity.ok().body(userSerivce.getUser(userId));
     }
 
+    // 회원 탈퇴
     @DeleteMapping("/user")
-    public ResponseEntity userWithDraw(@RequestParam Long userId) {
+    public ResponseEntity<?> userWithDraw(@RequestParam Long userId) {
         userSerivce.userWithDraw(userId);
         return ResponseEntity.ok().build();
     }

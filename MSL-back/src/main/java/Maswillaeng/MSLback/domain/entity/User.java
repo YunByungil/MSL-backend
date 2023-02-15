@@ -9,12 +9,14 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class User extends BaseTimeEntity{
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,8 +39,7 @@ public class User extends BaseTimeEntity{
     @Column(length = 100)
     private String introduction;
 
-    @ColumnDefault("0")
-    private int withdrawYn;
+    private boolean withdrawYn = Boolean.FALSE;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -48,8 +49,11 @@ public class User extends BaseTimeEntity{
 
     private LocalDateTime withdrawAt;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Post> posts = new ArrayList<>();
+
     @Builder
-    public User(long userId, String email, String password, String phoneNumber, String nickName, String userImage, String introduction, int withdrawYn, Role role, String refreshToken, LocalDateTime withdrawAt) {
+    public User(long userId, String email, String password, String phoneNumber, String nickName, String userImage, String introduction, boolean withdrawYn, Role role, String refreshToken, LocalDateTime withdrawAt, List<Post> posts) {
         this.userId = userId;
         this.email = email;
         this.password = password;
@@ -61,6 +65,7 @@ public class User extends BaseTimeEntity{
         this.role = role;
         this.refreshToken = refreshToken;
         this.withdrawAt = withdrawAt;
+        this.posts = posts;
     }
 
     public void update(UserUpdateReqDTO userUpdateReqDTO) {
@@ -72,7 +77,7 @@ public class User extends BaseTimeEntity{
     }
 
     public void withdraw() {
-        this.withdrawYn = 1;
+        this.withdrawYn = true;
         this.withdrawAt = LocalDateTime.now();
     }
 }
