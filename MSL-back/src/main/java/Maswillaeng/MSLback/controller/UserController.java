@@ -3,6 +3,7 @@ package Maswillaeng.MSLback.controller;
 import Maswillaeng.MSLback.config.EncryptConfig;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.dto.user.reponse.LoginResponseDto;
+import Maswillaeng.MSLback.dto.user.reponse.LoginResultResponse;
 import Maswillaeng.MSLback.dto.user.reponse.UserLoginResponseDto;
 import Maswillaeng.MSLback.dto.user.request.UserLoginRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserJoinDTO;
@@ -15,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -46,18 +48,25 @@ public class UserController {
      * 회원 조회할 때, 반환 값을 어떻게 해야될지,
      * res에는 분명 배열 형태인데 dto넘기는 건데 왜 배열이지?
      */
-//    @GetMapping("/user")
-//    public ResponseEntity<Object> member() {
-//        User user = userService.findOne(1L);
-//        UserListDTO userListDTO = new UserListDTO(user);
-//        return ResponseEntity.ok().body(userListDTO);
-//    }
+    @GetMapping("/user")
+    public ResponseEntity<Object> member(Authentication authentication) {
+        User user = userService
+                .findOne(Long.parseLong(authentication.getName()))
+                .orElseThrow(() -> new IllegalStateException("없는 회원"));
+        UserListDTO userListDTO = new UserListDTO(user);
+        return ResponseEntity.ok().body(userListDTO);
+    }
 
     @PostMapping("/test")
-    public ResponseEntity<String> test(@CookieValue("accessToken") String co, Authentication authentication) {
+    public ResponseEntity<String> test(Authentication authentication) {
         log.info("userId = {}", authentication.getName());
-        log.info("co = {}", co);
-        return ResponseEntity.ok().body(authentication.getName() + "님의 test");
+//        log.info("co = {}", co);
+        return ResponseEntity.ok().body("님의 test");
+    }
+
+    @GetMapping("/test2")
+    public String test2() {
+        return "okTest2";
     }
 
     /**
@@ -70,34 +79,32 @@ public class UserController {
 
         UserLoginResponseDto userLoginResponseDto = userService.login(dto);
 
-        ResponseCookie accessToken = ResponseCookie
-                .from("accessToken", userLoginResponseDto.getTokenResponse().getAccessToken())
-                .path("/")
-                .httpOnly(true)
-                .maxAge(JwtUtil.ACCESS_TOKEN_EXPIRE_TIME)
-                .sameSite("Lax")
-                .build();
+        ResponseCookie accessToken = cookieUtil.createAccessCookieToken(userLoginResponseDto);
 
-        ResponseCookie refreshToken = ResponseCookie
-                .from("refreshToken", userLoginResponseDto.getTokenResponse().getRefreshToken())
-                .path("/")
-                .httpOnly(true)
-                .maxAge(JwtUtil.REFRESH_TOKEN_EXPIRE_TIME)
-                .sameSite("Lax")
-                .build();
+        ResponseCookie refreshToken = cookieUtil.createRefreshCookieToken(userLoginResponseDto);
 
-//        return ResponseEntity.ok().body(userLoginResponseDto);
+        LoginResultResponse l = getLoginResultResponse(userLoginResponseDto);
+
         return ResponseEntity.ok()
                 .header("Set-Cookie", accessToken.toString())
                 .header("Set-Cookie", refreshToken.toString())
-                .body(new LoginResponseDto(userLoginResponseDto.getNickName(), userLoginResponseDto.getUserImage()));
+                .body(new LoginResponseDto(HttpStatus.OK.value(), l));
+    }
+
+    private LoginResultResponse getLoginResultResponse(UserLoginResponseDto userLoginResponseDto) {
+        LoginResultResponse l = LoginResultResponse
+                .builder()
+                .nickName(userLoginResponseDto.getNickName())
+                .userImage(userLoginResponseDto.getUserImage())
+                .build();
+        return l;
     }
 
     @PostMapping("/sign")
-    public ResponseEntity<Object> join(@RequestBody UserJoinDTO userJoinDTO) {
+    public Result join(@RequestBody UserJoinDTO userJoinDTO) {
         log.info("userJoinDTO = {}", userJoinDTO);
         userService.join(userJoinDTO);
-        return ResponseEntity.ok().body("회원 가입 완료!");
+        return new Result(HttpStatus.OK.value());
     }
 
 //    @PutMapping("/user") // 로그인 구현x
@@ -109,7 +116,6 @@ public class UserController {
     @Data
     @AllArgsConstructor
     static class Result<T> {
-//        private ResponseEntity<T> responseEntity;
-        private T result;
+        private T code;
     }
 }

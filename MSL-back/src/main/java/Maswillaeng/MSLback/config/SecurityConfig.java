@@ -1,5 +1,7 @@
 package Maswillaeng.MSLback.config;
 
+import Maswillaeng.MSLback.common.exception.CustomAccessDeniedHandler;
+import Maswillaeng.MSLback.common.exception.CustomAuthenticationEntryPoint;
 import Maswillaeng.MSLback.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,9 +36,15 @@ public class SecurityConfig {
 //                .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // exception 토큰
+                .accessDeniedHandler(new CustomAccessDeniedHandler()) // exception 권한
+                .and()
                 .authorizeRequests()
                 .antMatchers("/api/sign", "/api/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/**")
+                .access("hasRole('ROLE_USER')")
+                .anyRequest().permitAll()
                 .and()
                 .addFilterAfter(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();

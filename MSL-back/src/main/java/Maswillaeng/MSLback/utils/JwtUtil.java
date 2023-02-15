@@ -27,8 +27,9 @@ public class JwtUtil {
                 .compact();
     }
 
-    public static String createRefreshJwt(String secretKey) {
+    public static String createRefreshJwt(Long userId, String secretKey) {
         Claims claims = Jwts.claims();
+        claims.put("userId", userId);
 
         return Jwts.builder()
                 .setClaims(claims)

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class UserService {
         }
 
         String accessToken = JwtUtil.createJwt(user.getId(), user.getRole(), secretKey);
-        String refreshToken = JwtUtil.createRefreshJwt(secretKey);
+        String refreshToken = JwtUtil.createRefreshJwt(user.getId(), secretKey);
         user.updateRefreshToken(refreshToken);
         System.out.println("refreshToken = " + refreshToken);
 //        userRepository.save(user);
@@ -67,9 +68,10 @@ public class UserService {
 //        user.updateUser(userUpdateDTO);
 //    }
 
-//    public User findOne(Long userId) {
-//        return userRepository.findOne(userId);
-//    }
+    public Optional<User> findOne(Long userId) {
+
+        return userRepository.findById(userId);
+    }
 
     public List<User> findAll() {
         return userRepository.findAll();

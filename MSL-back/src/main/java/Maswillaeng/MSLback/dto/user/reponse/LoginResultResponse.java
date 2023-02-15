@@ -1,15 +1,14 @@
 package Maswillaeng.MSLback.dto.user.reponse;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class LoginResponseDto<T> {
+@Builder
+public class LoginResultResponse {
 
-    private int code;
-    private T result;
-
-
-
+    private String nickName;
+    private String userImage;
 }
