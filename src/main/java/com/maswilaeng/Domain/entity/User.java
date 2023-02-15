@@ -6,7 +6,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,6 +18,7 @@ public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name= "user_id")
     private Long user_id;
 
     @Column(nullable = false, length = 50, unique = true)
@@ -59,4 +60,8 @@ public class User{
 
     @Column
     private LocalDateTime withdraw_at;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post_id")
+    private List<Post> post;
+
 }

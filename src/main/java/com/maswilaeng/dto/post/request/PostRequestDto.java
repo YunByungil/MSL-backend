@@ -2,20 +2,16 @@ package com.maswilaeng.dto.post.request;
 
 import com.maswilaeng.Domain.entity.Post;
 import com.maswilaeng.Domain.entity.User;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
-@Data
-@AllArgsConstructor
 
+// 데이터 전달 목적
+//
+@Data
+@NoArgsConstructor // 인자 없이 객체 생성 가능
 @Builder
 public class PostRequestDto {
 
@@ -31,7 +27,6 @@ public class PostRequestDto {
     public Post toEntity() {
         Post posts = Post.builder()
                 .post_id(post_id)
-                .user_id(user_id)
                 .created_at(created_at)
                 .thumbnail(thumbnail)
                 .title(title)
@@ -40,5 +35,16 @@ public class PostRequestDto {
                 .build();
 
         return posts;
+    }
+
+    @Builder
+    public PostRequestDto(Long post_id, Long user_id, LocalDateTime created_at, String thumbnail, String title, String content, LocalDateTime modified_at) {
+        this.post_id = post_id;
+        this.user_id = user_id;
+        this.created_at = created_at;
+        this.thumbnail = thumbnail;
+        this.title = title;
+        this.content = content;
+        this.modified_at = modified_at;
     }
 }

@@ -4,10 +4,13 @@ import com.maswilaeng.Domain.entity.Role;
 import com.maswilaeng.Domain.entity.User;
 import com.maswilaeng.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping("/sign")
-    public String create(UserForm form){
+    public ResponseEntity<Object> join(@RequestBody UserForm form){
 
         // 회원가입 API /sign 에서 원하는 정보를 body로 전달하기 위한 form
         User user = new User();
@@ -48,7 +51,7 @@ public class UserController {
 
         userService.join(user);
 
-        return "redirect:/";
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/users")
