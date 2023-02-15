@@ -26,8 +26,6 @@ public class UserService {
 
     @Value("${jwt.secret}")
     private String secretKey; // 시크릿 키
-    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L; // AccessToken 시간
-    private static final Long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24L; // RefreshToken 시간
 
     @Transactional
     public UserLoginResponseDto login(UserLoginRequestDto dto) {
@@ -39,8 +37,8 @@ public class UserService {
             throw new IllegalStateException("비밀번호 틀림");
         }
 
-        String accessToken = JwtUtil.createJwt(user.getId(), user.getRole(), secretKey, ACCESS_TOKEN_EXPIRE_TIME);
-        String refreshToken = JwtUtil.createRefreshJwt(secretKey, REFRESH_TOKEN_EXPIRE_TIME);
+        String accessToken = JwtUtil.createJwt(user.getId(), user.getRole(), secretKey);
+        String refreshToken = JwtUtil.createRefreshJwt(secretKey);
         user.updateRefreshToken(refreshToken);
         System.out.println("refreshToken = " + refreshToken);
 //        userRepository.save(user);

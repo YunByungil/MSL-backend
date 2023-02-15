@@ -31,14 +31,14 @@ public class SecurityConfig {
         return http.httpBasic().disable()
                 .cors().disable()
                 .csrf().disable()
-                .formLogin().disable()
+//                .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/sign", "/api/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/**").authenticated()
                 .and()
-                .addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

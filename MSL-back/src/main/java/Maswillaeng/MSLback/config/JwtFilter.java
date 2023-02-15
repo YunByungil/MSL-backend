@@ -14,6 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,7 +34,13 @@ public class JwtFilter extends OncePerRequestFilter {
         log.info("=== doFilterInternal ===");
 
         /* 헤더에서 토큰 꺼내기 */
+        /* 쿠키에서 토큰 꺼내기 */
+
         final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+//        Cookie[] cookies = request.getCookies();
+//        for (Cookie cookie : cookies) {
+//            System.out.println("cookie = " + cookie.getName());
+//        }
         log.info("Access 토큰 정보 : {}", authorization);
         log.info("SecretKey : {}", secretKey);
 
@@ -58,7 +65,51 @@ public class JwtFilter extends OncePerRequestFilter {
 
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+//        response.addHeader("Authorization", authorization);
+//        System.out.println("\"\" = " + "ㅇㄴㅁㅇㅁㄴㅇㅁㄴㄱ");
         filterChain.doFilter(request, response);
 
     }
+
+//    @Override
+//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+//        log.info("=== doFilterInternal ===");
+//
+//        /* 헤더에서 토큰 꺼내기 */
+//        final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+////        Cookie[] cookies = request.getCookies();
+////        for (Cookie cookie : cookies) {
+////            System.out.println("cookie = " + cookie.getName());
+////        }
+//        log.info("Access 토큰 정보 : {}", authorization);
+//        log.info("SecretKey : {}", secretKey);
+//
+//        if (authorization == null || !authorization.startsWith("Bearer ")) {
+//            log.error("토큰이 존재하지 않습니다.");
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+//
+//        String token = authorization.split(" ")[1];
+//
+//        if (JwtUtil.isExpired(token, secretKey)) {
+//            log.error("토큰 유효기간 만료");
+//            return;
+//        }
+//
+//        Long userId = JwtUtil.getUserId(token, secretKey);
+//
+//        // 권한 부여
+//        UsernamePasswordAuthenticationToken authentication
+//                = new UsernamePasswordAuthenticationToken(userId, null, List.of(new SimpleGrantedAuthority("USER")));
+//
+//        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+////        response.addHeader("Authorization", authorization);
+////        System.out.println("\"\" = " + "ㅇㄴㅁㅇㅁㄴㅇㅁㄴㄱ");
+//        filterChain.doFilter(request, response);
+//
+//    }
+
+
 }
