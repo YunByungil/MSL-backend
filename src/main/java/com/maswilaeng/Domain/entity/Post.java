@@ -1,6 +1,13 @@
 package com.maswilaeng.Domain.entity;
 
+<<<<<<< HEAD
 import lombok.*;
+=======
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+>>>>>>> e4e6d6b201a889ee90f8bd7d6d9881ec574f0853
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -21,8 +28,10 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name="post_id")
     private Long id;
+
 
     @Column(nullable = false)
     @CreatedDate
