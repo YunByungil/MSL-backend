@@ -38,11 +38,11 @@ public class PostService {
 
     /* READ 게시글 리스트 조회 */
     @Transactional(readOnly = true)
-    public List<PostResponseDto> getPostListById(Long id) {
-        List<Post> post = postRepository.getPostById(id).orElseThrow(() ->
+    public List<PostResponseDto> findPostById(Long id) {
+        List<Post> post = postRepository.findByPostId(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글이 존재하지 않습니다. id: " + id));
 
-        return new PostResponseDto(post);
+        return new PostResponseDto(post.stream().));
     }
 
     /*
