@@ -19,7 +19,7 @@ public class PostResponseDto {
 
     /* Dto -> Entity */
     public PostResponseDto(Post post) {
-        this.post_id = post.getPost_id();
+        this.post_id = post.getId();
         this.created_at = post.getCreated_at();
         this.thumbnail = post.getThumbnail();
         this.title = post.getTitle();

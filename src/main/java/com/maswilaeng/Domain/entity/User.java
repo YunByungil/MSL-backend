@@ -19,7 +19,7 @@ public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name= "user_id")
-    private Long user_id;
+    private Long id;
 
     @Column(nullable = false, length = 50, unique = true)
     private String email;
@@ -31,7 +31,7 @@ public class User{
     private String nickName;
 
     @Column(nullable = false, length = 100)
-    private Long phoneNumber;
+    private String phoneNumber;
 
     @Column
     private String userImage;

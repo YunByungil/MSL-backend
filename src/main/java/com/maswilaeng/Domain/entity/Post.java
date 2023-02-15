@@ -21,7 +21,8 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long post_id;
+    @Column(name="post_id")
+    private Long id;
 
     @Column(nullable = false)
     @CreatedDate
@@ -55,7 +56,7 @@ public class Post {
     public Post(Long post_id, LocalDateTime created_at, String thumbnail, String title, String content, LocalDateTime modified_at) {
 
         //
-        this.post_id = post_id;
+        this.id = post_id;
         this.created_at = created_at;
         this.thumbnail = thumbnail;
         this.title = title;
@@ -63,3 +64,4 @@ public class Post {
         this.modified_at = modified_at;
     }
 }
+

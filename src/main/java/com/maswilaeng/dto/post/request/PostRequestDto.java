@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 
 // 데이터 전달 목적
-//
 @Data
 @NoArgsConstructor // 인자 없이 객체 생성 가능
 @Builder
@@ -26,7 +25,7 @@ public class PostRequestDto {
     /* Dto -> Entity */
     public Post toEntity() {
         Post posts = Post.builder()
-                .post_id(post_id)
+                .id(post_id)
                 .created_at(created_at)
                 .thumbnail(thumbnail)
                 .title(title)

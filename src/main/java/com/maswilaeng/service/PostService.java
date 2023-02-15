@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -24,30 +26,30 @@ public class PostService {
     /* CREATE */
     @Transactional
     public Long save(PostRequestDto dto, String nickName) {
+
         /* User 정보를 가져와 dto에 담아준다. */
         User user = userRepository.findByNickName(nickName);
-        dto.setUser_id(user.getUser_id());
-        log.info("PostService save() 실행");
+        dto.setUser_id(user.getId());
         Post post = dto.toEntity();
         postRepository.save(post);
 
-        return post.getPost_id();
+        return post.getId();
     }
 
-    /* READ 게시글 리스트 조회 readOnly 속성으로 조회속도 개선 */
+    /* READ 게시글 리스트 조회 */
     @Transactional(readOnly = true)
-    public PostResponseDto findById(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(() ->
+    public List<PostResponseDto> getPostListById(Long id) {
+        List<Post> post = postRepository.getPostById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글이 존재하지 않습니다. id: " + id));
 
         return new PostResponseDto(post);
     }
 
     /*
-     * UPDATE (dirty checking 영속성 컨텍스트)
+     * UPDATE -> dirty checking 으로 하는지?
      */
     @Transactional
-    public void update(Long id, PostRequestDto dto) {
+    public void update(Long id, PostRequestDto dto) { // id 없는 객체 -> null "mergeX"
         Post post = postRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글이 존재하지 않습니다. id=" + id));
 
@@ -62,11 +64,11 @@ public class PostService {
 
         postRepository.delete(posts);
     }
-
-    /* search */
-    @Transactional(readOnly = true)
-    public Page<Post> search(String keyword, Pageable pageable) {
-        Page<Post> postList = postRepository.findByTitleContaining(keyword, pageable);
-        return postList;
-    }
+//
+//    /* search */
+//    @Transactional(readOnly = true)
+//    public Page<Post> search(String keyword, Pageable pageable) {
+//        Page<Post> postList = postRepository.findByTitleContaining(keyword, pageable);
+//        return postList;
+//    }
 }
