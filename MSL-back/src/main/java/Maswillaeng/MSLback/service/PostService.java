@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,6 +31,11 @@ public class PostService {
         postRepository.save(post);
     }
 
+    /**
+     * 게시글 수정
+     * @param id
+     * @param dto
+     */
     @Transactional
     public void updatePost(Long id, PostUpdateRequestDto dto) {
         /*
@@ -41,12 +47,33 @@ public class PostService {
         post.update(dto);
     }
 
+    /**
+     * post_id를 이용해서 게시글 불러오기
+     * @param id
+     */
     public Post findOne(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(
                         () -> new IllegalStateException("게시글을 찾을 수 없습니다.")
                 );
 
+        return post;
+    }
+
+    /**
+     * 게시글 상세 조회
+     * @param id
+     */
+    public Post getPost(Long id) {
+        Post post = findOne(id);
+        return post;
+    }
+
+    /**
+     * 게시글 전체 조회
+     */
+    public List<Post> getAllPost() {
+        List<Post> post = postRepository.findAll();
         return post;
     }
 }
