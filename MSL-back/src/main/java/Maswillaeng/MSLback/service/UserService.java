@@ -68,9 +68,10 @@ public class UserService {
 //        user.updateUser(userUpdateDTO);
 //    }
 
-    public Optional<User> findOne(Long userId) {
-
-        return userRepository.findById(userId);
+    public User findOne(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("없는 회원"));
+        return user;
     }
 
     public List<User> findAll() {

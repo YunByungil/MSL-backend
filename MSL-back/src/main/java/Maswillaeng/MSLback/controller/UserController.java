@@ -50,9 +50,7 @@ public class UserController {
      */
     @GetMapping("/user")
     public ResponseEntity<Object> member(Authentication authentication) {
-        User user = userService
-                .findOne(Long.parseLong(authentication.getName()))
-                .orElseThrow(() -> new IllegalStateException("없는 회원"));
+        User user = userService.findOne(Long.parseLong(authentication.getName()));
         UserListDTO userListDTO = new UserListDTO(user);
         return ResponseEntity.ok().body(userListDTO);
     }
