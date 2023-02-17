@@ -1,4 +1,4 @@
-package com.maswilaeng.Domain.entity;
+package com.maswilaeng.domain.entity;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

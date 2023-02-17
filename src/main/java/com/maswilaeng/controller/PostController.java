@@ -1,6 +1,6 @@
 package com.maswilaeng.controller;
 
-import com.maswilaeng.Domain.entity.Post;
+import com.maswilaeng.domain.entity.Post;
 import com.maswilaeng.dto.post.request.PostRequestDto;
 import com.maswilaeng.dto.post.response.PostResponseDto;
 import com.maswilaeng.dto.user.request.UserRequestDto;

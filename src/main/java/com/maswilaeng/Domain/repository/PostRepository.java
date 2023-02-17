@@ -1,6 +1,6 @@
-package com.maswilaeng.Domain.repository;
+package com.maswilaeng.domain.repository;
 
-import com.maswilaeng.Domain.entity.Post;
+import com.maswilaeng.domain.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,7 +1,7 @@
 package com.maswilaeng.service;
 
-import com.maswilaeng.Domain.entity.User;
-import com.maswilaeng.Domain.repository.UserRepository;
+import com.maswilaeng.domain.entity.User;
+import com.maswilaeng.domain.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

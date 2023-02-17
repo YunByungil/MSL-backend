@@ -1,7 +1,7 @@
 package com.maswilaeng.service;
 
-import com.maswilaeng.Domain.entity.User;
-import com.maswilaeng.Domain.repository.UserRepository;
+import com.maswilaeng.domain.entity.User;
+import com.maswilaeng.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

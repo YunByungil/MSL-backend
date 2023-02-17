@@ -1,9 +1,9 @@
 package com.maswilaeng.service;
 
-import com.maswilaeng.Domain.entity.Post;
-import com.maswilaeng.Domain.entity.User;
-import com.maswilaeng.Domain.repository.PostRepository;
-import com.maswilaeng.Domain.repository.UserRepository;
+import com.maswilaeng.domain.entity.Post;
+import com.maswilaeng.domain.entity.User;
+import com.maswilaeng.domain.repository.PostRepository;
+import com.maswilaeng.domain.repository.UserRepository;
 import com.maswilaeng.dto.post.request.PostRequestDto;
 import com.maswilaeng.dto.post.response.PostResponseDto;
 import lombok.RequiredArgsConstructor;

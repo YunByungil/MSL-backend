@@ -1,7 +1,7 @@
 package com.maswilaeng.controller;
 
-import com.maswilaeng.Domain.entity.Role;
-import com.maswilaeng.Domain.entity.User;
+import com.maswilaeng.domain.entity.Role;
+import com.maswilaeng.domain.entity.User;
 import com.maswilaeng.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

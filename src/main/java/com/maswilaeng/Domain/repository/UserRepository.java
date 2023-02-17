@@ -1,7 +1,7 @@
-package com.maswilaeng.Domain.repository;
+package com.maswilaeng.domain.repository;
 
-import com.maswilaeng.Domain.entity.Post;
-import com.maswilaeng.Domain.entity.User;
+import com.maswilaeng.domain.entity.Post;
+import com.maswilaeng.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

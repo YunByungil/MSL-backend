@@ -1,4 +1,4 @@
-package com.maswilaeng.Domain.repository;
+package com.maswilaeng.domain.repository;
 
 public class AlarmLikeRepository {
 }

@@ -1,6 +1,6 @@
 package com.maswilaeng.controller;
 
-import com.maswilaeng.Domain.entity.Role;
+import com.maswilaeng.domain.entity.Role;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.LastModifiedDate;
