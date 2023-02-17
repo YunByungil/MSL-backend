@@ -47,18 +47,6 @@ public class PostService {
         post.update(dto);
     }
 
-    /**
-     * post_id를 이용해서 게시글 불러오기
-     * @param id
-     */
-    public Post findOne(Long id) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(
-                        () -> new IllegalStateException("게시글을 찾을 수 없습니다.")
-                );
-
-        return post;
-    }
 
     /**
      * 게시글 상세 조회
@@ -74,6 +62,34 @@ public class PostService {
      */
     public List<Post> getAllPost() {
         List<Post> post = postRepository.findAll();
+        return post;
+    }
+
+    /**
+     * 게시글 삭제
+     */
+    @Transactional
+    public void deletePost(Long id) {
+
+        Post post = findOne(id);
+        System.out.println("log.info(\"deletePost, postId = {}\", postId);");
+        postRepository.deleteById(post.getId());
+    }
+
+
+
+
+
+    /**
+     * post_id를 이용해서 게시글 불러오기
+     * @param id
+     */
+    private Post findOne(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(
+                        () -> new IllegalStateException("게시글을 찾을 수 없습니다.")
+                );
+
         return post;
     }
 }

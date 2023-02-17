@@ -65,4 +65,14 @@ public class PostController {
 
         return new PostListResponse(collect.size(), HttpStatus.OK.value(), collect);
     }
+
+    /**
+     * 게시글 삭제
+     */
+    @DeleteMapping("/post/{postId}")
+    public PostResponse deletePost(@PathVariable Long postId) {
+        log.info("deletePost, postId = {}", postId);
+        postService.deletePost(postId);
+        return new PostResponse(HttpStatus.OK.value());
+    }
 }
