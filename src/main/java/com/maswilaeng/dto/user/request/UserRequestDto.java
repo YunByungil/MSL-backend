@@ -10,7 +10,7 @@ public class UserRequestDto {
     private String email;
     private String pw;
     private String nickName;
-    private Long phoneNumber;
+    private String phoneNumber;
     private String userImage;
     private String introduction;
     private String withdraw_yn;
@@ -23,7 +23,7 @@ public class UserRequestDto {
     /* DTO -> Entity */
     public User toEntity() {
         User user = User.builder()
-                .user_id(user_id)
+                .id(user_id)
                 .email(email)
                 .pw(pw)
                 .nickName(nickName)

@@ -27,7 +27,10 @@ public class PostController {
     /* CREATE */
     @PostMapping("/post")
     public ResponseEntity save(@RequestBody PostRequestDto dto, String nickname) {
-        return ResponseEntity.ok(postService.save(dto, nickname));
+//        return ResponseEntity.ok(postService.save(dto, nickname));
+        return ResponseEntity.ok().body(postService.save(dto, nickname));
+        //ResponseEntity search
+        // test
     }
 
     /* READ */

@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Getter
 public class PostResponseDto {
     private Long post_id;
-    private Long user_id;
     private LocalDateTime created_at;
     private String thumbnail;
     private String title;
@@ -20,8 +19,7 @@ public class PostResponseDto {
 
     /* Dto -> Entity */
     public PostResponseDto(Post post) {
-        this.post_id = post.getPost_id();
-        this.user_id = post.getUser_id();
+        this.post_id = post.getId();
         this.created_at = post.getCreated_at();
         this.thumbnail = post.getThumbnail();
         this.title = post.getTitle();
