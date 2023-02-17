@@ -1,5 +1,6 @@
 package Maswillaeng.MSLback.domain.entity;
 
+import Maswillaeng.MSLback.dto.post.request.PostUpdateRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,9 +22,9 @@ public class Post extends BaseEntity{
     @JoinColumn(name = "user_id")
     private User user;
     private String thumbnail;
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String title;
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String content;
     private Long hits;
     private int report;
@@ -36,5 +37,11 @@ public class Post extends BaseEntity{
         this.content = content;
         this.hits = 0L;
         this.report = 0;
+    }
+
+    public void update(PostUpdateRequestDto dto) {
+        this.thumbnail = dto.getThumbnail();
+        this.title = dto.getTitle();
+        this.content = dto.getContent();
     }
 }
