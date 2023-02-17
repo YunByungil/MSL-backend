@@ -32,6 +32,11 @@ public class PostService {
 
     @Transactional
     public void updatePost(Long id, PostUpdateRequestDto dto) {
+        /*
+        굳이 게시글 하나만 찾는 findOne이 필요할까?
+        그냥 Repository에서 바로 불러와도 될 거 같은뎅
+        근데 Optional때문에 놔둬도 될 거 같기도 하고 (가독성)
+         */
         Post post = findOne(id);
         post.update(dto);
     }
