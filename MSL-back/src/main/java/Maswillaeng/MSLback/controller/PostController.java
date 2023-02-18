@@ -70,9 +70,13 @@ public class PostController {
      * 게시글 삭제
      */
     @DeleteMapping("/post/{postId}")
-    public PostResponse deletePost(@PathVariable Long postId) {
+    public PostResponse deletePost(@PathVariable Long postId, Authentication authentication) {
+        /*
+        내 게시글이 맞는지 확인하는 검증
+         */
+        Long myId = Long.parseLong(authentication.getName());
         log.info("deletePost, postId = {}", postId);
-        postService.deletePost(postId);
+        postService.deletePost(postId, myId);
         return new PostResponse(HttpStatus.OK.value());
     }
 }

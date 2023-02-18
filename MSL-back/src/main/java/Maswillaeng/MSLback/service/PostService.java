@@ -69,9 +69,12 @@ public class PostService {
      * 게시글 삭제
      */
     @Transactional
-    public void deletePost(Long id) {
+    public void deletePost(Long postId, Long myId) {
 
-        Post post = findOne(id);
+        Post post = findOne(postId);
+        if (post.getUser().getId() != myId) {
+            throw new IllegalStateException("내가 등록한 글이 아니기 때문에 삭제 불가능합니다");
+        }
         System.out.println("log.info(\"deletePost, postId = {}\", postId);");
         postRepository.deleteById(post.getId());
     }
