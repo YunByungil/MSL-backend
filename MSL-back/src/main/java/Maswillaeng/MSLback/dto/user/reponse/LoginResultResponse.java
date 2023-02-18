@@ -9,6 +9,6 @@ import lombok.Getter;
 @Builder
 public class LoginResultResponse {
 
-    private String nickName;
+    private String nickname;
     private String userImage;
 }

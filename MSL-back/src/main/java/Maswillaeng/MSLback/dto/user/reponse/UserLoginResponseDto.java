@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class UserLoginResponseDto {
 
     private TokenResponse tokenResponse;
-    private String nickName;
+    private String nickname;
     private String userImage;
 }

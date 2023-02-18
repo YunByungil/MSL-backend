@@ -30,6 +30,9 @@ public class PostController {
     @PostMapping("/post")
     public PostResponse addPost(Authentication authentication, @RequestBody PostRequestDto postRequestDto) {
         // TODO: @Valid
+
+        log.info(authentication.getName());
+        System.out.println("id = " + authentication.getName());
         Long id = Long.parseLong(authentication.getName());
         log.info("content = {}", postRequestDto.getContent());
         postService.addPost(id, postRequestDto);

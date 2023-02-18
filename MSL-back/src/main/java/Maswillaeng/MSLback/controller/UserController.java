@@ -1,6 +1,5 @@
 package Maswillaeng.MSLback.controller;
 
-import Maswillaeng.MSLback.config.EncryptConfig;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.dto.user.reponse.LoginResponseDto;
 import Maswillaeng.MSLback.dto.user.reponse.LoginResultResponse;
@@ -8,10 +7,8 @@ import Maswillaeng.MSLback.dto.user.reponse.UserLoginResponseDto;
 import Maswillaeng.MSLback.dto.user.request.UserLoginRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserJoinDTO;
 import Maswillaeng.MSLback.dto.user.request.UserListDTO;
-import Maswillaeng.MSLback.dto.user.request.UserUpdateDTO;
 import Maswillaeng.MSLback.service.UserService;
 import Maswillaeng.MSLback.utils.CookieUtil;
-import Maswillaeng.MSLback.utils.JwtUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -92,7 +89,7 @@ public class UserController {
     private LoginResultResponse getLoginResultResponse(UserLoginResponseDto userLoginResponseDto) {
         LoginResultResponse l = LoginResultResponse
                 .builder()
-                .nickName(userLoginResponseDto.getNickName())
+                .nickname(userLoginResponseDto.getNickname())
                 .userImage(userLoginResponseDto.getUserImage())
                 .build();
         return l;
@@ -104,6 +101,11 @@ public class UserController {
         userService.join(userJoinDTO);
         return new Result(HttpStatus.OK.value());
     }
+
+//    @GetMapping("/token")
+//    public ResponseEntity reToken() {
+//
+//    }
 
 //    @PutMapping("/user") // 로그인 구현x
 //    public ResponseEntity<Object> update(@RequestBody UserUpdateDTO userUpdateDTO) {

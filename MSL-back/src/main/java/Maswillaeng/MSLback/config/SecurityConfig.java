@@ -43,10 +43,10 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/api/sign", "/api/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/**")
-                .access("hasRole('ROLE_USER')")
+                .access("hasRole('USER')")
                 .anyRequest().permitAll()
                 .and()
-                .addFilterAfter(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }
