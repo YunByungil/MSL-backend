@@ -3,7 +3,6 @@ package Maswillaeng.MSLback.controller;
 import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.dto.post.request.PostsSaveRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostsUpdateRequestDto;
-import Maswillaeng.MSLback.dto.post.response.PostResponseDto;
 import Maswillaeng.MSLback.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,17 +14,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/post")
-public class PostsController {
+public class PostController {
 
     private final PostService postService;
 
 
-    @GetMapping("/posts")
+    @GetMapping("/page")
     public ResponseEntity<List<Post>> getAllPosts() {
         List<Post> posts = postService.getAllPosts();
         return ResponseEntity.ok(posts);
     }
-    @GetMapping("/{id}")
+    @GetMapping
     public ResponseEntity<Optional<Post>> getPostById(@PathVariable Long id) {
         Optional<Post> post = postService.getPostById(id);
         return ResponseEntity.ok().build();
@@ -37,13 +36,13 @@ public class PostsController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}")
+/*    @PutMapping
     public ResponseEntity<Object> updatePost(@RequestBody PostsUpdateRequestDto requestDto, @PathVariable Long id) {
         postService.updatePost(id, requestDto);
         return ResponseEntity.ok().build();
-    }
+    }*/
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping
     public ResponseEntity<Object> deletePost(@PathVariable Long id){
         postService.deletePost(id);
         return ResponseEntity.ok().build();

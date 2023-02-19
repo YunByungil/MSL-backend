@@ -3,19 +3,16 @@ package Maswillaeng.MSLback.domain.entity;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.validator.constraints.Currency;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.management.relation.Role;
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseTimeEntity{
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,15 +40,16 @@ public class User extends BaseTimeEntity{
     private int withdrawYn;
 
     @Enumerated(EnumType.STRING)
-    private RoleType role;
+    private Role role;
 
     private String refreshToken;
+
 
     private LocalDateTime withdrawAt;
 
     @Builder
     public User(String email, String password, String nickname, String phoneNumber, String userImage,
-                String introduction, RoleType role, String refreshToken) {
+                String introduction, Role role, String refreshToken) {
         this.email = email;
         this.password = password;
         this.nickName = nickname;
@@ -69,5 +67,13 @@ public class User extends BaseTimeEntity{
         this.nickName = requestDto.getNickName();
         this.userImage = requestDto.getUserImage();
         this.introduction = requestDto.getIntroduction();
+    }
+
+    public void setPassword(String encodePwd) {
+        this.password = encodePwd;
+    }
+
+    public void setRefreshToken(String token) {
+        this.refreshToken = token;
     }
 }

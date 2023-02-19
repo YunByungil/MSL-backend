@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class UserResponseDto {
     private String email;
@@ -17,14 +16,12 @@ public class UserResponseDto {
     private String introduction;
     private String password;
 
-
-    public UserResponseDto toEntity(User user){
-        return new UserResponseDto(
-            user.getEmail(),
-            user.getPhoneNumber(),
-            user.getNickName(),
-            user.getUserImage(),
-            user.getIntroduction(),
-            user.getPassword());
+    public UserResponseDto(User user){
+        this.email = user.getEmail();
+        this.phoneNumber = user.getPhoneNumber();
+        this.nickName = user.getNickName();
+//        this.userImage = user.getUserImage();
+//        this.introduction = user.getIntroduction();
+        this.password = user.getPassword();
     }
 }

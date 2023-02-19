@@ -1,5 +1,5 @@
 package Maswillaeng.MSLback.domain.entity;
 
-public enum RoleType {
+public enum Role {
     ADMIN,USER
 }

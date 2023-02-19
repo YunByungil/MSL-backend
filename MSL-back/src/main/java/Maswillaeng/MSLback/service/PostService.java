@@ -22,13 +22,13 @@ public class PostService {
     private final PostsRepository postsRepository;
 
     public List<Post> getAllPosts(){
-        List<Post> posts = postsRepository.findAll();
+        List<Post> posts = postsRepository.findAll(); //500개씩
         return posts;
     }
 
     public Optional<Post> getPostById(Long postId){
         Optional<Post> post = postsRepository.findById(postId);
-        return post;
+        return post; //optional null처리  .orElse();
     }
 
     public void savePost(PostsSaveRequestDto requestDto) {
@@ -36,10 +36,10 @@ public class PostService {
         postsRepository.save(post);
     }
 
-    public void updatePost(Long id, PostsUpdateRequestDto requestDto) {
-        Post posts = postsRepository.findById(id).get();
-        posts.update(requestDto);
-    }
+//    public void updatePost(Long id, PostsUpdateRequestDto requestDto) {
+//        Post posts = postsRepository.findById(id); //get null처리 안하고 강제
+//        posts.update(requestDto);
+//    }
 
     public void deletePost(Long id) {
         Post post = postsRepository.findById(id)
