@@ -28,12 +28,15 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         String exception = (String) request.getAttribute("exception");
         if (exception == null) {
             log.info("Exception에서 null 발생");
-            setErrorResponse(response, UNKNOWN_ERROR);
-            return;
+            log.info("토큰이 존재하지 않습니다. 로그인 해주세여");
+            setErrorResponse(response, INVALID_TOKEN);
+//            response.sendRedirect("/api");
+//            throw new IOException("gd");
+//            return;
         }
 
-        log.error("Exception = {}", exception);
 
+        log.error("Exception = {}", exception);
 
         if (exception.equals(UNKNOWN_ERROR.name())) {
             log.info("알 수 없는 에러가 발생하였습니다.");
@@ -43,6 +46,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         if (exception.equals(INVALID_TOKEN.name())) {
             log.info("토큰이 만료되었습니다.");
             setErrorResponse(response, INVALID_TOKEN);
+            response.sendRedirect("/api");
         }
 
         if (exception.equals(INVALID_PERMISSION.name())) {
@@ -66,4 +70,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                 objectMapper.writeValueAsString(
                         ErrorResponse.error(errorCode.getStatus().value(), result)));
     }
+
+
 }

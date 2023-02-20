@@ -9,6 +9,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
@@ -17,7 +18,7 @@ public class JwtUtil {
     private final UserService userService;
     private final CookieUtil cookieUtil;
     @Value("${jwt.secret}")
-    private String secretKey; // 시크릿 키
+    private final String secretKey; // 시크릿 키
     public static final Long ACCESS_TOKEN_EXPIRE_TIME = 100 * 60L; // AccessToken 시간 1분
     public static final Long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 120L; // RefreshToken 시간
 
@@ -45,11 +46,11 @@ public class JwtUtil {
                 .compact();
     }
 
-    public void reissueAccessToken(String refreshToken, String accessToken, String secretKey) {
+    public static void reissueAccessToken(String refreshToken, String accessToken, String secretKey) {
         System.out.println("엑세스토큰 재발급 완료 메서드");
+        System.out.println("secretKey = " + secretKey);
         Long userId = getUserId(refreshToken, secretKey);
         System.out.println("userId = " + userId);
-        User user = userService.findOne(userId);
 
         String token = createJwt(userId, RoleType.USER, secretKey);
         System.out.println("token = " + token);

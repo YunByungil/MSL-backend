@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -25,6 +26,11 @@ public class SecurityConfig {
     
     @Value("${jwt.secret}")
     private String secretKey;
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/api/post/1", "/api", "/api/token");
+    }
     
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,13 +43,15 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // exception 토큰
+//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // exception 토큰
+                .authenticationEntryPoint((request, response, authException) ->
+                        response.sendRedirect("/api/token"))
                 .accessDeniedHandler(new CustomAccessDeniedHandler()) // exception 권한
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/sign", "/api/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/**")
-                .access("hasRole('USER')")
+                .antMatchers("/api/**")
+                .access("hasRole('ROLE_USER')")
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)

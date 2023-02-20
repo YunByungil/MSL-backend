@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -39,7 +40,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // TODO: PrincipalDetails 구현
+        /*
+        TODO: PrincipalDetails 구현
+        TODO: 비회원일 때 처리
+        TODO: 어떻게 하면 액세스 토큰이 만료 되었을 때 필터를 거치지 않고 발급 받을 수 있을까?
+         */
         log.info("=== doFilterInternal ===");
         log.info("SecretKey : {}", secretKey);
 
@@ -48,17 +53,20 @@ public class JwtFilter extends OncePerRequestFilter {
         Cookie[] cookies = request.getCookies();
 
         log.info("SecretKey2 : {}", secretKey);
-        if (cookies == null) {
-            log.error("토큰이 존재하지 않습니다.");
+//        if (cookies == null) {
+//            log.error("토큰이 존재하지 않습니다.");
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+        if (ObjectUtils.isEmpty(cookies)) {
             filterChain.doFilter(request, response);
             return;
         }
-
         log.info("SecretKey3 : {}", secretKey);
         String accessCookie = "";
         String refreshCookie = "";
         for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("accessToken")) {
+                if (cookie.getName().equals("accessToken")) {
                 accessCookie = cookie.getValue();
             } else if (cookie.getName().equals("refreshToken")) {
                 refreshCookie = cookie.getValue();
@@ -83,7 +91,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 exceptionAccess(request, response, filterChain, accessCookie);
             } else {
                 log.error("Filter: 엑세스 토큰 만료되었음");
-                userService.reissueAccessToken(refreshCookie, accessCookie, secretKey);
+                exceptionAccess(request, response, filterChain, accessCookie);
+//                userService.reissueAccessToken(refreshCookie, accessCookie, secretKey);
             }
         } else {
             log.error("Filter: 리프레시 토큰 만료되었음");

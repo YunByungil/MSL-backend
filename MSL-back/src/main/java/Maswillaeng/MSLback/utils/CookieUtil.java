@@ -12,7 +12,18 @@ public class CookieUtil {
                 .from("accessToken", userLoginResponseDto.getTokenResponse().getAccessToken())
                 .path("/")
                 .httpOnly(true)
-                .maxAge(JwtUtil.ACCESS_TOKEN_EXPIRE_TIME)
+                // 시간
+                .maxAge(JwtUtil.REFRESH_TOKEN_EXPIRE_TIME)
+                .sameSite("Lax")
+                .build();
+    }
+    public ResponseCookie createCookie(String accessToken) {
+        return ResponseCookie
+                .from("accessToken", accessToken)
+                .path("/")
+                .httpOnly(true)
+                // 시간
+                .maxAge(JwtUtil.REFRESH_TOKEN_EXPIRE_TIME)
                 .sameSite("Lax")
                 .build();
     }

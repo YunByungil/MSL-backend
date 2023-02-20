@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,11 @@ import java.util.stream.Collectors;
 public class PostController {
 
     private final PostService postService;
+
+    @GetMapping()
+    public String index() {
+        return "index";
+    }
 
     @PostMapping("/post")
     public PostResponse addPost(Authentication authentication, @RequestBody PostRequestDto postRequestDto) {

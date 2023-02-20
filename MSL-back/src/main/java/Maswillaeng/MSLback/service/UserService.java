@@ -92,7 +92,7 @@ public class UserService {
 //        }
 //    }
 
-    public TokenResponse reissueAccessToken(String refreshToken, String accessToken, String secretKey) {
+    public TokenResponse reissueAccessToken(String refreshToken) {
         String token = "";
         System.out.println("엑세스토큰 재발급 완료 메서드");
         Long userId = getUserId(refreshToken, secretKey);
@@ -104,9 +104,8 @@ public class UserService {
         } else {
             new Exception("이상한 토큰을 넣었음!");
         }
-
         return TokenResponse.builder()
-                .accessToken(accessToken)
+                .accessToken(token)
                 .refreshToken(refreshToken)
                 .build();
 //        return ResponseEntity.ok()

@@ -3,6 +3,7 @@ package Maswillaeng.MSLback.controller;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.dto.user.reponse.LoginResponseDto;
 import Maswillaeng.MSLback.dto.user.reponse.LoginResultResponse;
+import Maswillaeng.MSLback.dto.user.reponse.TokenResponse;
 import Maswillaeng.MSLback.dto.user.reponse.UserLoginResponseDto;
 import Maswillaeng.MSLback.dto.user.request.UserLoginRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserJoinDTO;
@@ -102,10 +103,18 @@ public class UserController {
         return new Result(HttpStatus.OK.value());
     }
 
-//    @GetMapping("/token")
-//    public ResponseEntity reToken() {
-//
-//    }
+    @GetMapping("/token")
+    public ResponseEntity reissue(@CookieValue("refreshToken") String to, Authentication authentication) {
+        System.out.println("\"gdgd\" = " + "gdgd");
+
+        System.out.println("authentication = " + to.toString());
+        TokenResponse token = userService.reissueAccessToken(to);
+
+        ResponseCookie cookie = cookieUtil.createCookie(token.getAccessToken());
+        return ResponseEntity.ok()
+                .header("Set-Cookie", cookie.toString())
+                .body("토큰 발급 완료");
+    }
 
 //    @PutMapping("/user") // 로그인 구현x
 //    public ResponseEntity<Object> update(@RequestBody UserUpdateDTO userUpdateDTO) {
