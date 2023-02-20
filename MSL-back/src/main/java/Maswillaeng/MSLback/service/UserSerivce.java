@@ -4,6 +4,7 @@ import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
 import Maswillaeng.MSLback.dto.user.reponse.UserResDTO;
 import Maswillaeng.MSLback.dto.user.request.UserJoinReqDTO;
+import Maswillaeng.MSLback.dto.user.request.UserLoginReqDTO;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateReqDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class UserSerivce {
 
     @Transactional
     public void updateUser(Long userId, UserUpdateReqDTO userUpdateReqDTO) {
-        Optional<User> user = userRepository.findById(userId).orElseThrow();
+        User user = userRepository.findById(userId).get();
         user.update(userUpdateReqDTO);
     }
 
@@ -49,5 +50,11 @@ public class UserSerivce {
     public void userWithDraw(Long userId) {
         User user = userRepository.findById(userId).get();
         user.withdraw();
+    }
+
+    public String login(UserLoginReqDTO userLoginReqDTO) {
+        User selectUser = userRepository.findByEmail(userLoginReqDTO.getEmail()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        String password = selectUser.getPassword();
+        if(!userLoginReqDTO.getPassword().equals(password));
     }
 }
