@@ -21,22 +21,22 @@ public class PostRequestDto {
 
     private Long post_id;
     private Long user_id;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     private String thumbnail;
     private String title;
     private String content;
-    private LocalDateTime modified_at;
+    private LocalDateTime modifiedAt;
 
     /* Dto -> Entity */
     public Post toEntity() {
         Post posts = Post.builder()
                 .post_id(post_id)
                 .user_id(user_id)
-                .created_at(created_at)
+                .createdAt(createdAt)
                 .thumbnail(thumbnail)
                 .title(title)
                 .content(content)
-                .modified_at(modified_at)
+                .modifiedAt(modifiedAt)
                 .build();
 
         return posts;

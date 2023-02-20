@@ -25,12 +25,12 @@ public class UserResponseDto {
     private Long phoneNumber;
     private String userImage;
     private String introduction;
-    private String withdraw_yn;
+    private String withdrawYn;
     private Role role;
-    private String refresh_token;
-    private LocalDateTime created_at;
-    private LocalDateTime modified_at;
-    private LocalDateTime withdraw_at;
+    private String refreshToken;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
+    private LocalDateTime withdrawAt;
 
     /* DTO -> Entity */
     public UserResponseDto(User user) {
@@ -43,9 +43,9 @@ public class UserResponseDto {
         this.phoneNumber = user.getPhoneNumber();
         this.userImage = user.getUserImage();
         this.introduction = user.getIntroduction();
-        this.withdraw_yn = user.getWithdraw_yn();
+        this.withdrawYn = user.getWithdrawYn();
         this.role = user.getRole();
-        this.refresh_token = user.getRefresh_token();
+        this.refreshToken = user.getRefreshToken();
 
 
 

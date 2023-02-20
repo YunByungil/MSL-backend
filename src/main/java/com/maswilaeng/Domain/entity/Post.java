@@ -26,7 +26,7 @@ public class Post {
 
     @Column(nullable = false)
     @CreatedDate
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     @Column
     private String thumbnail;
@@ -39,7 +39,7 @@ public class Post {
 
     @Column
     @LastModifiedDate
-    private LocalDateTime modified_at;
+    private LocalDateTime modifiedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
@@ -53,15 +53,15 @@ public class Post {
 
     // Java Build design pattern. 생성 시점에 값 채우기
     @Builder
-    public Post(Long post_id, LocalDateTime created_at, String thumbnail, String title, String content, LocalDateTime modified_at) {
+    public Post(Long post_id, LocalDateTime createdAt, String thumbnail, String title, String content, LocalDateTime modifiedAt) {
 
         //
         this.id = post_id;
-        this.created_at = created_at;
+        this.createdAt = createdAt;
         this.thumbnail = thumbnail;
         this.title = title;
         this.content = content;
-        this.modified_at = modified_at;
+        this.modifiedAt = modifiedAt;
     }
 }
 

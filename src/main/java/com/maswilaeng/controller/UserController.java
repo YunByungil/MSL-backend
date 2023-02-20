@@ -28,27 +28,9 @@ public class UserController {
     }
 
     @PostMapping("/sign")
-    public ResponseEntity<Object> join(@RequestBody UserForm form){
+    public ResponseEntity<Object> join(@RequestBody UserJoinDto userJoinDto)throws Exception{
 
-        // 회원가입 API /sign 에서 원하는 정보를 body로 전달하기 위한 form
-        User user = new User();
-
-        user.setUser_id(form.getUser_id());
-        user.setEmail(form.getEmail());
-        user.setPw(form.getPw());
-        user.setNickName(form.getNickName());
-        user.setPhoneNumber(form.getPhoneNumber());
-        user.setUserImage(form.getUserImage());
-        user.setIntroduction(form.getIntroduction());
-        user.setWithdraw_yn(form.getWithdraw_yn());
-        user.setRole(form.getRole());
-        user.setRefresh_token(form.getRefresh_token());
-        user.setCreated_at(form.getCreated_at());
-        user.setModified_at(form.getModified_at());
-        user.setWithdraw_at(form.getWithdraw_at());
-
-        userService.join(user);
-
+        User user = userJoinDto.toEntity();
         return ResponseEntity.ok().build();
     }
 

@@ -13,12 +13,12 @@ public class UserRequestDto {
     private String phoneNumber;
     private String userImage;
     private String introduction;
-    private String withdraw_yn;
+    private String withdrawYn;
     private Role role;
-    private String refresh_token;
-    private LocalDateTime created_at;
-    private LocalDateTime modified_at;
-    private LocalDateTime withdraw_at;
+    private String refreshToken;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
+    private LocalDateTime withdrawAt;
 
     /* DTO -> Entity */
     public User toEntity() {
@@ -30,12 +30,12 @@ public class UserRequestDto {
                 .phoneNumber(phoneNumber)
                 .userImage(userImage)
                 .introduction(introduction)
-                .withdraw_yn(withdraw_yn)
+                .withdrawYn(withdrawYn)
                 .role(role.USER)
-                .refresh_token(refresh_token)
-                .created_at(created_at)
-                .modified_at(modified_at)
-                .withdraw_at(withdraw_at)
+                .refreshToken(refreshToken)
+                .createdAt(createdAt)
+                .modifiedAt(modifiedAt)
+                .withdrawAt(withdrawAt)
                 .build();
         return user;
     }

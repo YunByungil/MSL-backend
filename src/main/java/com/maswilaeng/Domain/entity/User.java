@@ -40,7 +40,7 @@ public class User{
     private String introduction;
 
     @Column(nullable = false, length = 100)
-    private String withdraw_yn;
+    private String withdrawYn;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 100)
@@ -48,18 +48,18 @@ public class User{
 
     // 수정 필요
     @Column(nullable = false, length = 100)
-    private String refresh_token;
+    private String refreshToken;
 
     @Column(nullable = false, length = 100)
     @CreatedDate
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     @Column
     @LastModifiedDate
-    private LocalDateTime  modified_at;
+    private LocalDateTime  modifiedAt;
 
     @Column
-    private LocalDateTime withdraw_at;
+    private LocalDateTime withdrawAt;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post_id")
     private List<Post> post;
