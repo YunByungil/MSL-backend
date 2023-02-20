@@ -29,13 +29,13 @@ public class PostController {
 
     // 1개 글 조회
     @GetMapping("/post/{postId}")
-    public ResponseEntity<Object> getPost(@RequestParam Long postId) {
+    public ResponseEntity<Object> getPost(@PathVariable Long postId) {
         return ResponseEntity.ok().body(postService.getPost(postId));
     }
 
     // 글 삭제
     @DeleteMapping("/post/{postId}")
-    public ResponseEntity<?> deletePost(@RequestParam Long postId) {
+    public ResponseEntity<?> deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
         return ResponseEntity.ok().build();
     }

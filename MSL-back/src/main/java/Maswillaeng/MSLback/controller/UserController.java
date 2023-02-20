@@ -1,6 +1,7 @@
 package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.dto.user.request.UserJoinReqDTO;
+import Maswillaeng.MSLback.dto.user.request.UserLoginReqDTO;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateReqDTO;
 import Maswillaeng.MSLback.service.UserSerivce;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,12 @@ public class UserController {
     public ResponseEntity<?> join(@RequestBody UserJoinReqDTO userJoinReqDTO) throws Exception {
         userSerivce.join(userJoinReqDTO);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UserLoginReqDTO userLoginReqDTO) {
+        String token = userSerivce.login(userLoginReqDTO);
+        return ResponseEntity.ok().body(token);
     }
 
     // 이메일 중복 확인

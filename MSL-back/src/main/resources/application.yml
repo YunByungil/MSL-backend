@@ -13,7 +13,7 @@ spring:
     hibernate:
       ddl-auto: create
 
-    open-in-view: true
+    open-in-view: false
 
     generate-ddl: off
 
@@ -25,3 +25,6 @@ spring:
 logging:
   level:
     sql: debug
+
+secret:
+  access: accessTokenSecretKeyAesSecretKey
