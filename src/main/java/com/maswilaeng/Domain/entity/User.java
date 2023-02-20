@@ -8,12 +8,10 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Setter
 @Entity
+@Table(name = "users")
 public class User{
 
     @Id
@@ -27,41 +25,27 @@ public class User{
     @Column(nullable = false, length = 100)
     private String pw;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String nickName;
 
-    @Column(nullable = false, length = 100)
     private String phoneNumber;
 
-    @Column
     private String userImage;
 
-    @Column
+    @Column(length = 100)
     private String introduction;
 
-    @Column(nullable = false, length = 100)
+    @ColumnDefault("0")
     private String withdrawYn;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 100)
     private Role role;
 
     // 수정 필요
-    @Column(nullable = false, length = 100)
+    @Column(length=1000)
     private String refreshToken;
 
-    @Column(nullable = false, length = 100)
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @Column
-    @LastModifiedDate
-    private LocalDateTime  modifiedAt;
-
-    @Column
-    private LocalDateTime withdrawAt;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post_id")
+    @OneToMany(mappedBy = "post_id")
     private List<Post> post;
 
 }
