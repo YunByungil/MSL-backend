@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class CommentDto {
+public class CommentRequestDto {
 
     private User user;
     private Post post;

@@ -1,6 +1,6 @@
 package Maswillaeng.MSLback.controller;
 
-import Maswillaeng.MSLback.dto.comment.request.CommentDto;
+import Maswillaeng.MSLback.dto.comment.request.CommentRequestDto;
 import Maswillaeng.MSLback.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ public class CommentController {
 
     @PostMapping("/post/{postId}/comment")
     public ResponseEntity addComment(@PathVariable("postId") Long postId,
-                                     @RequestBody CommentDto dto,
+                                     @RequestBody CommentRequestDto dto,
                                      Authentication authentication) {
         Long userId = Long.parseLong(authentication.getName());
         commentService.addComment(postId, userId, dto);
