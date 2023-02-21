@@ -1,7 +1,8 @@
 package Maswillaeng.MSLback.service;
 
+import Maswillaeng.MSLback.domain.entity.Comment;
 import Maswillaeng.MSLback.domain.repository.CommentRepository;
-import Maswillaeng.MSLback.domain.repository.UserRepository;
+import Maswillaeng.MSLback.dto.comment.request.CommentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class CommentService {
      * 댓글에 유저, 포스트 정보를 다 넣어야 함.
      */
     public void addComment(CommentDto commentDto) {
-        commentRepository.save(commentDto);
+        Comment comment = commentDto.toEntity();
+        commentRepository.save(comment);
     }
 }
