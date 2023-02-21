@@ -43,9 +43,9 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .exceptionHandling()
-//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // exception 토큰
-                .authenticationEntryPoint((request, response, authException) ->
-                        response.sendRedirect("/api/token"))
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // exception 토큰
+//                .authenticationEntryPoint((request, response, authException) ->
+//                        response.sendRedirect("/api/token"))
                 .accessDeniedHandler(new CustomAccessDeniedHandler()) // exception 권한
                 .and()
                 .authorizeRequests()

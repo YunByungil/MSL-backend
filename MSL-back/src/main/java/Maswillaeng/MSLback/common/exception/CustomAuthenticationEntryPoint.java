@@ -25,17 +25,19 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         // TODO: 더 추가해야 됨. JwtFilter
+//        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "에러");
         String exception = (String) request.getAttribute("exception");
-        if (exception == null) {
-            log.info("Exception에서 null 발생");
-            log.info("토큰이 존재하지 않습니다. 로그인 해주세여");
-            setErrorResponse(response, INVALID_TOKEN);
-//            response.sendRedirect("/api");
-//            throw new IOException("gd");
-//            return;
-        }
-
-
+//        if (exception == null) {
+//            log.info("Exception에서 null 발생");
+//            log.info("토큰이 존재하지 않습니다. 로그인 해주세여");
+//            setErrorResponse(response, INVALID_TOKEN);
+//            response.setStatus(400);
+////            response.sendRedirect("/api");
+////            throw new IOException("gd");
+////            return;
+//        }
+//
+//
         log.error("Exception = {}", exception);
 
         if (exception.equals(UNKNOWN_ERROR.name())) {
@@ -46,7 +48,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         if (exception.equals(INVALID_TOKEN.name())) {
             log.info("토큰이 만료되었습니다.");
             setErrorResponse(response, INVALID_TOKEN);
-            response.sendRedirect("/api");
+//            response.sendRedirect("/api");
         }
 
         if (exception.equals(INVALID_PERMISSION.name())) {
