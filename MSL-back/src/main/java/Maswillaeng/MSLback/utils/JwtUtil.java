@@ -68,7 +68,7 @@ public class JwtUtil {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
                     .getBody().getExpiration().before(new Date());
             return true;
-        } catch (ExpiredJwtException e) {
+        } catch (ExpiredJwtException | IllegalArgumentException e) {
 
             return false;
         }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static Maswillaeng.MSLback.utils.JwtUtil.createJwt;
 import static Maswillaeng.MSLback.utils.JwtUtil.getUserId;
@@ -93,6 +94,9 @@ public class UserService {
 //    }
 
     public TokenResponse reissueAccessToken(String refreshToken) {
+        /**
+         * 토큰 발급 시간 어떻게 할지
+         */
         String token = "";
         System.out.println("엑세스토큰 재발급 완료 메서드");
         Long userId = getUserId(refreshToken, secretKey);
@@ -113,5 +117,11 @@ public class UserService {
 //                .header("Set-Cookie", refreshToken)
 //                .body("");
 
+    }
+
+    @Transactional
+    public void deleteRefreshToken(Long userId) {
+        User findUser = findOne(userId);
+        findUser.deleteRefreshToken();
     }
 }

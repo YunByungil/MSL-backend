@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .accessDeniedHandler(new CustomAccessDeniedHandler()) // exception 권한
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/sign", "/api/login", "/api/token").permitAll()
+                .antMatchers("/api/sign", "/api/login", "/api/token", "/api/logout").permitAll()
                 .antMatchers("/api/**")
                 .access("hasRole('ROLE_USER')")
                 .anyRequest().permitAll()

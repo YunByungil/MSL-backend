@@ -116,11 +116,26 @@ public class UserController {
                 .body("토큰 발급 완료");
     }
 
-//    @PutMapping("/user") // 로그인 구현x
-//    public ResponseEntity<Object> update(@RequestBody UserUpdateDTO userUpdateDTO) {
-//        userService.update(1L, userUpdateDTO);
-//        return ResponseEntity.ok().build();
-//    }
+    /**
+     * 로그아웃
+     * 유저 정보 불러와서, 1. DB에 담겨있는 리프레쉬 토큰 삭제
+     * 2. 헤더에 있는 쿠키 정보 삭제
+     */
+    @PostMapping("/logout")
+    public ResponseEntity logout(Authentication authentication) {
+        Long userId = Long.parseLong(authentication.getName());
+        System.out.println("userId1231231231 = " + userId);
+        userService.deleteRefreshToken(userId);
+        ResponseCookie cookie = cookieUtil.deleteAccessCookieToken();
+        ResponseCookie cookie2 = cookieUtil.deleteRefreshCookieToken();
+        System.out.println("\"\" = " + "실행되나염?");
+
+        return ResponseEntity.ok()
+                .header("Set-Cookie", cookie.toString())
+                .header("Set-Cookie", cookie2.toString())
+                .body("gd");
+    }
+
 
     @Data
     @AllArgsConstructor

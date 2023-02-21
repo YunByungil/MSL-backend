@@ -59,4 +59,8 @@ public class User extends BaseEntity{
     public void updateRefreshToken(String refreshToken) {
         this.refresh_token = refreshToken;
     }
+
+    public void deleteRefreshToken() {
+        this.refresh_token = null;
+    }
 }

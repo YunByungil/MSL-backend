@@ -17,6 +17,12 @@ public class CookieUtil {
                 .sameSite("Lax")
                 .build();
     }
+
+    /**
+     * 재발급 엑세스 토큰
+     * @param accessToken
+     * @return
+     */
     public ResponseCookie createCookie(String accessToken) {
         return ResponseCookie
                 .from("accessToken", accessToken)
@@ -34,6 +40,29 @@ public class CookieUtil {
                 .path("/")
                 .httpOnly(true)
                 .maxAge(JwtUtil.REFRESH_TOKEN_EXPIRE_TIME)
+                .sameSite("Lax")
+                .build();
+    }
+
+    /**
+     * 쿠키 삭제 메서드
+     * logout할 때 사용
+     */
+    public ResponseCookie deleteAccessCookieToken() {
+        return ResponseCookie
+                .from("accessToken", "")
+                .path("/")
+                .httpOnly(true)
+                .maxAge(0)
+                .sameSite("Lax")
+                .build();
+    }
+    public ResponseCookie deleteRefreshCookieToken() {
+        return ResponseCookie
+                .from("refreshToken", "")
+                .path("/")
+                .httpOnly(true)
+                .maxAge(0)
                 .sameSite("Lax")
                 .build();
     }
