@@ -16,7 +16,7 @@ public class CommentDto {
     private Comment comment;
 
 
-    public Comment toEntity() {
+    public Comment toEntity(Post post, User user) {
         return Comment.builder()
                 .user(user)
                 .post(post)
