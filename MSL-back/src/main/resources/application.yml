@@ -1,23 +1,37 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:test
-    username: sa
-    password:
-    driverClassName: org.h2.Driver
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        show_sql: true
-        format_sql: true
-    show-sql: true
-    hibernate:
-      ddl-auto: create-drop
+
   h2:
     console:
       enabled: true
       path: /h2-console
 
-  jwt:
-    secret: da7f3e46f4707ac128b0bc161c78ce832809dfba80084e0704f054099fb119a5155799d84b56c022087393512288699f0ee4b6d5391c34ae68a3c5828a120bda
+  datasource:
+    url: jdbc:h2:mem:test
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    jpa:
+      defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        show_sql: true
+        format_sql: true
+    defer-datasource-initialization: true
+
+logging:
+  level:
+    me.silvernine: DEBUG
+
+jwt:
+  header: Authorization
+  #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
+  #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
+  secret: 410a0467c34f6c04b92daa98f68e632bf1efeefe7c8e936442145d0942db78e5d395c579f1bbfe41cd1d63a782bdcb355818cd889ee34bdc5384b4f3df221f2a
+  token-validity-in-seconds: 86400

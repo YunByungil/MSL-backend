@@ -2,7 +2,6 @@ package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.dto.post.request.PostsSaveRequestDto;
-import Maswillaeng.MSLback.dto.post.request.PostsUpdateRequestDto;
 import Maswillaeng.MSLback.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/api/post")
 public class PostController {
 
     private final PostService postService;

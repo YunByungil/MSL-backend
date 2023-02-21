@@ -3,13 +3,13 @@ package Maswillaeng.MSLback.domain.entity;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
@@ -26,7 +26,7 @@ public class User extends BaseTimeEntity {
     private String password;
 
     @Column(nullable = false, unique = true)
-    private String nickName;
+    private String nickname;
 
     @Column(nullable = false)
     private String phoneNumber;
@@ -40,7 +40,8 @@ public class User extends BaseTimeEntity {
     private int withdrawYn;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(nullable = false)
+    private RoleType role;
 
     private String refreshToken;
 
@@ -49,10 +50,10 @@ public class User extends BaseTimeEntity {
 
     @Builder
     public User(String email, String password, String nickname, String phoneNumber, String userImage,
-                String introduction, Role role, String refreshToken) {
+                String introduction, RoleType role, String refreshToken) {
         this.email = email;
         this.password = password;
-        this.nickName = nickname;
+        this.nickname = nickname;
         this.phoneNumber = phoneNumber;
         this.userImage = userImage;
         this.introduction = introduction;
@@ -64,7 +65,7 @@ public class User extends BaseTimeEntity {
     public void update(UserUpdateRequestDto requestDto) {
         this.password = requestDto.getPassword();
         this.phoneNumber = requestDto.getPhoneNumber();
-        this.nickName = requestDto.getNickName();
+        this.nickname = requestDto.getNickname();
         this.userImage = requestDto.getUserImage();
         this.introduction = requestDto.getIntroduction();
     }
@@ -73,6 +74,9 @@ public class User extends BaseTimeEntity {
         this.password = encodePwd;
     }
 
+    public void setRole(RoleType role){
+        this.role = role;
+    }
     public void setRefreshToken(String token) {
         this.refreshToken = token;
     }

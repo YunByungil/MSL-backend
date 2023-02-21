@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class UserResponseDto {
     private String email;
     private String phoneNumber;
-    private String nickName;
+    private String nickname;
     private String userImage;
     private String introduction;
     private String password;
@@ -19,7 +19,7 @@ public class UserResponseDto {
     public UserResponseDto(User user){
         this.email = user.getEmail();
         this.phoneNumber = user.getPhoneNumber();
-        this.nickName = user.getNickName();
+        this.nickname = user.getNickname();
 //        this.userImage = user.getUserImage();
 //        this.introduction = user.getIntroduction();
         this.password = user.getPassword();

@@ -1,27 +1,19 @@
 package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.domain.entity.User;
-import Maswillaeng.MSLback.domain.repository.UserRepository;
-import Maswillaeng.MSLback.dto.TokenDto;
-import Maswillaeng.MSLback.dto.user.reponse.UserLoginResponseDto;
-import Maswillaeng.MSLback.dto.user.reponse.UserResponseDto;
 import Maswillaeng.MSLback.dto.user.request.UserJoinRequestDto;
-import Maswillaeng.MSLback.dto.user.request.UserLoginRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import Maswillaeng.MSLback.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor // 이게 멀까
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
@@ -51,20 +43,6 @@ public class UserController {
             return ResponseEntity.ok().build();}
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody UserLoginRequestDto requestDto) {
-        return ResponseEntity.ok(userService.login(requestDto));
-    }
-    @PostMapping("/sign")
-    public ResponseEntity join(@RequestBody UserJoinRequestDto userJoinDto){
-         //toEntity를 여기서?? -> 두번 쓸 거니까.. 한번에 하자
-        if (userService.joinDuplicate(userJoinDto)) { //존재 여부는 controller에서 정의해야한다.
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        } else {
-            userService.join(userJoinDto);
-            return ResponseEntity.ok().build();
-        }
-    }
     @GetMapping("/userList")
     public ResponseEntity getUsers(@RequestBody User user){
         Optional<User> responseDto = userService.findByUserId(user.getId());

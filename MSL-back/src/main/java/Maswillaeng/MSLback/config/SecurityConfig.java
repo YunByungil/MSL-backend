@@ -1,10 +1,12 @@
 package Maswillaeng.MSLback.config;
 
-import Maswillaeng.MSLback.Util.TokenProvider;
 import Maswillaeng.MSLback.jwt.JwtAccessDeniedHandler;
 import Maswillaeng.MSLback.jwt.JwtAuthenticationEntryPoint;
+import Maswillaeng.MSLback.jwt.JwtSecurityConfig;
+import Maswillaeng.MSLback.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,12 +16,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)//preeAuthorize 어노테이션 사용을 위
 @RequiredArgsConstructor
 public class SecurityConfig {
-
     private final TokenProvider tokenProvider;
+//    private final CorsFilter corsFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
@@ -38,26 +42,32 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CSRF 설정 Disable
-        http.csrf().disable()
+        http
+                .csrf().disable()
+
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
 
-                /**form login 비활성화*/
+                //enable h2-console
                 .and()
-                .formLogin().disable()
-                /**로그인시 발급된 토큰을 들고오도록 함*/
-                .httpBasic().disable()
+                .headers()
+                .frameOptions()
+                .sameOrigin()
 
                 //세션 사용 안함
+                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                /** HttpServletRequest를 사용하는 요청들에 대한 접근 제한 설정*/
-                .and().authorizeRequests()
-                .antMatchers("/user/sign").permitAll() //auth로 통일해야겠당
-                .antMatchers("/user/login").permitAll()
+                //HttpServletRequest를 사용하는 요청들에 대한 접근 제한 설정
+                .and()
+                .authorizeRequests()
+                .antMatchers("/api/auth/sign").permitAll()
+                .antMatchers("/api/auth/authenticate").permitAll()
                 .anyRequest().authenticated()
+
+                //JwtFilter를 addFilterBefore로 등록한 JwtSecurityConfig 클래스도 적용
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
 
