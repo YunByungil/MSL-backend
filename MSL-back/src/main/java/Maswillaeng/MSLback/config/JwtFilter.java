@@ -55,31 +55,31 @@ public class JwtFilter extends OncePerRequestFilter {
 
         log.info("쿠키에서 토큰 꺼내기");
 
-        if (ObjectUtils.isEmpty(cookies)) {
-            log.info("쿠키의 값이 null, 비회원상태 접근");
-            filterChain.doFilter(request, response);
-            return;
-        }
+        if (!ObjectUtils.isEmpty(cookies)) {
+            log.info("쿠키의 값이 존재, 비회원상태 접근");
 
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("accessToken")) {
-                accessCookie = cookie.getValue();
+
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("accessToken")) {
+                    accessCookie = cookie.getValue();
+                }
+            }
+
+            log.info("SecretKey4 : {}", secretKey);
+
+            /**
+             * 필터에서는 엑세스 토큰만 검증하자.
+             * 엑세스 토큰 만료 -> 401
+             */
+            if (JwtUtil.isExpired(accessCookie, secretKey)) { // 유효한 엑세스 토큰
+                log.info("Filter: 엑세스 토큰 유효하다");
+                exceptionAccess(request, response, filterChain, accessCookie);
+            } else {
+                log.error("Filter: 엑세스 토큰 만료되었음");
+                exceptionAccess(request, response, filterChain, accessCookie);
             }
         }
-
-        log.info("SecretKey4 : {}", secretKey);
-
-        /**
-         * 필터에서는 엑세스 토큰만 검증하자.
-         * 엑세스 토큰 만료 -> 401
-         */
-        if (JwtUtil.isExpired(accessCookie, secretKey)) { // 유효한 엑세스 토큰
-            log.info("Filter: 엑세스 토큰 유효하다");
-            exceptionAccess(request, response, filterChain, accessCookie);
-        } else {
-            log.error("Filter: 엑세스 토큰 만료되었음");
-            exceptionAccess(request, response, filterChain, accessCookie);
-        }
+        filterChain.doFilter(request, response);
         log.info("SecretKey5 : {}", secretKey);
 
     }

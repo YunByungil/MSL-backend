@@ -38,6 +38,14 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
+    /**
+     * 댓글 수정
+     * @param postId
+     * @param userId
+     * @param commentId
+     * @param dto 댓글 수정폼 dto
+     */
+
     @Transactional
     public void updateComment(Long postId, Long userId, Long commentId, CommentUpdateDto dto) {
         Post findPost = postRepository.findById(postId)
@@ -53,7 +61,29 @@ public class CommentService {
         }
 
         comment.updateComment(dto);
+    }
 
+    /**
+     * 댓글 삭제
+     * 게시글이 유효한지, 내가 작성한 댓글이 맞는지 검증
+     * 결국 업데이트랑 댓글 등록이랑 똑같은 검증
+     * TODO: 메서드로 만들자
+     */
+    @Transactional
+    public void deleteComment(Long postId, Long userId, Long commentId) {
+        Post findPost = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalStateException("해당 게시글이 존재하지 않습니다."));
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalStateException("해당 댓글이 존재하지 않습니다."));
+
+        Long findUserId = comment.getUser().getId();
+
+        if (findUserId != userId) {
+            throw new IllegalStateException("내가 쓴 댓글이 아닙니다.");
+        }
+
+        commentRepository.delete(comment);
     }
 
 }
