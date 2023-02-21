@@ -126,6 +126,7 @@ public class UserController {
         Long userId = Long.parseLong(authentication.getName());
         System.out.println("userId1231231231 = " + userId);
         userService.deleteRefreshToken(userId);
+        // TODO: 변수명 수정하기
         ResponseCookie cookie = cookieUtil.deleteAccessCookieToken();
         ResponseCookie cookie2 = cookieUtil.deleteRefreshCookieToken();
         System.out.println("\"\" = " + "실행되나염?");

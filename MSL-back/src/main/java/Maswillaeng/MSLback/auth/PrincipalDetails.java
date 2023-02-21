@@ -1,20 +1,42 @@
 package Maswillaeng.MSLback.auth;
 
+import Maswillaeng.MSLback.domain.entity.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter
 public class PrincipalDetails implements UserDetails {
 
-    private User user;
+    private final User user;
+
+    public PrincipalDetails(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Long getId() {
+        return user.getId();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        System.out.println("해당 User 권한 리턴");
+        Collection<GrantedAuthority> collect = new ArrayList<>();
+        collect.add(new GrantedAuthority() {
+            @Override
+            public String getAuthority() {
+                return user.getRole().toString();
+            }
+        });
+        return collect;
     }
 
     @Override
@@ -22,9 +44,13 @@ public class PrincipalDetails implements UserDetails {
         return user.getPassword();
     }
 
+    /**
+     * 원래는 getUsername
+     * 지금은 getEmail로 사용해보자
+     */
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.getEmail();
     }
 
     @Override
