@@ -1,5 +1,6 @@
 package Maswillaeng.MSLback.domain.entity;
 
+import Maswillaeng.MSLback.dto.comment.request.CommentUpdateDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,5 +44,9 @@ public class Comment extends BaseEntity{
         this.user = user;
         this.content = content;
         this.parent = parent;
+    }
+
+    public void updateComment(CommentUpdateDto dto) {
+        this.content = dto.getContent();
     }
 }

@@ -27,10 +27,10 @@ public class SecurityConfig {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/api/post/1", "/api", "/api/token");
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring().antMatchers("/api/post/1", "/api", "/api/token");
+//    }
     
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .accessDeniedHandler(new CustomAccessDeniedHandler()) // exception 권한
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/sign", "/api/login").permitAll()
+                .antMatchers("/api/sign", "/api/login", "/api/token").permitAll()
                 .antMatchers("/api/**")
                 .access("hasRole('ROLE_USER')")
                 .anyRequest().permitAll()

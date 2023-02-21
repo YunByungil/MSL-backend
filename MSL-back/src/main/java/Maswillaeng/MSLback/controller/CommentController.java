@@ -1,6 +1,7 @@
 package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.dto.comment.request.CommentRequestDto;
+import Maswillaeng.MSLback.dto.comment.request.CommentUpdateDto;
 import Maswillaeng.MSLback.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,16 @@ public class CommentController {
                                      Authentication authentication) {
         Long userId = Long.parseLong(authentication.getName());
         commentService.addComment(postId, userId, dto);
+        return ResponseEntity.ok().body(dto);
+    }
+
+    @PutMapping("/post/{postId}/{commentId}/comment")
+    public ResponseEntity updateComment(@PathVariable("postId") Long postId,
+                                        @PathVariable("commentId") Long commentId,
+                                        @RequestBody CommentUpdateDto dto,
+                                        Authentication authentication) {
+        Long userId = Long.parseLong(authentication.getName());
+        commentService.updateComment(postId, userId, commentId, dto);
         return ResponseEntity.ok().body(dto);
     }
 }

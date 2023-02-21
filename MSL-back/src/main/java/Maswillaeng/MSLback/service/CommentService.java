@@ -7,6 +7,7 @@ import Maswillaeng.MSLback.domain.repository.CommentRepository;
 import Maswillaeng.MSLback.domain.repository.PostRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
 import Maswillaeng.MSLback.dto.comment.request.CommentRequestDto;
+import Maswillaeng.MSLback.dto.comment.request.CommentUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,4 +37,23 @@ public class CommentService {
         Comment comment = commentRequestDto.toEntity(findPost, findUser);
         commentRepository.save(comment);
     }
+
+    @Transactional
+    public void updateComment(Long postId, Long userId, Long commentId, CommentUpdateDto dto) {
+        Post findPost = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalStateException("해당 게시글이 존재하지 않습니다."));
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalStateException("해당 댓글이 존재하지 않습니다."));
+
+        Long findUserId = comment.getUser().getId();
+
+        if (findUserId != userId) {
+            throw new IllegalStateException("내가 쓴 댓글이 아닙니다.");
+        }
+
+        comment.updateComment(dto);
+
+    }
+
 }
