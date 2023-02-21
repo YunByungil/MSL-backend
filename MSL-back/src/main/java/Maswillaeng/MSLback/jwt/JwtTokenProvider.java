@@ -19,8 +19,8 @@ public class JwtTokenProvider implements InitializingBean {
     @Value("${secret.access")
     private String secretKey;
 
-    public final long ACCESS_TOKEN_VALID_SECONDS = 60 * 30; // 30분
-    public final long REFRESH_TOKEN_VALID_SECONDS = 60 * 60 * 24; // 24시간
+    public final long ACCESS_TOKEN_VALID_TIME = 1000 * 60 * 30; // 30분
+    public final long REFRESH_TOKEN_VALID_SECONDS = 1000 * 60 * 60 * 48; // 48시간
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -35,9 +35,9 @@ public class JwtTokenProvider implements InitializingBean {
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims) // 정보 저장
-                .setIssuedAt(now) // 토큰 발행 시간 정보
-                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_VALID_SECONDS)) // set Expire Time
-                .signWith(SignatureAlgorithm.HS256, secretKey)  // 사용할 암호화 알고리즘과
+                .setIssuedAt(now) // 토큰 발행 시간
+                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_VALID_TIME)) // 끝나는 날짜
+                .signWith(SignatureAlgorithm.HS256, secretKey)  // 암호화
                 .compact();
     }
 

@@ -1,5 +1,6 @@
 package Maswillaeng.MSLback.controller;
 
+import Maswillaeng.MSLback.dto.user.reponse.LoginResDTO;
 import Maswillaeng.MSLback.dto.user.request.UserJoinReqDTO;
 import Maswillaeng.MSLback.dto.user.request.UserLoginReqDTO;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateReqDTO;
@@ -22,13 +23,14 @@ public class UserController {
     @PostMapping("/sign")
     public ResponseEntity<?> join(@RequestBody UserJoinReqDTO userJoinReqDTO) throws Exception {
         userSerivce.join(userJoinReqDTO);
+        log.info("{}",userJoinReqDTO);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserLoginReqDTO userLoginReqDTO) {
-        String token = userSerivce.login(userLoginReqDTO);
-        return ResponseEntity.ok().body(token);
+    public ResponseEntity<Object> login(@RequestBody UserLoginReqDTO userLoginReqDTO) throws Exception {
+        LoginResDTO loginResDTO = userSerivce.login(userLoginReqDTO);
+        return ResponseEntity.ok().body(loginResDTO);
     }
 
     // 이메일 중복 확인

@@ -1,3 +1,4 @@
+/*
 package Maswillaeng.MSLback.configuration;
 
 import org.apache.catalina.filters.CorsFilter;
@@ -19,3 +20,4 @@ public class CorsConfig {
         return null;
     }
 }
+*/

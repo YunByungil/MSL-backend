@@ -80,4 +80,8 @@ public class User extends BaseTimeEntity {
         this.withdrawYn = true;
         this.withdrawAt = LocalDateTime.now();
     }
+
+    public void setPassword(String encodePassword) {
+        this.password = encodePassword;
+    }
 }
