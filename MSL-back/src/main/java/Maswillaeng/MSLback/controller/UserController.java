@@ -1,7 +1,6 @@
 package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.domain.entity.User;
-import Maswillaeng.MSLback.dto.user.request.UserJoinRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import Maswillaeng.MSLback.service.UserService;
 import lombok.RequiredArgsConstructor;

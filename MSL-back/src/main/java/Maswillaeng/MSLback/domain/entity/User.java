@@ -3,9 +3,11 @@ package Maswillaeng.MSLback.domain.entity;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -61,6 +63,7 @@ public class User extends BaseTimeEntity {
         this.role = role;
         this.refreshToken = refreshToken;
     }
+
 
     public void update(UserUpdateRequestDto requestDto) {
         this.password = requestDto.getPassword();

@@ -1,4 +1,4 @@
-package Maswillaeng.MSLback.dto.user.request;
+package Maswillaeng.MSLback.dto.auth.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

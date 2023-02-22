@@ -16,7 +16,7 @@ spring:
     jpa:
       defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
 
     properties:
       hibernate:
@@ -29,9 +29,6 @@ logging:
   level:
     me.silvernine: DEBUG
 
-jwt:
-  header: Authorization
-  #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
-  #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
-  secret: 410a0467c34f6c04b92daa98f68e632bf1efeefe7c8e936442145d0942db78e5d395c579f1bbfe41cd1d63a782bdcb355818cd889ee34bdc5384b4f3df221f2a
-  token-validity-in-seconds: 86400
+secret:
+  access: "f58244a11aea6530c36326f2dbba84ca27988c396e57b3bf71e9c4b459d5923baebd73aa97600e265c6e0b9f1aea6a70f0f6a06d2c75956f850dc68d8a5baa45"
+  refresh: "06d0d40bfdcb3a9f296c6791f9b246ef8bb249cfc75e709e6aaab6ca0e427db143aaa099e95f5b92a3d890b40014c0574ff41ef051e5183e9ac00a7d28eda52b"

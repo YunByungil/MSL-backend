@@ -1,12 +1,11 @@
 package Maswillaeng.MSLback.config;
 
-import Maswillaeng.MSLback.jwt.JwtAccessDeniedHandler;
-import Maswillaeng.MSLback.jwt.JwtAuthenticationEntryPoint;
-import Maswillaeng.MSLback.jwt.JwtSecurityConfig;
-import Maswillaeng.MSLback.jwt.TokenProvider;
+import Maswillaeng.MSLback.jwt.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,15 +14,17 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 @EnableWebSecurity
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)//preeAuthorize 어노테이션 사용을 위
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final TokenProvider tokenProvider;
-//    private final CorsFilter corsFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
@@ -32,28 +33,19 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    //테스트용, 관련 API 들은 전부 무시
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-                .antMatchers("/h2-console/**", "/favicon.ico");
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CSRF 설정 Disable
         http
+                .httpBasic().disable() // rest api 만을 고려하여 기본 설정은 해제하겠습니다.
                 .csrf().disable()
 
-                .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .accessDeniedHandler(jwtAccessDeniedHandler)
-
-                //enable h2-console
-                .and()
-                .headers()
-                .frameOptions()
-                .sameOrigin()
+                .headers().frameOptions().disable()
 
                 //세션 사용 안함
                 .and()
@@ -63,14 +55,18 @@ public class SecurityConfig {
                 //HttpServletRequest를 사용하는 요청들에 대한 접근 제한 설정
                 .and()
                 .authorizeRequests()
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/auth/sign").permitAll()
-                .antMatchers("/api/auth/authenticate").permitAll()
+                .antMatchers("/api/auth/login").permitAll()
                 .anyRequest().authenticated()
 
-                //JwtFilter를 addFilterBefore로 등록한 JwtSecurityConfig 클래스도 적용
                 .and()
-                .apply(new JwtSecurityConfig(tokenProvider));
-
+                .addFilterBefore(new JwtFilter(tokenProvider),
+                        UsernamePasswordAuthenticationFilter.class)
+                .authorizeRequests();
+//        .exceptionHandling()
+//                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+//                .accessDeniedHandler(jwtAccessDeniedHandler)
         return http.build();
     }
 }
