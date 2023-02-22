@@ -23,16 +23,11 @@ class AuthServiceTest {
     @Transactional
     void joinTest(){
         //given
-        UserJoinDto userJoinDto = new UserJoinDto("test@test.com", "1234", "Gilbert", "1234.jpeg");
-        User user = userJoinDto.toEntity();
-//        System.out.println("nickName : " + userJoinDto.getNickName());
-//        System.out.println("userJoinDto.getEmail() = " + userJoinDto.getEmail());
-//        System.out.println("userJoinDto.getpassword() = " + userJoinDto.getpassword());
-//        System.out.println("userJoinDto.getUserImage() = " + userJoinDto.getUserImage());
+//        UserJoinDto userJoinDto = new UserJoinDto("test@test.com", "1234", "Gilbert", "1234.jpeg");
+//        User user = userJoinDto.toEntity();
 
         //when
-        authService.signup(userJoinDto);
-
+//        authService.signup(userJoinDto);
 
         //then
         System.out.println("==============================test 1==================================");

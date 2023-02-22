@@ -1,5 +1,6 @@
 package com.maswilaeng.jwt;
 
+import com.maswilaeng.domain.entity.Role;
 import com.maswilaeng.jwt.dto.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -73,6 +74,20 @@ public class TokenProvider {
                 .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    public String generateAccessToken(Long userId, Role role) {
+        Claims claims = Jwts.claims();
+        claims.put("userId", userId);
+        claims.put("role", role);
+
+        Date now = new Date();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME))
+                .compact();
     }
 
     /**

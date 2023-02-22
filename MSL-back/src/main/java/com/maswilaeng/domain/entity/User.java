@@ -25,7 +25,7 @@ public class User extends BaseTimeEntity{
     @Column(nullable = false)
     private String password;
 
-    @Column(unique = true)
+    @Column(nullable = false, length = 30, unique = true)
     private String nickName;
 
     private String phoneNumber;
@@ -60,18 +60,11 @@ public class User extends BaseTimeEntity{
         this.role = Role.USER;
     }
 
-//    @Builder
-//    public User(String email, String password, Role role) {
-//        this.email = email;
-//        this.password = password;
-//        this.role = role;
-//    }
-
+    public void destroyRefreshToken() {
+        this.refreshToken = null;
+    }
 
     public void update(UserUpdateRequestDto userUpdateRequestDto) {
-
-        this.password = userUpdateRequestDto.getPassword();
-        this.phoneNumber = userUpdateRequestDto.getPhoneNumber();
         this.nickName = userUpdateRequestDto.getNickName();
         this.userImage = userUpdateRequestDto.getUserImage();
         this.introduction = userUpdateRequestDto.getIntroduction();
@@ -81,8 +74,4 @@ public class User extends BaseTimeEntity{
         this.withdrawYn = 1;
         this.withdrawAt = LocalDateTime.now();
     }
-    // 질문: 필요없는 부분일까요?
-//    @OneToMany(mappedBy = "post_id")
-//    private List<Post> post  = new ArrayList<>();
-
 }

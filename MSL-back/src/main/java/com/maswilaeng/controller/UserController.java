@@ -11,11 +11,13 @@ import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/user")
+
+    @GetMapping("/userInfo")
     public ResponseEntity<?> getUserInfo() {
         return ResponseEntity.ok().body(
                 userService.getUser(UserContext.userData.get().getUserId()));
@@ -24,7 +26,7 @@ public class UserController {
     @PutMapping("/user")
     public ResponseEntity<Object> updateUserInfo(
             @RequestBody @Valid UserUpdateRequestDto requestDto) {
-        if (requestDto.getPassword() == null && requestDto.getNickName() == null) {
+        if (requestDto.getNickName() == null) {
             return ResponseEntity.badRequest().build();
         }
         userService.updateUser(UserContext.userData.get().getUserId(), requestDto);

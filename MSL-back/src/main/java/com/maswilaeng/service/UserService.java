@@ -1,10 +1,15 @@
 package com.maswilaeng.service;
 
+import com.maswilaeng.domain.entity.Role;
+import com.maswilaeng.domain.entity.RoleType;
 import com.maswilaeng.domain.entity.User;
 import com.maswilaeng.domain.repository.UserRepository;
+import com.maswilaeng.dto.user.request.UserJoinDto;
 import com.maswilaeng.dto.user.request.UserUpdateRequestDto;
 import com.maswilaeng.dto.user.response.UserInfoResponseDto;
+import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,22 +18,26 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public Long join(User user){
-        // 같은 닉네임의 중복 회원 X
-        User result = userRepository.findByNickName(user.getNickName());
+    public User join(UserJoinDto userJoinDto){
+        if (userRepository.findOneWithAuthoritiesByEmail(userJoinDto.getEmail()).orElse(null) != null)
+            throw new DuplicateRequestException("이미 가입 되어있는 유저입니다.");
 
-        if(result != null) {
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
-        }
+        User user = User.builder()
+                        .nickName(userJoinDto.getNickName())
+                        .password(passwordEncoder.encode(userJoinDto.getPassword()))
+                        .email(userJoinDto.getEmail())
+                        .userImage(userJoinDto.getUserImage())
+                        .introduction("hi")
+                        .build();
 
-        userRepository.save(user);
-        return user.getId();
+        return userRepository.save(user);
+
     }
 
 

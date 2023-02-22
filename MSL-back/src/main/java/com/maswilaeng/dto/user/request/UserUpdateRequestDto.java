@@ -7,9 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class UserUpdateRequestDto {
 
-    private String password;
-    private String phoneNumber;
-
     private String nickName;
     private String userImage;
     private String introduction;
