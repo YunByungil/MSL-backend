@@ -12,14 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
-
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 public class UserController {
-   @Autowired
-   private final UserService userService;
+
+    private final UserService userService;
 
     @Autowired
     private UserResponseDto userResponseDto;
@@ -29,9 +26,6 @@ public class UserController {
 
     /*
     1. 회원 가입
-    memo :
-    - findOne 으로 해도 될거같은데 좀 더 체크 필요
-    - id가 없을테니 email로
     */
    @PostMapping("/sign")
     public HttpStatus sign (@RequestBody UserSignDto signReq ){
@@ -41,12 +35,11 @@ public class UserController {
        }else {
            return HttpStatus.BAD_REQUEST;
        }
-
        return HttpStatus.OK;
    }
 
     /*
-    2. 내 정보 조회 -  member_id에 대한게 뭔지..잘 모르겠슴등? 일단 id 라는 가정하에 진행..
+    2. 내 정보 조회
     */
     @GetMapping("/user/{id}")
     public ResponseEntity<UserResponseDto> showMyInfo (@PathVariable("id") Long id){
@@ -60,13 +53,13 @@ public class UserController {
     }
 
     /*
-    3. 내 정보 수정 -  tokent으로 id를 받나? 일단 진행
+    3. 내 정보 수정
     memo :
     - 중복 검사 대상 ( 이메일, 닉네임 끝? )
     */
     @PutMapping("/user/{id}")
-    public HttpStatus updateMyInfo (@PathVariable("id") Long id, @RequestBody UserUpateDto upateDto ){
-        userService.updateMyInfo(id ,upateDto);
+    public HttpStatus updateMyInfo (@PathVariable("id") Long id, @RequestBody UserUpateDto updateDto ){
+        userService.updateMyInfo(id ,updateDto);
         return HttpStatus.OK;
     }
 

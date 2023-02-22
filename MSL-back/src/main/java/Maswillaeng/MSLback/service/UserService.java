@@ -7,21 +7,25 @@ import Maswillaeng.MSLback.dto.user.request.UserSignDto;
 import Maswillaeng.MSLback.dto.user.request.UserUpateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
 
     public User findIdUser(Long id){
         Optional<User> optUser = userRepository.findById(id);
-        User user = optUser.get();
-        return user;
+        return optUser.get();
     };
+
+    public void setRefreshToken(User refreshTokenUdate) {
+        userRepository.save(refreshTokenUdate);
+    }
 
     public UserResponseDto selectMyInfo(User infoRes) {
         UserResponseDto responseDto = new UserResponseDto();
@@ -41,7 +45,7 @@ public class UserService {
              signUser.setPhonenumber(signReq.getPhoneNumber());
              signUser.setUserimage(signReq.getUserImage());
              signUser.setIntroduction(signReq.getIntroduction());
-             signUser.setRole(User.userRole.BASIC);              //나중에 권한은 front에서 명시를 받아야함
+             signUser.setRole(User.userRole.BASIC);
              signUser.setWithdraw_yn(User.withDraw.N);
         userRepository.save(signUser);
     }
@@ -60,5 +64,9 @@ public class UserService {
     public void drawUser(User drawUser) {
         drawUser.setWithdraw_yn(User.withDraw.Y);
         userRepository.save(drawUser);
+    }
+
+    public void CheckRefresh(User checkUser) {
+        userRepository.save(checkUser);
     }
 }

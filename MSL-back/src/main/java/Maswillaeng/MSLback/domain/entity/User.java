@@ -6,7 +6,9 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -14,17 +16,27 @@ import java.util.Date;
 @Getter @Setter
 public class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE) //아이디 pk 자동생성
-    @Column(name = "ID")
+
+    @OneToMany
+    @JoinColumn(name = "POST_ID")
+    private List<Post> postList;
+
+    @Id  @Column(name = "USER_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE) //아이디 pk 자동생성
     private Long id;
 
     @NonNull
     private String email;
-    @Column(name = "pwd")
+
+    @Column(name = "PW")
     private String pwd;
+
     private String nickname;
+
     private String phonenumber;
+
     private String userimage;
+
     private String introduction;
 
     @Enumerated(EnumType.STRING)
@@ -49,6 +61,8 @@ public class User {
     @CreationTimestamp
     private Date withdraw_at;
 
+
+    //------생성로직-------
 
 
 }

@@ -8,13 +8,11 @@ spring:
       properties:
       hibernate:
         format_sql: true
-
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:tcp://localhost/~/test
     username: sa
     password:
-
   jpa:
     hibernate:
      # ddl-auto: create
@@ -22,7 +20,10 @@ spring:
       hibernate:
         # show_sql: true 로그로 찍어야하기 때문에 아래의 org.hibernate.SQL: debug 를 사용하여 대체한다.
         format_sql: true
-
   logging:
    level:
      org.hibernate.SQL: debug
+
+# 파싱하는거 다시~
+jwt:
+  scrt_key: maswilleang
