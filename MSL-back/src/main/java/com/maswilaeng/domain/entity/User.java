@@ -22,7 +22,7 @@ public class User extends BaseTimeEntity{
     @Column(nullable = false, length = 30, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String password;
 
     @Column(nullable = false, length = 30, unique = true)
@@ -73,5 +73,13 @@ public class User extends BaseTimeEntity{
     public void withdraw() {
         this.withdrawYn = 1;
         this.withdrawAt = LocalDateTime.now();
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void encreptPassword(String encryptedPw) {
+        this.password = encryptedPw;
     }
 }

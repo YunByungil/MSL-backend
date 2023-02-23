@@ -21,6 +21,10 @@ public class ResponseDto<T> {
         this.message = message;
     }
 
+    public ResponseDto(String Message) {
+        this.message = Message;
+    }
+
     public ResponseDto(int status, T data) {
         this.status = status;
         this.data = data;
@@ -34,6 +38,10 @@ public class ResponseDto<T> {
     public static <T> ResponseDto<T> of(String message, T data) { return new ResponseDto<>(message, data); }
 
     public static ResponseDto<?> of(HttpStatus httpStatus) { return new ResponseDto<>(httpStatus.value()); }
+
+    public static ResponseDto<?> of(String Message) {
+        return new ResponseDto<>(Message);
+    }
 
     public static ResponseDto<?> of(HttpStatus httpStatus, String message){
         return new ResponseDto<>(httpStatus.value(), message);

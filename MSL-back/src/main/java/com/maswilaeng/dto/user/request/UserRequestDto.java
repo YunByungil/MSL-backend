@@ -4,7 +4,6 @@ import com.maswilaeng.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.time.LocalDateTime;
 
@@ -35,10 +34,5 @@ public class UserRequestDto {
                 .introduction(introduction)
                 .build();
         return user;
-    }
-
-
-    public UsernamePasswordAuthenticationToken toAuthentication() {
-        return new UsernamePasswordAuthenticationToken(email, password);
     }
 }

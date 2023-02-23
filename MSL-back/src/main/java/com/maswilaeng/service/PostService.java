@@ -6,19 +6,13 @@ import com.maswilaeng.domain.repository.PostRepository;
 import com.maswilaeng.domain.repository.UserRepository;
 import com.maswilaeng.dto.post.request.PostRequestDto;
 import com.maswilaeng.dto.post.request.PostUpdateDto;
-import com.maswilaeng.dto.post.response.UserPostListResponseDto;
-import com.maswilaeng.utils.UserContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import javax.xml.bind.ValidationException;
-import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -66,10 +60,10 @@ public class PostService {
         }
         postRepository.delete(post);
     }
-
-    public UserPostListResponseDto getUserPostList(Long userId) {
-        return new UserPostListResponseDto(postRepository.findAllPostByUserId(userId));
-    }
+//
+//    public UserPostListResponseDto getUserPostList(Long userId) {
+//        return new UserPostListResponseDto(postRepository.findAllPostByUserId(userId));
+//    }
 
 //    /* search */
 //    @Transactional(readOnly = true)

@@ -1,15 +1,13 @@
 package com.maswilaeng.service;
 
-import com.maswilaeng.domain.entity.Role;
-import com.maswilaeng.domain.entity.RoleType;
 import com.maswilaeng.domain.entity.User;
 import com.maswilaeng.domain.repository.UserRepository;
 import com.maswilaeng.dto.user.request.UserJoinDto;
 import com.maswilaeng.dto.user.request.UserUpdateRequestDto;
 import com.maswilaeng.dto.user.response.UserInfoResponseDto;
+import com.maswilaeng.jwt.AESEncryption;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,16 +19,16 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final AESEncryption aesEncryption;
 
     @Transactional
-    public User join(UserJoinDto userJoinDto){
-        if (userRepository.findOneWithAuthoritiesByEmail(userJoinDto.getEmail()).orElse(null) != null)
+    public User join(UserJoinDto userJoinDto) throws Exception {
+        if (userRepository.findByEmail(userJoinDto.getEmail()).orElse(null) != null)
             throw new DuplicateRequestException("이미 가입 되어있는 유저입니다.");
 
         User user = User.builder()
                         .nickName(userJoinDto.getNickName())
-                        .password(passwordEncoder.encode(userJoinDto.getPassword()))
+                        .password(aesEncryption.encrypt(userJoinDto.getPassword()))
                         .email(userJoinDto.getEmail())
                         .userImage(userJoinDto.getUserImage())
                         .introduction("hi")

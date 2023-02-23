@@ -8,15 +8,16 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long>{
 
-    User findByNickName(String nickName);
-
     Optional<User> findByEmail(String email);
 
     boolean existsByEmail(String email);
 
     // 쿼리 수행시 Eager조회. authorities 정보 같이 가져옴
-    @EntityGraph(attributePaths = "authorities")
-    Optional<User> findOneWithAuthoritiesByEmail(String email);
+//    @EntityGraph(attributePaths = "authorities")
+//    Optional<User> findOneWithAuthoritiesByUserName(String username);
 
     boolean existsByNickName(String nickName);
+
+    @EntityGraph(attributePaths = "authorities")
+    Optional<User> findOneWithAuthoritiesByEmail(String email);
 }

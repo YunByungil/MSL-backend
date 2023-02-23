@@ -30,8 +30,7 @@ public class Post extends BaseTimeEntity{
 
     private String thumbnail;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @Enumerated(EnumType.STRING)
     private Category category;
 
     @Column(nullable = false)
