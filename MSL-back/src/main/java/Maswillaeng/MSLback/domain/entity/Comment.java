@@ -38,6 +38,13 @@ public class Comment extends BaseEntity{
     @OneToMany(mappedBy = "parent")
     private List<Comment> child = new ArrayList<>();
 
+    /**
+     * addComment
+     * @param post
+     * @param user
+     * @param content
+     * @param parent
+     */
     @Builder
     public Comment(Post post, User user, String content, Comment parent) {
         this.post = post;
@@ -46,7 +53,9 @@ public class Comment extends BaseEntity{
         this.parent = parent;
     }
 
+
     public void updateComment(CommentUpdateDto dto) {
         this.content = dto.getContent();
     }
+
 }

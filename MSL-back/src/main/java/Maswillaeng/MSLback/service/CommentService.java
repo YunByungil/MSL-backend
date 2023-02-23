@@ -8,9 +8,12 @@ import Maswillaeng.MSLback.domain.repository.PostRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
 import Maswillaeng.MSLback.dto.comment.request.CommentRequestDto;
 import Maswillaeng.MSLback.dto.comment.request.CommentUpdateDto;
+import Maswillaeng.MSLback.dto.comment.request.ReCommentRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +41,21 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
+    @Transactional
+    public void addReComment(Long postId, Long userId, Long commentId, ReCommentRequestDto recommentRequestDto) {
+        Post findPost = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalStateException("해당 게시글이 존재하지 않습니다."));
+
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("해당 유저가 존재하지 않습니다."));
+
+        Comment findComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalStateException("해당 댓글이 존재하지 않습니다."));
+
+        Comment comment = recommentRequestDto.toEntityReComment(findPost, findUser, findComment);
+        commentRepository.save(comment);
+    }
+
     /**
      * 댓글 수정
      * @param postId
@@ -45,7 +63,6 @@ public class CommentService {
      * @param commentId
      * @param dto 댓글 수정폼 dto
      */
-
     @Transactional
     public void updateComment(Long postId, Long userId, Long commentId, CommentUpdateDto dto) {
         Post findPost = postRepository.findById(postId)

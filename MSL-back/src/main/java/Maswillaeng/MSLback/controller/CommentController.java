@@ -2,6 +2,7 @@ package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.dto.comment.request.CommentRequestDto;
 import Maswillaeng.MSLback.dto.comment.request.CommentUpdateDto;
+import Maswillaeng.MSLback.dto.comment.request.ReCommentRequestDto;
 import Maswillaeng.MSLback.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,24 @@ public class CommentController {
     }
 
     /**
+     * 대댓글 작성
+     * @param postId
+     * @param commentId
+     * @param dto
+     * @param authentication
+     * @return
+     */
+    @PostMapping("/post/{postId}/{commentId}/comment")
+    public ResponseEntity addReComment(@PathVariable("postId") Long postId,
+                                       @PathVariable("commentId") Long commentId,
+                                       @RequestBody ReCommentRequestDto dto,
+                                       Authentication authentication) {
+        Long userId = Long.parseLong(authentication.getName());
+        commentService.addReComment(postId, userId, commentId, dto);
+        return ResponseEntity.ok().body(dto);
+    }
+
+    /**
      * 댓글 수정
      */
     @PutMapping("/post/{postId}/{commentId}/comment")
@@ -39,6 +58,16 @@ public class CommentController {
         commentService.updateComment(postId, userId, commentId, dto);
         return ResponseEntity.ok().body(dto);
     }
+
+//    // TODO
+//    @PutMapping("/post/{postId}/{commentId}/comment")
+//    public ResponseEntity updateReComment(@PathVariable("postId") Long postId,
+//                                          @PathVariable("commentId") Long commentId,
+//                                          @RequestBody ReCommentRequestDto dto,
+//                                          Authentication authentication) {
+//         Long userId = Long.parseLong(authentication.getName());
+//         return ResponseEntity.ok().body(dto);
+//    }
 
     /**
      * 댓글 삭제
@@ -56,7 +85,5 @@ public class CommentController {
 
         return ResponseEntity.ok().body("댓글 삭제 완료");
     }
-
-
 
 }
