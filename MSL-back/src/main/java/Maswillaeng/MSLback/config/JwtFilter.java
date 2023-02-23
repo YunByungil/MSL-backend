@@ -19,6 +19,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -35,14 +36,14 @@ import static Maswillaeng.MSLback.common.exception.ErrorCode.*;
 
 @RequiredArgsConstructor
 @Slf4j
+@Component
 public class JwtFilter extends OncePerRequestFilter {
 
     private final PrincipalDetailsService principalDetailsService;
 
     private final UserService userService;
 
-    @Value("${jwt.secret}")
-    private final String secretKey;
+    private final JwtUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -75,13 +76,13 @@ public class JwtFilter extends OncePerRequestFilter {
                 }
             }
 
-            log.info("SecretKey4 : {}", secretKey);
+            log.info("SecretKey4 : {}");
 
             /**
              * 필터에서는 엑세스 토큰만 검증하자.
              * 엑세스 토큰 만료 -> 401
              */
-            if (JwtUtil.isExpired(accessCookie, secretKey)) { // 유효한 엑세스 토큰
+            if (jwtUtil.isExpired(accessCookie)) { // 유효한 엑세스 토큰
                 // TODO: isExpired 예외 처리 꼼꼼하게 더 하기
                 log.info("Filter: 엑세스 토큰 유효하다");
                 exceptionAccess(request, response, filterChain, accessCookie);
@@ -101,7 +102,7 @@ public class JwtFilter extends OncePerRequestFilter {
         // TODO: 아직 수정해야 됨 PrinciplaDetails를 구현해야 된다. (권한, login)
         try {
             log.info("엑세스토큰 시작점");
-            Long userId = JwtUtil.getUserId(accessCookie, secretKey);
+            Long userId = jwtUtil.getUserId(accessCookie);
             User user = userService.findOne(userId);
             UserDetails userDetails = principalDetailsService.loadUserByUsername(user.getEmail());
             PrincipalDetails principalDetails = new PrincipalDetails(user);

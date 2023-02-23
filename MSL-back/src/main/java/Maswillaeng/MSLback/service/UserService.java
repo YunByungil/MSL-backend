@@ -20,13 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static Maswillaeng.MSLback.utils.JwtUtil.createJwt;
-import static Maswillaeng.MSLback.utils.JwtUtil.getUserId;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
+    private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final ValidateService validateService;
     private final CookieUtil cookieUtil;
@@ -46,8 +45,8 @@ public class UserService {
             throw new IllegalStateException("비밀번호 틀림");
         }
 
-        String accessToken = createJwt(user.getId(), user.getRole(), secretKey);
-        String refreshToken = JwtUtil.createRefreshJwt(user.getId(), secretKey);
+        String accessToken = jwtUtil.createJwt(user.getId(), user.getRole());
+        String refreshToken = jwtUtil.createRefreshJwt(user.getId());
         user.updateRefreshToken(refreshToken);
         System.out.println("refreshToken = " + refreshToken);
 //        userRepository.save(user);
@@ -100,11 +99,11 @@ public class UserService {
         String token = "";
         System.out.println("엑세스토큰 재발급 완료 메서드");
         System.out.println("\"\" = " + "확인요");
-        Long userId = getUserId(refreshToken, secretKey);
+        Long userId = jwtUtil.getUserId(refreshToken);
         System.out.println("userId = " + userId);
         User user = findOne(userId);
         if (user.getRefresh_token().equals(refreshToken)) {
-            token = createJwt(userId, user.getRole(), secretKey);
+            token = jwtUtil.createJwt(userId, user.getRole());
             System.out.println("token = " + token);
         } else {
             new Exception("이상한 토큰을 넣었음!");

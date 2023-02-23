@@ -23,12 +23,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Slf4j
 public class SecurityConfig {
 
-    private final PrincipalDetailsService principalDetailsService;
+    private final JwtFilter jwtFilter;
 
-    private final UserService userService;
-    
-    @Value("${jwt.secret}")
-    private String secretKey;
 
 //    @Bean
 //    public WebSecurityCustomizer webSecurityCustomizer() {
@@ -58,7 +54,7 @@ public class SecurityConfig {
                 .access("hasRole('ROLE_USER')")
                 .anyRequest().permitAll()
                 .and()
-                .addFilterBefore(new JwtFilter(principalDetailsService, userService, secretKey), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }
