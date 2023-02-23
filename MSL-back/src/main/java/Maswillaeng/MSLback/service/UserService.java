@@ -99,6 +99,7 @@ public class UserService {
          */
         String token = "";
         System.out.println("엑세스토큰 재발급 완료 메서드");
+        System.out.println("\"\" = " + "확인요");
         Long userId = getUserId(refreshToken, secretKey);
         System.out.println("userId = " + userId);
         User user = findOne(userId);

@@ -1,5 +1,6 @@
 package Maswillaeng.MSLback.config;
 
+import Maswillaeng.MSLback.auth.PrincipalDetailsService;
 import Maswillaeng.MSLback.common.exception.CustomAccessDeniedHandler;
 import Maswillaeng.MSLback.common.exception.CustomAuthenticationEntryPoint;
 import Maswillaeng.MSLback.service.UserService;
@@ -21,6 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Slf4j
 public class SecurityConfig {
+
+    private final PrincipalDetailsService principalDetailsService;
 
     private final UserService userService;
     
@@ -55,7 +58,7 @@ public class SecurityConfig {
                 .access("hasRole('ROLE_USER')")
                 .anyRequest().permitAll()
                 .and()
-                .addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(principalDetailsService, userService, secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

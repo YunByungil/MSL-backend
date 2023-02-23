@@ -35,9 +35,12 @@ public class CookieUtil {
     }
 
     public ResponseCookie createRefreshCookieToken(UserLoginResponseDto userLoginResponseDto) {
+        /*
+        path: 위치 바꿀까?
+         */
         return ResponseCookie
                 .from("refreshToken", userLoginResponseDto.getTokenResponse().getRefreshToken())
-                .path("/")
+                .path("/api/token")
                 .httpOnly(true)
                 .maxAge(JwtUtil.REFRESH_TOKEN_EXPIRE_TIME)
                 .sameSite("Lax")

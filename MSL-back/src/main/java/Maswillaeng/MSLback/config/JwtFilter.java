@@ -1,6 +1,9 @@
 package Maswillaeng.MSLback.config;
 
+import Maswillaeng.MSLback.auth.PrincipalDetails;
+import Maswillaeng.MSLback.auth.PrincipalDetailsService;
 import Maswillaeng.MSLback.common.exception.ErrorCode;
+import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.service.UserService;
 import Maswillaeng.MSLback.utils.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -14,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.HttpClientErrorException;
@@ -32,6 +36,8 @@ import static Maswillaeng.MSLback.common.exception.ErrorCode.*;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
+
+    private final PrincipalDetailsService principalDetailsService;
 
     private final UserService userService;
 
@@ -59,10 +65,13 @@ public class JwtFilter extends OncePerRequestFilter {
         if (!ObjectUtils.isEmpty(cookies)) {
             log.info("쿠키의 값이 존재, 로그인 상태임");
 
-
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("accessToken")) {
                     accessCookie = cookie.getValue();
+                } else {
+                    System.out.println("cookie.getName() = " + cookie.getName());
+                    System.out.println("cookie.getPath() = " + cookie.getPath());
+                    System.out.println("무슨 쿠키 인가요? value = " + cookie.getValue());
                 }
             }
 
@@ -93,10 +102,23 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             log.info("엑세스토큰 시작점");
             Long userId = JwtUtil.getUserId(accessCookie, secretKey);
+            User user = userService.findOne(userId);
+            UserDetails userDetails = principalDetailsService.loadUserByUsername(user.getEmail());
+            PrincipalDetails principalDetails = new PrincipalDetails(user);
+            System.out.println("principalDetails.getAuthorities() = " + principalDetails.getAuthorities().toString());
+            System.out.println("principalDetails.getPassword() = " + principalDetails.getPassword());
+            System.out.println("principalDetails.getUsername() = " + principalDetails.getUsername());
+            System.out.println("principalDetails.getId() = " + principalDetails.getId());
+            System.out.println("userDetails = " + userDetails.getUsername());
+            System.out.println("userDetails = " + userDetails.getAuthorities());
             System.out.println("액세스토큰 = " + userId);
             // 권한 부여
+//            UsernamePasswordAuthenticationToken authentication
+//                    = new UsernamePasswordAuthenticationToken(userId, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
+            System.out.println("user.getRole() = " + user.getRole());
+            System.out.println("user.getRole().toString() = " + user.getRole().toString());
             UsernamePasswordAuthenticationToken authentication
-                    = new UsernamePasswordAuthenticationToken(userId, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
+                    = new UsernamePasswordAuthenticationToken(userId, null, principalDetails.getAuthorities());
             System.out.println("액세스토큰 = " + userId);
 
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
