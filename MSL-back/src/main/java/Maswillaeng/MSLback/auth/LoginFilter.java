@@ -1,6 +1,8 @@
 package Maswillaeng.MSLback.auth;
 
 import Maswillaeng.MSLback.domain.entity.User;
+import Maswillaeng.MSLback.dto.user.reponse.UserLoginResponseDto;
+import Maswillaeng.MSLback.service.UserService;
 import Maswillaeng.MSLback.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -27,6 +30,7 @@ import java.io.IOException;
 public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final UserService userService;
 
     /*
     /login 요청을 하면 로그인 시도를 위해서 실행되는 함수
@@ -66,22 +70,32 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         log.info("successfulAuthentication 함수 실행: 로그인 성공");
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-        /*
-        로그인 완료,
-        1. 토큰 생성
-        2. 쿠키 장착
-         */
-        response.setHeader("gd", "gdgd");
-        ResponseCookie build = ResponseCookie
-                .from("accessToken", "gd")
+        UserLoginResponseDto login = userService.login(principalDetails.getId());
+        ResponseCookie accessToken = ResponseCookie
+                .from("accessToken", login.getTokenResponse().getAccessToken())
                 .path("/")
                 .httpOnly(true)
                 // 시간
                 .maxAge(JwtUtil.REFRESH_TOKEN_EXPIRE_TIME)
                 .sameSite("Lax")
                 .build();
-        ResponseEntity.ok().header("Set-Cookie", build.toString())
-                .body("ok");
+
+        ResponseCookie refreshToken = ResponseCookie
+                .from("refreshToken", login.getTokenResponse().getRefreshToken())
+                .path("/api/token")
+                .httpOnly(true)
+                .maxAge(JwtUtil.REFRESH_TOKEN_EXPIRE_TIME)
+                .sameSite("Lax")
+                .build();
+
+        response.addHeader("Set-Cookie", accessToken.toString());
+        response.addHeader("Set-Cookie", refreshToken.toString());
+
+        /*
+        로그인 완료,
+        1. 토큰 생성
+        2. 쿠키 장착
+         */
 //        response.sendRedirect("/api/loginTest");
 //        super.successfulAuthentication(request, response, chain, authResult);
     }

@@ -29,6 +29,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
+    private final UserService userService;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -78,7 +79,7 @@ public class SecurityConfig {
             System.out.println("체크포인트!@@!@!@!@");
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
             http
-                    .addFilter(new LoginFilter(authenticationManager))
+                    .addFilter(new LoginFilter(authenticationManager, userService))
                     .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         }
     }

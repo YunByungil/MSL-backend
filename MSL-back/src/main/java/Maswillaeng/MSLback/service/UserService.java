@@ -36,14 +36,14 @@ public class UserService {
     private String secretKey; // 시크릿 키
 
     @Transactional
-    public UserLoginResponseDto login(UserLoginRequestDto dto) {
-        /* 유저 존재 여부 확인 */
-        User user = validateService.validateExistUser(dto);
-
-        /* 비밀번호 맞는지 확인 */
-        if(!encoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new IllegalStateException("비밀번호 틀림");
-        }
+    public UserLoginResponseDto login(Long userId) {
+//        /* 유저 존재 여부 확인 */
+        User user = findOne(userId);
+//
+//        /* 비밀번호 맞는지 확인 */
+//        if(!encoder.matches(dto.getPassword(), user.getPassword())) {
+//            throw new IllegalStateException("비밀번호 틀림");
+//        }
 
         String accessToken = jwtUtil.createJwt(user.getId(), user.getRole());
         String refreshToken = jwtUtil.createRefreshJwt(user.getId());
@@ -61,6 +61,32 @@ public class UserService {
                 .userImage(user.getUserImage())
                 .build();
     }
+//    @Transactional
+//    public UserLoginResponseDto login(UserLoginRequestDto dto) {
+////        /* 유저 존재 여부 확인 */
+////        User user = validateService.validateExistUser(dto);
+////
+////        /* 비밀번호 맞는지 확인 */
+////        if(!encoder.matches(dto.getPassword(), user.getPassword())) {
+////            throw new IllegalStateException("비밀번호 틀림");
+////        }
+//
+//        String accessToken = jwtUtil.createJwt(user.getId(), user.getRole());
+//        String refreshToken = jwtUtil.createRefreshJwt(user.getId());
+//        user.updateRefreshToken(refreshToken);
+//        System.out.println("refreshToken = " + refreshToken);
+////        userRepository.save(user);
+//        TokenResponse token = TokenResponse.builder()
+//                .accessToken(accessToken)
+//                .refreshToken(refreshToken)
+//                .build();
+//
+//        return UserLoginResponseDto.builder()
+//                .tokenResponse(token)
+//                .nickname(user.getNickname())
+//                .userImage(user.getUserImage())
+//                .build();
+//    }
 
     @Transactional
     public Long join(UserJoinDTO dto) {
