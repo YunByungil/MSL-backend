@@ -88,6 +88,10 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
                 .sameSite("Lax")
                 .build();
 
+        /*
+        set은 Set-Cookie로 만든 거를 덮어 씌움
+        add는 계속 추가 add로 구현해야 됨!
+         */
         response.addHeader("Set-Cookie", accessToken.toString());
         response.addHeader("Set-Cookie", refreshToken.toString());
 
