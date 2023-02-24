@@ -1,6 +1,7 @@
 package Maswillaeng.MSLback.auth;
 
 import Maswillaeng.MSLback.domain.entity.User;
+import Maswillaeng.MSLback.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,6 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
         log.info("attemptAuthentication 함수 실행: 로그인 시도 중");
         try {
 
-
             ObjectMapper om = new ObjectMapper();
             User user = om.readValue(request.getInputStream(), User.class);
             log.info("user = {}",  user);
@@ -59,6 +59,19 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
      */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        log.info("successfulAuthentication 함수 실행: 로그인 성공");
+        PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
+
+        JwtUtil jwtUtil = new JwtUtil();
+        String accessToken = jwtUtil.createJwt(principalDetails.getId(), principalDetails.getUser().getRole());
+        String refreshToken = jwtUtil.createRefreshJwt(principalDetails.getId());
+
+        System.out.println("accessToken = " + accessToken);
+        System.out.println("refreshToken = " + refreshToken);
+
+
+
+
         super.successfulAuthentication(request, response, chain, authResult);
     }
 

@@ -59,7 +59,7 @@ public class SecurityConfig {
                 .and()
                 .apply(new MyCustomDsl())
                 .and()
-                .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+//                .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -69,8 +69,8 @@ public class SecurityConfig {
             System.out.println("체크포인트!@@!@!@!@");
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
             http
-                    .addFilter(new LoginFilter(authenticationManager));
-//                    .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository));
+                    .addFilter(new LoginFilter(authenticationManager))
+                    .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         }
     }
 }
