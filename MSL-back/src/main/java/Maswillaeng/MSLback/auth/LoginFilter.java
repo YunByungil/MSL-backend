@@ -5,11 +5,16 @@ import Maswillaeng.MSLback.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -61,23 +66,30 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         log.info("successfulAuthentication 함수 실행: 로그인 성공");
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-
-        JwtUtil jwtUtil = new JwtUtil();
-        String accessToken = jwtUtil.createJwt(principalDetails.getId(), principalDetails.getUser().getRole());
-        String refreshToken = jwtUtil.createRefreshJwt(principalDetails.getId());
-
-        System.out.println("accessToken = " + accessToken);
-        System.out.println("refreshToken = " + refreshToken);
-
-
-
-
-        super.successfulAuthentication(request, response, chain, authResult);
+        /*
+        로그인 완료,
+        1. 토큰 생성
+        2. 쿠키 장착
+         */
+        response.setHeader("gd", "gdgd");
+        ResponseCookie build = ResponseCookie
+                .from("accessToken", "gd")
+                .path("/")
+                .httpOnly(true)
+                // 시간
+                .maxAge(JwtUtil.REFRESH_TOKEN_EXPIRE_TIME)
+                .sameSite("Lax")
+                .build();
+        ResponseEntity.ok().header("Set-Cookie", build.toString())
+                .body("ok");
+//        response.sendRedirect("/api/loginTest");
+//        super.successfulAuthentication(request, response, chain, authResult);
     }
 
+
     /*
-        /login 실패했을 때,
-         */
+    /login 실패했을 때,
+     */
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         log.info("unsuccessfulAuthentication 함수 실행: 로그인 실패!!!!");

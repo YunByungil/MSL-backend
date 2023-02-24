@@ -5,6 +5,7 @@ import Maswillaeng.MSLback.auth.PrincipalDetailsService;
 import Maswillaeng.MSLback.common.exception.CustomAccessDeniedHandler;
 import Maswillaeng.MSLback.common.exception.CustomAuthenticationEntryPoint;
 import Maswillaeng.MSLback.service.UserService;
+import Maswillaeng.MSLback.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,10 +30,10 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
 
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web.ignoring().antMatchers("/api/post/1", "/api", "/api/token");
-//    }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/api/post/1", "/api", "/api/token", "/api/loginTest");
+    }
     
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -62,6 +63,14 @@ public class SecurityConfig {
 //                .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
+
+
+//    @Bean
+//    public AuthenticationManager authenticationManager(HttpSecurity http) {
+//        return http.getSharedObject(AuthenticationManager.class);
+//    }
+
 
     public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
         @Override
