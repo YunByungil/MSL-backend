@@ -1,5 +1,6 @@
 package Maswillaeng.MSLback.config;
 
+import Maswillaeng.MSLback.auth.LoginFilter;
 import Maswillaeng.MSLback.auth.PrincipalDetailsService;
 import Maswillaeng.MSLback.common.exception.CustomAccessDeniedHandler;
 import Maswillaeng.MSLback.common.exception.CustomAuthenticationEntryPoint;
@@ -10,9 +11,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -24,7 +28,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
-
 
 //    @Bean
 //    public WebSecurityCustomizer webSecurityCustomizer() {
@@ -49,12 +52,25 @@ public class SecurityConfig {
                 .accessDeniedHandler(new CustomAccessDeniedHandler()) // exception 권한
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/sign", "/api/login", "/api/token", "/api/logout").permitAll()
+                .antMatchers("/api/sign", "/api/login", "/api/token", "/api/logout", "/home").permitAll()
                 .antMatchers("/api/**")
                 .access("hasRole('ROLE_USER')")
                 .anyRequest().permitAll()
                 .and()
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .apply(new MyCustomDsl())
+                .and()
+                .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
+        @Override
+        public void configure(HttpSecurity http) throws Exception {
+            System.out.println("체크포인트!@@!@!@!@");
+            AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
+            http
+                    .addFilter(new LoginFilter(authenticationManager));
+//                    .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository));
+        }
     }
 }
