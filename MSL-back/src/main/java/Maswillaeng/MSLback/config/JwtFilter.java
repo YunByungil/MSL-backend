@@ -104,28 +104,28 @@ public class JwtFilter extends OncePerRequestFilter {
             log.info("엑세스토큰 시작점");
             Long userId = jwtUtil.getUserId(accessCookie);
             User user = userService.findOne(userId);
-            UserDetails userDetails = principalDetailsService.loadUserByUsername(user.getEmail());
+//            UserDetails userDetails = principalDetailsService.loadUserByUsername(user.getEmail());
             PrincipalDetails principalDetails = new PrincipalDetails(user);
-            System.out.println("principalDetails.getAuthorities() = " + principalDetails.getAuthorities().toString());
-            System.out.println("principalDetails.getPassword() = " + principalDetails.getPassword());
-            System.out.println("principalDetails.getUsername() = " + principalDetails.getUsername());
-            System.out.println("principalDetails.getId() = " + principalDetails.getId());
-            System.out.println("userDetails = " + userDetails.getUsername());
-            System.out.println("userDetails = " + userDetails.getAuthorities());
+//            System.out.println("principalDetails.getAuthorities() = " + principalDetails.getAuthorities().toString());
+//            System.out.println("principalDetails.getPassword() = " + principalDetails.getPassword());
+//            System.out.println("principalDetails.getUsername() = " + principalDetails.getUsername());
+//            System.out.println("principalDetails.getId() = " + principalDetails.getId());
+//            System.out.println("userDetails = " + userDetails.getUsername());
+//            System.out.println("userDetails = " + userDetails.getAuthorities());
             System.out.println("액세스토큰 = " + userId);
             // 권한 부여
 //            UsernamePasswordAuthenticationToken authentication
 //                    = new UsernamePasswordAuthenticationToken(userId, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
-            System.out.println("user.getRole() = " + user.getRole());
-            System.out.println("user.getRole().toString() = " + user.getRole().toString());
+//            System.out.println("user.getRole() = " + user.getRole());
+//            System.out.println("user.getRole().toString() = " + user.getRole().toString());
             UsernamePasswordAuthenticationToken authentication
                     = new UsernamePasswordAuthenticationToken(userId, null, principalDetails.getAuthorities());
             System.out.println("액세스토큰 = " + userId);
 
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            System.out.println("액세스토큰 = " + userId);
+//            System.out.println("액세스토큰 = " + userId);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            System.out.println("액세스토큰 = " + userId);
+//            System.out.println("액세스토큰 = " + userId);
 
         } catch (SecurityException | MalformedJwtException | ExpiredJwtException e) {
             log.info("엑세스 토큰 유효기간 만료되었음!!");
