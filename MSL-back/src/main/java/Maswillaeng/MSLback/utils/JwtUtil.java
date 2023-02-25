@@ -18,8 +18,8 @@ import java.util.Date;
 public class JwtUtil {
     @Value("${jwt.secret}")
     private String secretKey; // 시크릿 키
-    public static final Long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60L; // AccessToken 시간 1분
-    public static final Long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 120L; // RefreshToken 시간
+    public static final Long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L; // AccessToken 시간 1분
+    public static final Long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 120L; // RefreshToken 시간
 
     public String createJwt(Long userId, RoleType roleType) {
         Claims claims = Jwts.claims();
