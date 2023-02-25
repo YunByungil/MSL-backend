@@ -30,6 +30,7 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
     private final UserService userService;
+    private final CorsConfig corsConfig;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -61,6 +62,8 @@ public class SecurityConfig {
                 .and()
                 .apply(new MyCustomDsl())
                 .and()
+                .addFilter(corsConfig.corsFilter())
+//                .and()
 //                .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

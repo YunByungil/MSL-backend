@@ -30,7 +30,7 @@ public class Post extends BaseEntity{
     private Long hits;
     private int report;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<PostLike> postLike = new ArrayList<>();
 
     @Builder

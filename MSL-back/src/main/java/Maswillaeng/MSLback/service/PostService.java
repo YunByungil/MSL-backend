@@ -53,6 +53,7 @@ public class PostService {
      * @param id
      */
     public Post getPost(Long id) {
+        System.out.println("check!!!");
         Post post = findOne(id);
         return post;
     }
