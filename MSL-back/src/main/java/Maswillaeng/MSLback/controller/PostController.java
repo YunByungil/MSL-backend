@@ -33,6 +33,12 @@ public class PostController {
         return "index";
     }
 
+    /**
+     * 글쓰기
+     * @param authentication
+     * @param postRequestDto
+     * @return
+     */
     @PostMapping("/post")
     public PostResponse addPost(Authentication authentication, @RequestBody PostRequestDto postRequestDto) {
         // TODO: @Valid
@@ -46,6 +52,13 @@ public class PostController {
         return new PostResponse(HttpStatus.OK.value());
     }
 
+
+    /**
+     * 게시글 수정
+     * @param postId
+     * @param dto
+     * @return
+     */
     @PutMapping("/post/{postId}")
     public PostResponse updatePost(@PathVariable Long postId, @RequestBody PostUpdateRequestDto dto) {
         postService.updatePost(postId, dto);
