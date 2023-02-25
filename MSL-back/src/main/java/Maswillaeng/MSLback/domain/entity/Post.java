@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,6 +29,9 @@ public class Post extends BaseEntity{
     private String content;
     private Long hits;
     private int report;
+
+    @OneToMany(mappedBy = "user")
+    private List<PostLike> postLike = new ArrayList<>();
 
     @Builder
     public Post(User user, String thumbnail, String title, String content) {

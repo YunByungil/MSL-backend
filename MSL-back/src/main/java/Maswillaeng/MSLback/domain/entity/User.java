@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,6 +36,9 @@ public class User extends BaseEntity{
     @Column(length = 3000)
     private String refresh_token;
     private LocalDateTime withdrawAt;
+
+    @OneToMany(mappedBy = "post")
+    private List<PostLike> postLike = new ArrayList<>();
 
     @Builder
     public User(String email, String password, String nickname,
