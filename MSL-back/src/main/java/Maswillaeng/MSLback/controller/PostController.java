@@ -70,8 +70,8 @@ public class PostController {
      */
     @GetMapping("/post/{postId}")
     public PostDetailResponse getPost(@PathVariable Long postId) {
-        Post post = postService.getPost(postId);
-        PostDetailDto dto = new PostDetailDto(post);
+        PostDetailDto dto = postService.getPost(postId);
+//        PostDetailDto dto = new PostDetailDto(post);
         return new PostDetailResponse(HttpStatus.OK.value(), dto);
     }
 

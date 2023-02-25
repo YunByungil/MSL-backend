@@ -4,6 +4,7 @@ import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.PostRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
+import Maswillaeng.MSLback.dto.post.request.PostDetailDto;
 import Maswillaeng.MSLback.dto.post.request.PostRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -50,12 +51,19 @@ public class PostService {
 
     /**
      * 게시글 상세 조회
+     * 이 로직은 could not initialize proxy [Maswillaeng.MSLback.domain.entity.User#1] - no Session 에러 발생
      * @param id
      */
-    public Post getPost(Long id) {
+//    public Post getPost(Long id) {
+//        System.out.println("check");
+//        Post post = findOne(id);
+//        return post;
+//    }
+    public PostDetailDto getPost(Long id) {
         System.out.println("check!!!");
         Post post = findOne(id);
-        return post;
+        PostDetailDto dto = new PostDetailDto(post);
+        return dto;
     }
 
     /**
