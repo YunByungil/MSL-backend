@@ -2,6 +2,7 @@ package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.dto.post.request.PostsSaveRequestDto;
+import Maswillaeng.MSLback.dto.post.request.PostsUpdateRequestDto;
 import Maswillaeng.MSLback.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,11 +36,11 @@ public class PostController {
         return ResponseEntity.ok().build();
     }
 
-/*    @PutMapping
+    @PutMapping
     public ResponseEntity<Object> updatePost(@RequestBody PostsUpdateRequestDto requestDto, @PathVariable Long id) {
         postService.updatePost(id, requestDto);
         return ResponseEntity.ok().build();
-    }*/
+    }
 
     @DeleteMapping
     public ResponseEntity<Object> deletePost(@PathVariable Long id){

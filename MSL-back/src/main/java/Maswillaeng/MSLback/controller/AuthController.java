@@ -23,7 +23,16 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody UserLoginRequestDto requestDto) throws IllegalAccessException {
         UserTokenResponseDto responseDto = authService.login(requestDto);
-        return ResponseEntity.ok().body(responseDto);
+        return ResponseEntity.ok()
+                .header("Set-Cookie", responseDto.getAccessToken())
+                .header("Set-Cookie", responseDto.getRefreshToken())//리프레시 토큰 경로
+                .body(responseDto);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity logout(HttpServletRequest request){
+        authService.logout(request);
+        return ResponseEntity.ok().build();
     }
     @PostMapping("/sign")
     public ResponseEntity join(@RequestBody UserJoinRequestDto userJoinDto){
@@ -34,4 +43,15 @@ public class AuthController {
             return ResponseEntity.ok().build();
         }
     }
+
+    //Access Token을 재발급 위한 api
+    @PostMapping("/issue")
+    public ResponseEntity issueAccessToken(HttpServletRequest request) throws Exception {
+        UserTokenResponseDto responseDto = authService.issueAccessToken(request);
+        return ResponseEntity.ok()
+                .header("Set-Cookie", responseDto.getAccessToken())
+                .header("Set-Cookie", responseDto.getRefreshToken())
+                .body(responseDto);
+    }
+
 }

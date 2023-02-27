@@ -13,6 +13,8 @@ public class WebConfig implements WebMvcConfigurer {
     private final JwtTokenInterceptor jwtTokenInterceptor;
 
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(jwtTokenInterceptor).addPathPatterns("/user/test");
+        registry.addInterceptor(jwtTokenInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/api/auth/sign", "/api/auth/login", "/api/auth/issue");
     }
 }

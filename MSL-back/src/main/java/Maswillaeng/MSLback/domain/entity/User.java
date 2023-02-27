@@ -18,7 +18,7 @@ public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(nullable = false, name = "user_id")
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -80,7 +80,10 @@ public class User extends BaseTimeEntity {
     public void setRole(RoleType role){
         this.role = role;
     }
-    public void setRefreshToken(String token) {
+    public void updateRefreshToken(String token) {
         this.refreshToken = token;
+    }
+    public void deleteRefreshToken() {
+        this.refreshToken = null;
     }
 }

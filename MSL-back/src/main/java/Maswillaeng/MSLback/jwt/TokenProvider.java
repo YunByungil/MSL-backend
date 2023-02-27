@@ -35,6 +35,7 @@ public class TokenProvider{
     private String REFRESH_KEY;// = "ref";
 
     private final long ACCESS_TOKEN_VALID_TIME = 60 * 60 * 1000L;   // 1시간
+//    private final long ACCESS_TOKEN_VALID_TIME = 1000L;   // 1시간
     private final long REFRESH_TOKEN_VALID_TIME = 60 * 60 * 24 * 1000L;   // 하루
     private final UserDetailsService userDetailsService;
 
@@ -45,10 +46,26 @@ public class TokenProvider{
         REFRESH_KEY = Base64.getEncoder().encodeToString(REFRESH_KEY.getBytes());
     }
 
+
+    public Claims getClaimsFormToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(SECRET_KEY.getBytes())
+                .build().parseClaimsJws(token)
+                .getBody();
+    }
+
+    public Claims getClaimsToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(REFRESH_KEY.getBytes())
+                .build().parseClaimsJws(token)
+                .getBody();
+
+    }
     //권한정보를 이용해서 토큰을 생성하는 메소드
     public String createAccessToken(User user) {
 
-        Claims claims = Jwts.claims().setSubject(user.getId().toString()); // JWT payload 에 저장되는 정보단위
+        Claims claims = Jwts.claims(); // JWT payload 에 저장되는 정보단위
+        claims.put("userId", user.getId());
         claims.put("role", user.getRole()); // 정보는 key / value 쌍으로 저장된다.
         Date now = new Date();
         return Jwts.builder()
@@ -62,9 +79,10 @@ public class TokenProvider{
 
     public String createRefreshToken(User user) {
 
-        Claims claims = Jwts.claims().setSubject(user.getId().toString()); // JWT payload 에 저장되는 정보단위
-        claims.put("role", user.getRole()); // 정보는 key / value 쌍으로 저장된다.
+        Claims claims = Jwts.claims(); // JWT payload 에 저장되는 정보단위
+        claims.put("userId", user.getId()); // 정보는 key / value 쌍으로 저장된다. 저장할지말지
         Date now = new Date();
+
         return Jwts.builder()
                 .setClaims(claims) // 정보 저장
                 .setIssuedAt(now) // 토큰 발행 시간 정보
@@ -73,39 +91,52 @@ public class TokenProvider{
                 .compact();
     }
 
-    // JWT 토큰에서 인증 정보 조회
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserId(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
-
-    // 토큰에서 회원 정보 추출
-    public String getUserId(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(Decoders.BASE64.decode(SECRET_KEY))
-                .build().parseClaimsJws(token)
-                .getBody().getSubject();
-    }
-
-    // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값'
-    public String resolveAccessToken(HttpServletRequest request) {
-        return request.getHeader("ACCESS_TOKEN");
-    }
-
-
-    // 토큰의 유효성 + 만료일자 확인
-    public boolean validateToken(String token) {
+    public boolean isValidAccessToken(String token) {
         try {
-            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token);
-            return !claims.getBody().getExpiration().before(new Date());
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(SECRET_KEY.getBytes())
+                    .build().parseClaimsJws(token)
+                    .getBody();
+
+            log.info("expireTime: " + claims.getExpiration());
+            log.info("userId: " + claims.get("userId"));
+            return true;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info("잘못된 JWT 서명입니다.");
+            return false;
+        } catch (ExpiredJwtException e) {
+            log.info("만료된 JWT 토큰입니다.");
+            return false;
+        } catch (UnsupportedJwtException e) {
+            log.info("지원되지 않는 JWT 토큰입니다.");
+            return false;
+        } catch (IllegalArgumentException e) {
+            log.info("JWT 토큰이 잘못되었습니다.");
+            return false;
+        } catch (NullPointerException exception) {
+            log.info("Token is null");
+            return false;
+        }
+    }
+    public boolean isValidRefreshToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(REFRESH_KEY.getBytes())
+                    .build().parseClaimsJws(token)
+                    .getBody();
+            log.info("expireTime: " + claims.getExpiration());
+            log.info("userId: " + claims.get("userId"));
+            return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 토큰입니다.");
+            log.info("만료된 JWT refresh 토큰입니다.");
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
             log.info("JWT 토큰이 잘못되었습니다.");
+        } catch (NullPointerException exception) {
+            log.info("Token is null");
         }
         return false;
     }
