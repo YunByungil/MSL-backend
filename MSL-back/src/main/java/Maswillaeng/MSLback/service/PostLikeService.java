@@ -40,9 +40,6 @@ public class PostLikeService {
     }
 
 
-    /*
-    TODO: PostLikeRepository -> findByPostIdAndUserId 생성
-     */
     public void unlikePost(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalStateException("해당 게시글이 존재하지 않습니다."));
@@ -50,14 +47,14 @@ public class PostLikeService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("해당 회원이 존재하지 않습니다."));
 
-//        PostLike postLike = postLikeRepository.findByPostIdAndUserId(postId, userId)
-//                .orElseThrow(() -> new IllegalStateException("좋아요 취소됨"));
+        PostLike postLike = postLikeRepository.findByPostIdAndUserId(postId, userId)
+                .orElseThrow(() -> new IllegalStateException("해당 게시글에 좋아요를 누르지 않았습니다."));
 
 //        PostLike postLike = PostLike.builder()
 //                .post(post)
 //                .user(user)
 //                .build();
 
-//        postLikeRepository.delete(postLike);
+        postLikeRepository.delete(postLike);
     }
 }
