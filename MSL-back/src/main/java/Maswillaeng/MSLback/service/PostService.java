@@ -39,6 +39,7 @@ public class PostService {
      */
     @Transactional
     public void updatePost(Long id, PostUpdateRequestDto dto) {
+        // TODO: 내가 쓴 게시글이 맞는지 검증 로직 추가
         /*
         굳이 게시글 하나만 찾는 findOne이 필요할까?
         그냥 Repository에서 바로 불러와도 될 거 같은뎅
@@ -85,7 +86,7 @@ public class PostService {
             throw new IllegalStateException("내가 등록한 글이 아니기 때문에 삭제 불가능합니다");
         }
         System.out.println("log.info(\"deletePost, postId = {}\", postId);");
-        postRepository.deleteById(post.getId());
+        postRepository.deleteById(postId);
     }
 
 

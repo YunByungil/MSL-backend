@@ -77,6 +77,7 @@ public class PostController {
 
     /**
      * 게시글 전체 조회
+     * TODO: 이것도 Post로 받는게 아니라, Dto로 받아야 된다.
      */
     @GetMapping("/post/page")
     public PostListResponse getAllPost() {
@@ -91,17 +92,18 @@ public class PostController {
     /**
      * 게시글 삭제
      */
-    @DeleteMapping("/post/{postId}")
-    public PostResponse deletePost(@PathVariable("postId") Long postId, Authentication authentication) {
+    @DeleteMapping("/postD/{postId}")
+    public PostResponse deletePost(Authentication authentication, @PathVariable Long postId) {
         /*
-        내 게시글이 맞는지 확인하는 검증
+        대체 왜 /post/{postId}로 하면 1번 게시글이 삭제가 안 될까..
          */
-        log.info("user = {}", authentication.getName());
-        log.info("user = {}", authentication.getName());
-        log.info("user = {}", authentication.getName());
-        log.info("user = {}", authentication.getName());
+        log.info("== deletePost Method ==");
         log.info("deletePost Method");
         log.info("deletePost, postId = {}", postId);
+        log.info("user = {}", authentication.getName());
+        log.info("user = {}", authentication.getName());
+        log.info("user = {}", authentication.getName());
+        log.info("user = {}", authentication.getName());
         log.info("userId = {}", Long.parseLong(authentication.getName()));
         Long myId = Long.parseLong(authentication.getName());
         postService.deletePost(postId, myId);
