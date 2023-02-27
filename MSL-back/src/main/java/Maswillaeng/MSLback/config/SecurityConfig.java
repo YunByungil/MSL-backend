@@ -42,7 +42,8 @@ public class SecurityConfig {
         log.info("SecurityFilterChain 진입 완료");
 
         return http.httpBasic().disable()
-                .cors().disable()
+                .cors().configurationSource(corsConfig.corsConfigurationSource())
+                .and()
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
@@ -62,7 +63,6 @@ public class SecurityConfig {
                 .and()
                 .apply(new MyCustomDsl())
                 .and()
-                .addFilter(corsConfig.corsFilter())
 //                .and()
 //                .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
