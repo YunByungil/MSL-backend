@@ -11,8 +11,7 @@ public class TokenUserData {
     private String userRole;
 
     public TokenUserData(Claims claims) {
-        String userId = String.valueOf(claims.get("userId"));
-        this.userId = Long.valueOf(userId);
+        this.userId = Long.parseLong( String.valueOf(claims.get("userId")));
         this.userRole = (String) claims.get("role");
     }
 }

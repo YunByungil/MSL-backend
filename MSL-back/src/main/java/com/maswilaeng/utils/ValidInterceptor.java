@@ -64,6 +64,7 @@ public class ValidInterceptor implements Ordered, HandlerInterceptor {
                 System.out.println("refresh Token");
                 Claims claims = tokenProvider.getClaims(refreshToken);
                 UserContext.userData.set(new TokenUserData(claims));
+                System.out.println("userContext set 실행. 리프레시 토큰있을떄");
             } catch (ExpiredJwtException exception) {
                 res.sendRedirect("/api/login");
                 return false;
@@ -73,6 +74,7 @@ public class ValidInterceptor implements Ordered, HandlerInterceptor {
             try {
                 Claims claims = tokenProvider.getClaims(accessToken);
                 UserContext.userData.set(new TokenUserData(claims));
+                System.out.println("userContext set 실행. 엑세스 토큰있을떄");
             } catch (ExpiredJwtException exception) {
                 res.setStatus(401);
                 return false;
