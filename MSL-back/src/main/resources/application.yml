@@ -27,7 +27,9 @@ logging:
 
 
 jwt:
-  secret: mslbacksecretkeymslbacksecretkey
+  header: Authorization
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+
 
 import:
   key: 5161304000601633

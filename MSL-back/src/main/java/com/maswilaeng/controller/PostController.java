@@ -7,13 +7,10 @@ import com.maswilaeng.dto.post.request.PostRequestDto;
 import com.maswilaeng.dto.post.request.PostUpdateDto;
 import com.maswilaeng.dto.post.response.PostResponseDto;
 import com.maswilaeng.service.PostService;
-import com.maswilaeng.utils.UserContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.xml.bind.ValidationException;
 
 @RequiredArgsConstructor
 @RestController
@@ -45,11 +42,11 @@ public class PostController {
         postService.updatePost(postRepository.findUserIdById(postUpdateDto.getId()),postUpdateDto);
         return ResponseEntity.ok().body(ResponseDto.of(HttpStatus.OK));
     }
-
-    /* DELETE */
-    @DeleteMapping("/post/{postId}")
-    public ResponseEntity deletePost(@PathVariable Long postId) throws ValidationException {
-        postService.delete(UserContext.userData.get().getUserId(), postId);
-        return ResponseEntity.ok().body(ResponseDto.of(HttpStatus.OK));
-    }
+//
+//    /* DELETE */
+//    @DeleteMapping("/post/{postId}")
+//    public ResponseEntity deletePost(@PathVariable Long postId) throws ValidationException {
+//        postService.delete(UserContext.userData.get().getUserId(), postId);
+//        return ResponseEntity.ok().body(ResponseDto.of(HttpStatus.OK));
+//    }
 }

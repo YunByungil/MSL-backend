@@ -5,19 +5,18 @@ import com.maswilaeng.domain.repository.UserRepository;
 import com.maswilaeng.dto.user.request.LoginRequestDto;
 import com.maswilaeng.dto.user.request.UserJoinDto;
 import com.maswilaeng.jwt.AESEncryption;
-import com.maswilaeng.jwt.TokenProvider;
-import com.maswilaeng.jwt.dto.LoginResponseDto;
-import com.maswilaeng.jwt.dto.TokenResponseDto;
-import com.maswilaeng.utils.UserContext;
+import com.maswilaeng.jwt.entity.JwtTokenProvider;
+import com.maswilaeng.jwt.entity.TokenInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
-
-import static com.maswilaeng.jwt.TokenProvider.REFRESH_TOKEN_EXPIRE_TIME;
 
 @Slf4j
 @Service
@@ -25,79 +24,90 @@ import static com.maswilaeng.jwt.TokenProvider.REFRESH_TOKEN_EXPIRE_TIME;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final TokenProvider tokenProvider;
+    public static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 7일
+
     private final UserRepository userRepository;
     private final AESEncryption aesEncryption;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public void signup(UserJoinDto userJoinDto) throws Exception {
-        String encryptedPw = aesEncryption.encrypt(userJoinDto.getPassword());
+        String encryptedPw = passwordEncoder.encode(userJoinDto.getPassword());
         User user = userJoinDto.toUser();
-        user.encreptPassword(encryptedPw);
+        user.encryptPassword(encryptedPw);
         userRepository.save(user);
     }
 
-    public LoginResponseDto login(LoginRequestDto loginRequestDto) throws Exception {
-        User user = userRepository.findByEmail(loginRequestDto.getEmail())
-                .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
+    @Transactional
+    public TokenInfo login(LoginRequestDto loginRequestDto) throws Exception {
 
-        if (!aesEncryption.encrypt(loginRequestDto.getPassword()).equals(user.getPassword())) {
-            log.warn("1 : " + aesEncryption.encrypt(loginRequestDto.getPassword() +
-                    "2 : " + user.getPassword()));
-            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
-        } else if (user.getWithdrawYn() == 1) {
-            throw new EntityNotFoundException("탈퇴한 회원입니다.");
-        }
+        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
+        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
+        log.info("login 요청 들어옴! loginRequestDto.getemail(){}, loginRequestDto.getPassword(): {}", loginRequestDto.getEmail(), loginRequestDto.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
 
-        String accessToken = tokenProvider.generateAccessToken(user.getId(), user.getRole());
-        String refreshToken = tokenProvider.generateRefreshToken(user.getId());
+        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
+        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
+        log.info("2단계 돌입전");
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        log.info("authentication은 존재하는가 : {}", authentication);
 
-        user.updateRefreshToken(refreshToken);
+        // 3. 인증 정보 기반으로 JWT 토큰 생성
+        TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+        log.info("JWT 토큰 생성 후 tokenInfo : {}", tokenInfo);
 
-        TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
-                .ACCESS_TOKEN(accessToken)
-                .REFRESH_TOKEN(refreshToken)
-                .build();
-
-        return LoginResponseDto.builder()
-                .tokenResponseDto(tokenResponseDto)
-                .nickName(user.getNickName())
-                .userImage(user.getUserImage())
-                .build();
+        return tokenInfo;
+    }
+//
+//        String accessToken = tokenProvider.generateAccessToken(user.getId(), user.getRole());
+//        String refreshToken = tokenProvider.generateRefreshToken(user.getId());
+//
+//        user.updateRefreshToken(refreshToken);
+////
+//        TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
+//                .ACCESS_TOKEN(accessToken)
+//                .REFRESH_TOKEN(refreshToken)
+//                .build();
+//
+//        return LoginResponseDto.builder()
+//                .tokenResponseDto(tokenResponseDto)
+//                .nickName(user.getNickName())
+//                .userImage(user.getUserImage())
+//                .build();
 //
 //        public TokenResponseDto reissue(String refreshToken) {
 //
 //        }
 
 
+//
+//
+//        //1. Login ID/PW를 기반으로 AuthenticationToken 생성
+//        UsernamePasswordAuthenticationToken authenticationToken = loginRequestDto.toAuthentication();
+//
+//        // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
+//        // authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만든 loadUserByUsername이 실행됨
+//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+//
+//        // 3. 인증 정보를 기반으로 JWT 토큰 생성
+//        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
+//
+//        // 4. RefreshToken 저장
+//        RefreshToken refreshToken = RefreshToken.builder()
+//                .key(authentication.getName())
+//                .value(tokenDto.getRefreshToken())
+//                .build();
+//
+//        refreshTokenRepository.save(refreshToken);
+//
+//        // 5. 토큰 발급
+//        log.warn("여기까진 됐어 -> 5번 시작전");
+//        return tokenDto;
+//         ====================================스프링 시큐리티라고 생각됨 ================================================
+//
 
-        /**
-         * ====================================스프링 시큐리티라고 생각됨 ================================================
-         *
-        //1. Login ID/PW를 기반으로 AuthenticationToken 생성
-        UsernamePasswordAuthenticationToken authenticationToken = loginRequestDto.toAuthentication();
 
-        // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
-        // authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만든 loadUserByUsername이 실행됨
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
-
-        // 4. RefreshToken 저장
-        RefreshToken refreshToken = RefreshToken.builder()
-                .key(authentication.getName())
-                .value(tokenDto.getRefreshToken())
-                .build();
-
-        refreshTokenRepository.save(refreshToken);
-
-        // 5. 토큰 발급
-        log.warn("여기까진 됐어 -> 5번 시작전");
-        return tokenDto;
-         ====================================스프링 시큐리티라고 생각됨 ================================================
-         */
-
-    }
     /**
      * ====================================스프링 시큐리티라고 생각됨 ================================================
      *
@@ -132,22 +142,22 @@ public class AuthService {
     ====================================스프링 시큐리티라고 생각됨 ================================================
     */
 
-
-    public TokenResponseDto updateAccessToken(String refreshToken) {
-        User user = userRepository.findById(UserContext.userData.get().getUserId()).get();
-        String OriginalRefreshToken = user.getRefreshToken();
-
-        String updatedAccessToken;
-        if (!tokenProvider.validateToken(OriginalRefreshToken)) {
-            throw new RuntimeException("Refresh Token 이 유효하지 않습니다");
-        } else {
-            updatedAccessToken = tokenProvider.generateAccessToken(user.getId(), user.getRole());
-        }
-
-        return TokenResponseDto.builder()
-                .ACCESS_TOKEN(updatedAccessToken)
-                .build();
-    }
+//
+//    public TokenResponseDto updateAccessToken(String refreshToken) {
+//        User user = userRepository.findById(UserContext.userData.get().getUserId()).get();
+//        String OriginalRefreshToken = user.getRefreshToken();
+//
+//        String updatedAccessToken;
+//        if (!tokenProvider.validateToken(OriginalRefreshToken)) {
+//            throw new RuntimeException("Refresh Token 이 유효하지 않습니다");
+//        } else {
+//            updatedAccessToken = tokenProvider.generateAccessToken(user.getId(), user.getRole());
+//        }
+//
+//        return TokenResponseDto.builder()
+//                .ACCESS_TOKEN(updatedAccessToken)
+//                .build();
+//    }
 
 
     public boolean notDuplicate(User user) {

@@ -1,10 +1,13 @@
 package com.maswilaeng.domain.entity;
 
 import com.maswilaeng.dto.user.request.UserUpdateRequestDto;
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 
@@ -79,7 +82,7 @@ public class User extends BaseTimeEntity{
         this.refreshToken = refreshToken;
     }
 
-    public void encreptPassword(String encryptedPw) {
+    public void encryptPassword(String encryptedPw) {
         this.password = encryptedPw;
     }
 }

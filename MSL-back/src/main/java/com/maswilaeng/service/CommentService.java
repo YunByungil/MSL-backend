@@ -7,15 +7,12 @@ import com.maswilaeng.domain.repository.CommentRepository;
 import com.maswilaeng.domain.repository.PostRepository;
 import com.maswilaeng.domain.repository.UserRepository;
 import com.maswilaeng.dto.comment.request.CommentRequestDto;
-import com.maswilaeng.dto.comment.request.CommentUpdateRequestDto;
 import com.maswilaeng.dto.comment.request.RecommentRequestDto;
-import com.maswilaeng.utils.UserContext;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
-import javax.xml.bind.ValidationException;
 
 @Service
 @Transactional(readOnly = true)
@@ -47,23 +44,23 @@ public class CommentService {
      * @throws ValidationException
      * TODO -> UserContext 손보기
      */
-    public void updateComment(CommentUpdateRequestDto dto) throws ValidationException {
-        Comment comment = commentRepository.findById(dto.getCommentId()).orElseThrow(
-                () -> new EntityNotFoundException("존재하지 않는 댓글입니다.")
-        );
-
-        validateUser(UserContext.userData.get().getUserId(), comment);
-        comment.updateComment(dto.getContent());
-    }
-
-    public void deleteComment(Long commentId) throws ValidationException {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new EntityNotFoundException("존재하지 않는 댓글입니다.")
-        );
-        validateUser(UserContext.userData.get().getUserId(), comment);
-        commentRepository.delete(comment);
-    }
-
+//    public void updateComment(CommentUpdateRequestDto dto) throws ValidationException {
+//        Comment comment = commentRepository.findById(dto.getCommentId()).orElseThrow(
+//                () -> new EntityNotFoundException("존재하지 않는 댓글입니다.")
+//        );
+//
+//        validateUser(UserContext.userData.get().getUserId(), comment);
+//        comment.updateComment(dto.getContent());
+//    }
+//
+//    public void deleteComment(Long commentId) throws ValidationException {
+//        Comment comment = commentRepository.findById(commentId).orElseThrow(
+//                () -> new EntityNotFoundException("존재하지 않는 댓글입니다.")
+//        );
+//        validateUser(UserContext.userData.get().getUserId(), comment);
+//        commentRepository.delete(comment);
+//    }
+//
     /**
      * 권한체크
      * @param userId

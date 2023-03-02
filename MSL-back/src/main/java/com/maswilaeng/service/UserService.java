@@ -8,6 +8,7 @@ import com.maswilaeng.dto.user.response.UserInfoResponseDto;
 import com.maswilaeng.jwt.AESEncryption;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -54,19 +56,20 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-
-
-
     public UserInfoResponseDto getUser(Long userId){
         User user = userRepository.findById(userId).get();
-        return UserInfoResponseDto.of(user);
+        return new UserInfoResponseDto(user);
+    }
+
+    public Optional<User> getUserEntity(Long userId) {
+        return userRepository.findById(userId);
     }
 
     public void updateUser(Long userId, UserUpdateRequestDto requestDto) {
         User selectedUser = userRepository.findById(userId).get();
-
         selectedUser.update(requestDto); //더티체킹
     }
+
     public void userWithdraw(Long userId) {
         User user = userRepository.findById(userId).get();
         user.withdraw();

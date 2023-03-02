@@ -20,12 +20,11 @@ public class UserInfoResponseDto {
 
     private String introduction;
 
-    public static UserInfoResponseDto of(User user) {
-        return new UserInfoResponseDto(
-                user.getEmail(),
-                user.getNickName(),
-                user.getPhoneNumber(),
-                user.getUserImage(),
-                user.getIntroduction());
+    public UserInfoResponseDto (User user) {
+        this.email = user.getEmail();
+        this.nickname = user.getNickName();
+        this.phoneNumber = user.getPhoneNumber();
+        this.userImage = user.getUserImage();
+        this.introduction = user.getIntroduction();
     }
 }

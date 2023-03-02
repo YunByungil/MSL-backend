@@ -1,6 +1,6 @@
 package com.maswilaeng.dto.post.request;
 
-import com.sun.istack.NotNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
