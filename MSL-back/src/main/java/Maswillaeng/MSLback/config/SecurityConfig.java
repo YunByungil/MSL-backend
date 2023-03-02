@@ -49,6 +49,11 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .logout()
+                .logoutUrl("/logout")
+                .deleteCookies("accessToken")
+                .logoutSuccessUrl("/home")
+                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // exception 토큰
 //                .authenticationEntryPoint((request, response, authException) ->
