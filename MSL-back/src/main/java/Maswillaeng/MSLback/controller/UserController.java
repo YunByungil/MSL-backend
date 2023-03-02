@@ -8,6 +8,7 @@ import Maswillaeng.MSLback.dto.user.reponse.UserLoginResponseDto;
 import Maswillaeng.MSLback.dto.user.request.UserLoginRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserJoinDTO;
 import Maswillaeng.MSLback.dto.user.request.UserListDTO;
+import Maswillaeng.MSLback.dto.user.request.UserUpdateDTO;
 import Maswillaeng.MSLback.service.UserService;
 import Maswillaeng.MSLback.utils.CookieUtil;
 import lombok.AllArgsConstructor;
@@ -53,6 +54,19 @@ public class UserController {
         return ResponseEntity.ok().body(userListDTO);
     }
 
+    /**
+     * 회원 수정
+     * @param authentication
+     * @param dto
+     * @return
+     */
+    @PutMapping("/user")
+    public ResponseEntity updateMember(Authentication authentication, @RequestBody UserUpdateDTO dto) {
+        Long userId = Long.parseLong(authentication.getName());
+        userService.update(userId, dto);
+        return ResponseEntity.ok().body("수정 완료!");
+    }
+
     @PostMapping("/test")
     public ResponseEntity<String> test(Authentication authentication) {
         log.info("userId = {}", authentication.getName());
@@ -96,6 +110,11 @@ public class UserController {
         return l;
     }
 
+    /**
+     * 회원 가입
+     * @param userJoinDTO
+     * @return
+     */
     @PostMapping("/sign")
     public Result join(@RequestBody UserJoinDTO userJoinDTO) {
         log.info("userJoinDTO = {}", userJoinDTO);

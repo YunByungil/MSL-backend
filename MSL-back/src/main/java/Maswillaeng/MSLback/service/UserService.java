@@ -7,6 +7,7 @@ import Maswillaeng.MSLback.dto.user.reponse.TokenResponse;
 import Maswillaeng.MSLback.dto.user.reponse.UserLoginResponseDto;
 import Maswillaeng.MSLback.dto.user.request.UserJoinDTO;
 import Maswillaeng.MSLback.dto.user.request.UserLoginRequestDto;
+import Maswillaeng.MSLback.dto.user.request.UserUpdateDTO;
 import Maswillaeng.MSLback.utils.CookieUtil;
 import Maswillaeng.MSLback.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -95,11 +96,12 @@ public class UserService {
         return user.getId();
     }
 
-//    @Transactional
-//    public void update(Long userId, UserUpdateDTO userUpdateDTO) {
-//        User user = userRepository.findOne(userId);
-//        user.updateUser(userUpdateDTO);
-//    }
+    @Transactional
+    public void update(Long userId, UserUpdateDTO dto) {
+        User user = findOne(userId);
+
+        user.updateUser(dto, encoder.encode(dto.getPassword()));
+    }
 
     public User findOne(Long userId) {
         User user = userRepository.findById(userId)

@@ -53,8 +53,8 @@ public class User extends BaseEntity{
         this.role = RoleType.USER;
     }
 
-    public void updateUser(UserUpdateDTO userUpdateDTO) {
-        this.password = userUpdateDTO.getPassword();
+    public void updateUser(UserUpdateDTO userUpdateDTO, String pwd) {
+        this.password = pwd;
         this.nickname = userUpdateDTO.getNickname();
         this.phoneNumber = userUpdateDTO.getPhoneNumber();
         this.userImage = userUpdateDTO.getUserImage();

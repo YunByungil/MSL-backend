@@ -14,7 +14,7 @@ public class UserUpdateDTO {
     private String userImage;
     private String introduction;
 
-    public User toEntity() {
+    public User toEntity(String password) {
         return User.builder()
                 .password(password)
                 .nickname(nickname)
