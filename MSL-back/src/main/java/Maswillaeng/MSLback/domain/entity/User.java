@@ -27,6 +27,7 @@ public class User extends BaseEntity{
     private String nickname;
     @Column(nullable = false, unique = true)
     private String phoneNumber;
+    @Column(length = 3000)
     private String userImage;
     private String introduction;
     @ColumnDefault("0")
