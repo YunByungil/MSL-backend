@@ -1,6 +1,7 @@
 package Maswillaeng.MSLback.config;
 
 import Maswillaeng.MSLback.auth.LoginFilter;
+import Maswillaeng.MSLback.auth.LogoutFilter;
 import Maswillaeng.MSLback.auth.PrincipalDetailsService;
 import Maswillaeng.MSLback.common.exception.CustomAccessDeniedHandler;
 import Maswillaeng.MSLback.common.exception.CustomAuthenticationEntryPoint;
@@ -32,10 +33,12 @@ public class SecurityConfig {
     private final UserService userService;
     private final CorsConfig corsConfig;
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/api/post/1", "/api", "/api/token", "/api/loginTest");
-    }
+    private final LogoutFilter logoutFilter;
+
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring().antMatchers("/api/post/1", "/api", "/api/token", "/api/loginTest");
+//    }
     
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -50,9 +53,10 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .logout()
+                .addLogoutHandler(logoutFilter)
                 .logoutUrl("/logout")
-                .deleteCookies("accessToken")
-                .logoutSuccessUrl("/home")
+                .deleteCookies("refreshToken", "accessToken")
+                .logoutSuccessUrl("/api/test")
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // exception 토큰
