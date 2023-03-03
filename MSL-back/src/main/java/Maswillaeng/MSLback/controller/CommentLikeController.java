@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,5 +22,12 @@ public class CommentLikeController {
         Long userId = Long.parseLong(authentication.getName());
         commentLikeService.likeComment(commentId, userId);
         return ResponseEntity.ok().body("댓글 좋아요!");
+    }
+
+    @DeleteMapping("/{commentId}/commentlike")
+    public ResponseEntity unlikeComment(@PathVariable("commentId") Long commentId, Authentication authentication) {
+        Long userId = Long.parseLong(authentication.getName());
+        commentLikeService.unlikeComment(commentId, userId);
+        return ResponseEntity.ok().body("댓글 좋아요 취소 완료!");
     }
 }
