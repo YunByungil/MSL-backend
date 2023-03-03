@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -31,12 +33,17 @@ public class PostLikeService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("해당 회원이 존재하지 않습니다."));
 
-        PostLike postLike = PostLike.builder()
-                .post(post)
-                .user(user)
-                .build();
+        Optional<PostLike> findPost = postLikeRepository.findByPostIdAndUserId(postId, userId); // 중복 좋아요 검증 로직
+        if (findPost.isEmpty()) {
+            PostLike postLike = PostLike.builder()
+                    .post(post)
+                    .user(user)
+                    .build();
 
-        postLikeRepository.save(postLike);
+            postLikeRepository.save(postLike);
+        } else {
+            throw new IllegalStateException("해당 게시글에 이미 좋아요를 누르셨습니다.");
+        }
     }
 
 
