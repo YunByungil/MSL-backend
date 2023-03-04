@@ -1,5 +1,6 @@
 package Maswillaeng.MSLback.domain.entity;
 
+import Maswillaeng.MSLback.domain.enums.Category;
 import Maswillaeng.MSLback.dto.post.request.PostUpdateRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,6 +31,9 @@ public class Post extends BaseEntity{
     private Long hits;
     private int report;
 
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comment = new ArrayList<>();
 
@@ -37,13 +41,14 @@ public class Post extends BaseEntity{
     private List<PostLike> postLike = new ArrayList<>();
 
     @Builder
-    public Post(User user, String thumbnail, String title, String content) {
+    public Post(User user, String thumbnail, String title, String content, Category category) {
         this.user = user;
         this.thumbnail = thumbnail;
         this.title = title;
         this.content = content;
         this.hits = 0L;
         this.report = 0;
+        this.category = category;
     }
 
     public void update(PostUpdateRequestDto dto) {
