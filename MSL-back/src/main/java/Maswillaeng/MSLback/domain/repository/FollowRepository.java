@@ -12,13 +12,13 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
      * @param userId
      * @return
      */
-    Long countByFollow(Long userId);
-    Long countByFollower(Long userId);
+//    Long countByFollow(Long userId);
+//    Long countByFollower(Long userId);
 
     /**
      * 팔로우, 팔로워 목록 불러오기
      * 존재하지 않을 경우, null Exception을 방지하기 위해 List를 사용.
      */
-    List<Follow> getFollowList(Long userId);
-    List<Follow> getFollowerList(Long userId);
+//    List<Follow> getFollowList(Long userId);
+//    List<Follow> getFollowerList(Long userId);
 }
