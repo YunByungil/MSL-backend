@@ -40,6 +40,8 @@ public class User extends BaseEntity{
 
 
     @OneToMany(mappedBy = "user")
+    private List<Post> post = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
     private List<PostLike> postLike = new ArrayList<>();
 
     @Builder
