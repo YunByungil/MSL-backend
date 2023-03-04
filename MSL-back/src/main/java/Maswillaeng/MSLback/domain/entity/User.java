@@ -38,7 +38,8 @@ public class User extends BaseEntity{
     private String refresh_token;
     private LocalDateTime withdrawAt;
 
-    @OneToMany(mappedBy = "post")
+
+    @OneToMany(mappedBy = "user")
     private List<PostLike> postLike = new ArrayList<>();
 
     @Builder

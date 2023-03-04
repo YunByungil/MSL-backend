@@ -33,7 +33,7 @@ public class Post extends BaseEntity{
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comment = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<PostLike> postLike = new ArrayList<>();
 
     @Builder
