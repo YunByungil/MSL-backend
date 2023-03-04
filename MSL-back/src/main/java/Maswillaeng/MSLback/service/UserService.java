@@ -1,25 +1,20 @@
 package Maswillaeng.MSLback.service;
 
-import Maswillaeng.MSLback.domain.entity.RoleType;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
 import Maswillaeng.MSLback.dto.user.reponse.TokenResponse;
 import Maswillaeng.MSLback.dto.user.reponse.UserLoginResponseDto;
 import Maswillaeng.MSLback.dto.user.request.UserJoinDTO;
-import Maswillaeng.MSLback.dto.user.request.UserLoginRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateDTO;
 import Maswillaeng.MSLback.utils.CookieUtil;
 import Maswillaeng.MSLback.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service

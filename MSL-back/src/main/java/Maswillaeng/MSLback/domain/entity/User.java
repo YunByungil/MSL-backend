@@ -1,9 +1,9 @@
 package Maswillaeng.MSLback.domain.entity;
 
+import Maswillaeng.MSLback.domain.enums.RoleType;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateDTO;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

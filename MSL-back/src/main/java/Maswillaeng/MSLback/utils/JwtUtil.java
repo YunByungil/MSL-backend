@@ -1,14 +1,10 @@
 package Maswillaeng.MSLback.utils;
 
-import Maswillaeng.MSLback.domain.entity.RoleType;
-import Maswillaeng.MSLback.domain.entity.User;
-import Maswillaeng.MSLback.service.UserService;
+import Maswillaeng.MSLback.domain.enums.RoleType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
