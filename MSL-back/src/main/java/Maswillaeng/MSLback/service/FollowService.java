@@ -35,6 +35,11 @@ public class FollowService {
         User yourAccount = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
 
+        Optional<Follow> find = followRepository.findByFollowerIdAndFollowingId(myId, userId);
+        if (find.isPresent()) {
+            throw new IllegalStateException("이미 팔로우한 회원입니다.");
+        }
+
         Follow follow = Follow.builder()
                 .follower(myAccount)
                 .following(yourAccount)
