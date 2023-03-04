@@ -20,6 +20,12 @@ public class FollowService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
+    /**
+     * 팔로우 기능
+     *
+     * @param myId
+     * @param userId
+     */
     public void addFollow(Long myId, Long userId) {
         User myAccount = userRepository.findById(myId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
@@ -33,6 +39,24 @@ public class FollowService {
                 .build();
 
         followRepository.save(follow);
+    }
+
+    /**
+     * 팔로우 취소 기능
+     */
+    public void unFollow(Long myId, Long userId) {
+        User myAccount = userRepository.findById(myId)
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
+
+        User yourAccount = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
+
+        Follow follow = Follow.builder()
+                .follower(myAccount)
+                .following(yourAccount)
+                .build();
+
+        followRepository.delete(follow);
     }
 
 }
