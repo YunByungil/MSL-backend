@@ -44,6 +44,11 @@ public class User extends BaseEntity{
     @OneToMany(mappedBy = "user")
     private List<PostLike> postLike = new ArrayList<>();
 
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.REMOVE)
+    private List<Follow> followerList = new ArrayList<>();
+    @OneToMany(mappedBy = "following", cascade = CascadeType.REMOVE)
+    private List<Follow> followingList = new ArrayList<>();
+
     @Builder
     public User(String email, String password, String nickname,
                 String phoneNumber, String userImage, String introduction) {
