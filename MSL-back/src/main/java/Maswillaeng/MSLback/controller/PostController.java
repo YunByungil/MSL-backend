@@ -2,6 +2,7 @@ package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.dto.post.reponse.PostDetailResponse;
 import Maswillaeng.MSLback.dto.post.reponse.PostListResponse;
+import Maswillaeng.MSLback.dto.post.reponse.PostListResponseDto;
 import Maswillaeng.MSLback.dto.post.reponse.PostResponse;
 import Maswillaeng.MSLback.dto.post.request.*;
 import Maswillaeng.MSLback.service.PostService;

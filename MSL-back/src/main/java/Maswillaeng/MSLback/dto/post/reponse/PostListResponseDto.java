@@ -1,4 +1,4 @@
-package Maswillaeng.MSLback.dto.post.request;
+package Maswillaeng.MSLback.dto.post.reponse;
 
 import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.enums.Category;

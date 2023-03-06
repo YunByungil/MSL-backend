@@ -5,7 +5,7 @@ import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.PostRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
 import Maswillaeng.MSLback.dto.post.request.PostDetailDto;
-import Maswillaeng.MSLback.dto.post.request.PostListResponseDto;
+import Maswillaeng.MSLback.dto.post.reponse.PostListResponseDto;
 import Maswillaeng.MSLback.dto.post.request.PostRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
