@@ -4,10 +4,7 @@ import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.dto.post.reponse.PostDetailResponse;
 import Maswillaeng.MSLback.dto.post.reponse.PostListResponse;
 import Maswillaeng.MSLback.dto.post.reponse.PostResponse;
-import Maswillaeng.MSLback.dto.post.request.PostDetailDto;
-import Maswillaeng.MSLback.dto.post.request.PostListDto;
-import Maswillaeng.MSLback.dto.post.request.PostRequestDto;
-import Maswillaeng.MSLback.dto.post.request.PostUpdateRequestDto;
+import Maswillaeng.MSLback.dto.post.request.*;
 import Maswillaeng.MSLback.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,14 +76,20 @@ public class PostController {
      * 게시글 전체 조회
      * TODO: 이것도 Post로 받는게 아니라, Dto로 받아야 된다.
      */
+//    @GetMapping("/post/page")
+//    public PostListResponse getAllPost() {
+//        List<Post> allPost = postService.getAllPost();
+//        List<PostListDto> collect = allPost.stream()
+//                .map(p -> new PostListDto(p.getId(), p.getUser().getNickname(), p.getThumbnail(), p.getTitle()))
+//                .collect(Collectors.toList());
+//
+//        return new PostListResponse(collect.size(), HttpStatus.OK.value(), collect);
+//    }
     @GetMapping("/post/page")
     public PostListResponse getAllPost() {
-        List<Post> allPost = postService.getAllPost();
-        List<PostListDto> collect = allPost.stream()
-                .map(p -> new PostListDto(p.getId(), p.getUser().getNickname(), p.getThumbnail(), p.getTitle()))
-                .collect(Collectors.toList());
+        List<PostListRequestDto> dto = postService.testAllPost();
 
-        return new PostListResponse(collect.size(), HttpStatus.OK.value(), collect);
+        return new PostListResponse(dto.size(), HttpStatus.OK.value(), dto);
     }
 
     /**
