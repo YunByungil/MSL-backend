@@ -2,11 +2,10 @@ package Maswillaeng.MSLback.dto.post.request;
 
 import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.enums.Category;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class PostListRequestDto {
+public class PostListResponseDto {
 
     private Long postId;
     private Long userId;
@@ -19,7 +18,7 @@ public class PostListRequestDto {
     private Long commentCount;
     private Long likeCount;
 
-    public PostListRequestDto(Post post) {
+    public PostListResponseDto(Post post) {
         this.postId = post.getId();
         this.userId = post.getUser().getId();
         this.nickname = post.getUser().getNickname();

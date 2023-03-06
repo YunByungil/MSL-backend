@@ -5,7 +5,7 @@ import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.PostRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
 import Maswillaeng.MSLback.dto.post.request.PostDetailDto;
-import Maswillaeng.MSLback.dto.post.request.PostListRequestDto;
+import Maswillaeng.MSLback.dto.post.request.PostListResponseDto;
 import Maswillaeng.MSLback.dto.post.request.PostRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,9 +76,9 @@ public class PostService {
         return post;
     }
 
-    public List<PostListRequestDto> testAllPost() {
+    public List<PostListResponseDto> testAllPost() {
         List<Post> post = postRepository.findAll();
-        return post.stream().map(p -> new PostListRequestDto(p)).collect(Collectors.toList());
+        return post.stream().map(p -> new PostListResponseDto(p)).collect(Collectors.toList());
     }
 
     /**
