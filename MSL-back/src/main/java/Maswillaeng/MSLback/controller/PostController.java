@@ -34,6 +34,7 @@ public class PostController {
      * 글쓰기
      * @param authentication
      * @param postRequestDto
+     * TODO: 카테고리
      * @return
      */
     @PostMapping("/post")
