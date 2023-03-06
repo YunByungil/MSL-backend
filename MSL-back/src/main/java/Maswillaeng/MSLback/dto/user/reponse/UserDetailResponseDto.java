@@ -32,8 +32,8 @@ public class UserDetailResponseDto {
     private String userImage;
     private String introduction;
     private boolean followState;
-    private Long followerCount;
-    private Long followingCount;
+    private int followerCount;
+    private int followingCount;
     private List<userPost> postList = new ArrayList<>();
 
     public UserDetailResponseDto(User user) {
