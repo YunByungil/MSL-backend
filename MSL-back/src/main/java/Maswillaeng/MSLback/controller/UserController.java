@@ -1,10 +1,7 @@
 package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.domain.entity.User;
-import Maswillaeng.MSLback.dto.user.reponse.LoginResponseDto;
-import Maswillaeng.MSLback.dto.user.reponse.LoginResultResponse;
-import Maswillaeng.MSLback.dto.user.reponse.TokenResponse;
-import Maswillaeng.MSLback.dto.user.reponse.UserLoginResponseDto;
+import Maswillaeng.MSLback.dto.user.reponse.*;
 import Maswillaeng.MSLback.dto.user.request.UserLoginRequestDto;
 import Maswillaeng.MSLback.dto.user.request.UserJoinDTO;
 import Maswillaeng.MSLback.dto.user.request.UserListDTO;
@@ -47,11 +44,22 @@ public class UserController {
      * 회원 조회할 때, 반환 값을 어떻게 해야될지,
      * res에는 분명 배열 형태인데 dto넘기는 건데 왜 배열이지?
      */
+//    @GetMapping("/user")
+//    public ResponseEntity<Object> member(Authentication authentication) {
+//        User user = userService.findOne(Long.parseLong(authentication.getName()));
+//        UserListDTO userListDTO = new UserListDTO(user);
+//        return ResponseEntity.ok().body(userListDTO);
+//    }
+
+    /**
+     * 유저 조회 테스트 (마이 페이지라고 생각하자 일단은)
+     */
     @GetMapping("/user")
-    public ResponseEntity<Object> member(Authentication authentication) {
-        User user = userService.findOne(Long.parseLong(authentication.getName()));
-        UserListDTO userListDTO = new UserListDTO(user);
-        return ResponseEntity.ok().body(userListDTO);
+    public LoginResponseDto testMember(Authentication authentication) {
+        Long userId = Long.parseLong(authentication.getName());
+//        UserListDTO userListDTO = new UserListDTO(user);
+        UserDetailResponseDto dto = userService.testMember(userId);
+        return new LoginResponseDto(HttpStatus.OK.value(), dto);
     }
 
     /**

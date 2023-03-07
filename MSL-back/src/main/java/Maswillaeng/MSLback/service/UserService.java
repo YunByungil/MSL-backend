@@ -1,8 +1,11 @@
 package Maswillaeng.MSLback.service;
 
+import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.entity.User;
+import Maswillaeng.MSLback.domain.repository.PostRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
 import Maswillaeng.MSLback.dto.user.reponse.TokenResponse;
+import Maswillaeng.MSLback.dto.user.reponse.UserDetailResponseDto;
 import Maswillaeng.MSLback.dto.user.reponse.UserLoginResponseDto;
 import Maswillaeng.MSLback.dto.user.request.UserJoinDTO;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateDTO;
@@ -25,7 +28,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ValidateService validateService;
     private final CookieUtil cookieUtil;
-
+    private final PostRepository postRepository;
     private final BCryptPasswordEncoder encoder;
 
     @Value("${jwt.secret}")
@@ -102,6 +105,16 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("없는 회원"));
         return user;
+    }
+
+    /**
+     * 유저 조회 테스트
+     * 생쿼리로 날린 거라 쿼리 수정해야 됨.
+     */
+    public UserDetailResponseDto testMember(Long userId) {
+        User user = findOne(userId);
+        List<Post> findPostList = postRepository.findByUserId(userId);
+        return new UserDetailResponseDto(user, findPostList);
     }
 
     public List<User> findAll() {

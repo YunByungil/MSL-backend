@@ -13,6 +13,7 @@ public class UserDetailResponseDto {
     /**
      * 임시 class,
      */
+    @Getter
     static class userPost {
         private Long postId;
         private String thumbnail;
@@ -36,7 +37,7 @@ public class UserDetailResponseDto {
     private int followingCount;
     private List<userPost> postList = new ArrayList<>();
 
-    public UserDetailResponseDto(User user) {
+    public UserDetailResponseDto(User user, List<Post> post) {
         this.userId = user.getId();
         this.nickname = user.getNickname();
         this.userImage = user.getUserImage();
@@ -44,7 +45,7 @@ public class UserDetailResponseDto {
         this.followState = false;
         this.followerCount = user.getFollowerList().size();
         this.followingCount = user.getFollowingList().size();
-        this.postList = user.getPost().stream().map(p -> new userPost(p)).collect(Collectors.toList());
+        this.postList = post.stream().map(p -> new userPost(p)).collect(Collectors.toList());
     }
 }
 
