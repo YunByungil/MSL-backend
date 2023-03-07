@@ -43,8 +43,8 @@ public class UserDetailResponseDto {
         this.userImage = user.getUserImage();
         this.introduction = user.getIntroduction();
         this.followState = false;
-        this.followerCount = user.getFollowerList().size();
-        this.followingCount = user.getFollowingList().size();
+        this.followerCount = user.getFollowingList().size();
+        this.followingCount = user.getFollowerList().size();
         this.postList = post.stream().map(p -> new userPost(p)).collect(Collectors.toList());
     }
 }
