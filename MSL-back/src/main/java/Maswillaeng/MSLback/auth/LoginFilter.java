@@ -1,6 +1,8 @@
 package Maswillaeng.MSLback.auth;
 
+import Maswillaeng.MSLback.common.exception.ErrorCode;
 import Maswillaeng.MSLback.domain.entity.User;
+import Maswillaeng.MSLback.dto.ErrorResponse;
 import Maswillaeng.MSLback.dto.user.reponse.UserLoginResponseDto;
 import Maswillaeng.MSLback.service.UserService;
 import Maswillaeng.MSLback.utils.JwtUtil;
@@ -24,6 +26,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -31,6 +35,7 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     /*
     /login 요청을 하면 로그인 시도를 위해서 실행되는 함수
@@ -70,6 +75,7 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         log.info("successfulAuthentication 함수 실행: 로그인 성공");
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
+        Long userId = principalDetails.getId();
         UserLoginResponseDto login = userService.login(principalDetails.getId());
         ResponseCookie accessToken = ResponseCookie
                 .from("accessToken", login.getTokenResponse().getAccessToken())
@@ -95,6 +101,8 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
         response.addHeader("Set-Cookie", accessToken.toString());
         response.addHeader("Set-Cookie", refreshToken.toString());
 
+
+        setAuthResponse(response, JwtUtil.REFRESH_TOKEN_EXPIRE_TIME, userId);
         /*
         로그인 완료,
         1. 토큰 생성
@@ -112,5 +120,18 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         log.info("unsuccessfulAuthentication 함수 실행: 로그인 실패!!!!");
         super.unsuccessfulAuthentication(request, response, failed);
+    }
+
+    private void setAuthResponse(HttpServletResponse response, Long tokenMinute, Long userId) throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("userId", userId);
+        result.put("expirationTime", tokenMinute);
+
+        response.getWriter().println(
+                objectMapper.writeValueAsString(
+                        AuthResponse.authResponse(HttpServletResponse.SC_OK, result)));
     }
 }
