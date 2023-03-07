@@ -4,6 +4,8 @@ import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.enums.Category;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class PostListResponseDto {
 
@@ -17,6 +19,7 @@ public class PostListResponseDto {
     private Category category;
     private Long commentCount;
     private Long likeCount;
+    private LocalDateTime createAt;
 
     public PostListResponseDto(Post post) {
         this.postId = post.getId();
@@ -29,5 +32,6 @@ public class PostListResponseDto {
         this.category = post.getCategory();
         this.commentCount = post.getComment().stream().count();
         this.likeCount = post.getPostLike().stream().count();
+        this.createAt = post.getCreateAt();
     }
 }
