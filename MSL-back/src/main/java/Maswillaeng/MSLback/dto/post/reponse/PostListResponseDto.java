@@ -2,6 +2,7 @@ package Maswillaeng.MSLback.dto.post.reponse;
 
 import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.enums.Category;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ public class PostListResponseDto {
     private Category category;
     private Long commentCount;
     private Long likeCount;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createAt;
 
     public PostListResponseDto(Post post) {
