@@ -1,5 +1,9 @@
 package Maswillaeng.MSLback.dto.comment.request;
 
+import Maswillaeng.MSLback.domain.entity.Comment;
+import Maswillaeng.MSLback.domain.entity.Post;
+import Maswillaeng.MSLback.domain.entity.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,11 +11,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentRequestDto {
 
-    private Long userId;
+    private User user;
 
-    private Long postId;
+    private Post post;
 
     private String content;
 
+    public Comment toEntity(Post post, User user) {
+        return Comment.builder()
+                .user(user)
+                .post(post)
+                .content(content)
+                .build();
+    }
 }
 

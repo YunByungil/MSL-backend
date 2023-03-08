@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -38,6 +39,9 @@ public class User extends BaseTimeEntity {
     @Column(length = 100)
     private String introduction;
 
+    @OneToMany(mappedBy = "user")
+    private List<Comment> commentList = new ArrayList<>();
+
     @ColumnDefault("0")
     private int withdrawYn;
 
@@ -49,6 +53,7 @@ public class User extends BaseTimeEntity {
 
 
     private LocalDateTime withdrawAt;
+
 
     @Builder
     public User(String email, String password, String nickname, String phoneNumber, String userImage,
@@ -77,7 +82,7 @@ public class User extends BaseTimeEntity {
         this.password = encodePwd;
     }
 
-    public void setRole(RoleType role){
+    public void updateRole(RoleType role){
         this.role = role;
     }
     public void updateRefreshToken(String token) {

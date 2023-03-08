@@ -20,8 +20,6 @@ public class UserService {
     private final UserRepository userRepository;
 
 
-
-
     public boolean nicknameDuplicate(String nickname){
         return userRepository.existsByNickname(nickname);
     }
@@ -34,9 +32,9 @@ public class UserService {
         return nicknameDuplicate(userJoinDto.getNickname()) || emailDuplicate(userJoinDto.getEmail());
     }
 
-    public List<User> findAllUsers(){
-        return userRepository.findAll();
-    }
+//    public List<User> findAllUsers(){
+//        return userRepository.findAll();
+//    }
 
     public Optional<User> findByUserId(Long userId) {
         Optional<User> user = userRepository.findById(userId);

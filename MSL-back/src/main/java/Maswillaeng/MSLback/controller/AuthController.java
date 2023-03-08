@@ -54,4 +54,30 @@ public class AuthController {
                 .body(responseDto);
     }
 
+    @GetMapping("/duplicate/email")
+    public ResponseEntity emailDuplicate(@RequestParam String email){
+        if(email == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if(userService.emailDuplicate(email)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        else{
+            return ResponseEntity.ok().build();}
+    }
+
+    @GetMapping("/duplicate/nickname")
+    public ResponseEntity nicknameDuplicate(@RequestParam String nickname){
+        if(nickname == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        if(userService.nicknameDuplicate(nickname)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        else{
+            return ResponseEntity.ok().build();}
+    }
+
+
 }

@@ -17,30 +17,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/duplicate/email")
-    public ResponseEntity emailDuplicate(@RequestParam String email){
-        if(email == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        if(userService.emailDuplicate(email)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-        else{
-            return ResponseEntity.ok().build();}
-    }
-
-    @GetMapping("/duplicate/nickname")
-    public ResponseEntity nicknameDuplicate(@RequestParam String nickname){
-        if(nickname == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        if(userService.nicknameDuplicate(nickname)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-        else{
-            return ResponseEntity.ok().build();}
-    }
 
     @GetMapping("/userList")
     public ResponseEntity getUsers(@RequestBody User user){
@@ -48,23 +24,21 @@ public class UserController {
         return ResponseEntity.ok().build(); //dto로 반환해서 보내주기 .. 이걸 어따 써??? 구
     }
 
-    @GetMapping
-    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id){
-        Optional<User> user = userService.findByUserId(id);//null처리
+    @GetMapping("/{userId}")
+    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long userId){
+        Optional<User> user = userService.findByUserId(userId);//null처리
         return ResponseEntity.ok(user);
     }
 
-
-
-    @PutMapping
-    public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequestDto requestDto) {
-        userService.updateUser(id, requestDto);
+    @PutMapping("/{userId}")
+    public ResponseEntity<Object> updateUser(@PathVariable Long userId, @RequestBody UserUpdateRequestDto requestDto) {
+        userService.updateUser(userId, requestDto);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping
-    public ResponseEntity<Object> deleteByUserId(@PathVariable Long id) {
-        userService.deleteByUserId(id);
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Object> deleteByUserId(@PathVariable Long userId) {
+        userService.deleteByUserId(userId);
         return ResponseEntity.ok().build();
     }
 }
