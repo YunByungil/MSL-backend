@@ -42,4 +42,11 @@ public class CommentLikeController {
          commentHateService.hateComment(commentId, userId);
          return ResponseEntity.ok().body("댓글 싫어요!");
     }
+
+    @DeleteMapping("/{commentId}/commenthate")
+    public ResponseEntity unHateComment(@PathVariable("commentId") Long commentId, Authentication authentication) {
+        Long userId = Long.parseLong(authentication.getName());
+        commentHateService.unHateComment(commentId, userId);
+        return ResponseEntity.ok().body("댓글 싫어요 취소 완료!");
+    }
 }
