@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -27,6 +29,10 @@ public class CommentHateService {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("해당 회원이 존재하지 않습니다."));
+        Optional<CommentHate> findCommentHate = commentHateRepository.findByCommentIdAndUserId(commentId, userId);
+        if (findCommentHate.isPresent()) {
+            throw new IllegalStateException("해당 댓글에 이미 싫어요를 누르셨습니다.");
+        }
         CommentHate commentHate = CommentHate.builder()
                 .user(user)
                 .comment(comment)
