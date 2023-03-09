@@ -33,4 +33,17 @@ public class CommentHateService {
                 .build();
         commentHateRepository.save(commentHate);
     }
+
+    public void unHateComment(Long commentId, Long userId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalStateException("해당 댓글이 존재하지 않습니다."));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("해당 회원이 존재하지 않습니다."));
+
+        CommentHate commentHate = commentHateRepository.findByCommentIdAndUserId(commentId, userId)
+                .orElseThrow(() -> new IllegalStateException("해당 댓글에 싫어요를 누르지 않았습니다."));
+
+        commentHateRepository.delete(commentHate);
+    }
 }
