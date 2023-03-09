@@ -102,7 +102,7 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
         response.addHeader("Set-Cookie", refreshToken.toString());
 
 
-        setAuthResponse(response, JwtUtil.REFRESH_TOKEN_EXPIRE_TIME, userId);
+        setAuthResponse(response, JwtUtil.ACCESS_TOKEN_EXPIRE_TIME, userId);
         /*
         로그인 완료,
         1. 토큰 생성
