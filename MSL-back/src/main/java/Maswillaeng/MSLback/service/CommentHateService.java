@@ -2,8 +2,10 @@ package Maswillaeng.MSLback.service;
 
 import Maswillaeng.MSLback.domain.entity.Comment;
 import Maswillaeng.MSLback.domain.entity.CommentHate;
+import Maswillaeng.MSLback.domain.entity.CommentLike;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.CommentHateRepository;
+import Maswillaeng.MSLback.domain.repository.CommentLikeRepository;
 import Maswillaeng.MSLback.domain.repository.CommentRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class CommentHateService {
     private final CommentHateRepository commentHateRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
     public void hateComment(Long commentId, Long userId) {
         Comment comment = commentRepository.findById(commentId)
@@ -33,6 +36,16 @@ public class CommentHateService {
         if (findCommentHate.isPresent()) {
             throw new IllegalStateException("해당 댓글에 이미 싫어요를 누르셨습니다.");
         }
+
+
+        /**
+         * 싫어요 눌렀을 떄 좋아요를 누른 상태면, 좋아요는 사라지고 싫어요가 올라간다
+         */
+        Optional<CommentLike> findCommentLike = commentLikeRepository.findByCommentIdAndUserId(commentId, userId);
+        if (findCommentLike.isPresent()) {
+            commentLikeRepository.delete(findCommentLike.get());
+        }
+
         CommentHate commentHate = CommentHate.builder()
                 .user(user)
                 .comment(comment)
