@@ -128,7 +128,12 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
 
         Map<String, Object> result = new HashMap<>();
         result.put("userId", userId);
-        result.put("expirationTime", tokenMinute);
+        long hours = ((tokenMinute / (1000 * 60 * 60)) % 24);
+        long minutes = ((tokenMinute / (1000 * 60)) % 60);
+        long seconds = (tokenMinute / 1000) % 60;
+
+        String remainingTime = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        result.put("expirationTime", remainingTime);
 
         response.getWriter().println(
                 objectMapper.writeValueAsString(
