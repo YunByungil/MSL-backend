@@ -9,6 +9,9 @@ spring:
       jdbc-url: jdbc:mysql://localhost:3306/maswilaeng?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
       username: root
       password: chlckd12#
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 
   jpa:
     database: mysql

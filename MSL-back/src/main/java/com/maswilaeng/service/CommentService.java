@@ -7,60 +7,78 @@ import com.maswilaeng.domain.repository.CommentRepository;
 import com.maswilaeng.domain.repository.PostRepository;
 import com.maswilaeng.domain.repository.UserRepository;
 import com.maswilaeng.dto.comment.request.CommentRequestDto;
+import com.maswilaeng.dto.comment.request.CommentUpdateRequestDto;
 import com.maswilaeng.dto.comment.request.RecommentRequestDto;
+import com.maswilaeng.dto.comment.response.CommentResponseDto;
+import com.maswilaeng.dto.comment.response.RecommentResponseDto;
+import com.maswilaeng.utils.SecurityUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class CommentService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
 
-
     //댓글 다는 기능
-    public void generateComment(Long userId, CommentRequestDto dto) {
-        Post post = postRepository.findById(dto.getPostId()).orElseThrow(() -> new EntityNotFoundException("게시물이 존재하지 않습니다."));
+    public CommentResponseDto createComment(CommentRequestDto dto) {
+        Post post = postRepository.findById(dto.getPostId())
+                .orElseThrow(
+                () -> new EntityNotFoundException("게시물이 존재하지 않습니다."));
 
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(
+                        () -> new RuntimeException("로그인 유저 정보가 없습니다."));
 
         Comment comment = Comment.builder()
                 .post(post)
                 .user(user)
                 .content(dto.getContent())
+                .parent(null)
+                .likeCount(0)
+                .hateCount(0)
                 .build();
-        commentRepository.save(comment);
+
+        return CommentResponseDto.of(commentRepository.save(comment));
+
     }
 
     /**
      * 댓글 업데이트
      * @param dto
      * @throws ValidationException
-     * TODO -> UserContext 손보기
      */
-//    public void updateComment(CommentUpdateRequestDto dto) throws ValidationException {
-//        Comment comment = commentRepository.findById(dto.getCommentId()).orElseThrow(
-//                () -> new EntityNotFoundException("존재하지 않는 댓글입니다.")
-//        );
-//
-//        validateUser(UserContext.userData.get().getUserId(), comment);
-//        comment.updateComment(dto.getContent());
-//    }
-//
-//    public void deleteComment(Long commentId) throws ValidationException {
-//        Comment comment = commentRepository.findById(commentId).orElseThrow(
-//                () -> new EntityNotFoundException("존재하지 않는 댓글입니다.")
-//        );
-//        validateUser(UserContext.userData.get().getUserId(), comment);
-//        commentRepository.delete(comment);
-//    }
-//
+    public void updateComment(CommentUpdateRequestDto dto) throws ValidationException {
+        Comment comment = commentRepository.findById(dto.getCommentId()).orElseThrow(
+                () -> new EntityNotFoundException("존재하지 않는 댓글입니다.")
+        );
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
+
+        comment.updateComment(dto.getContent());
+    }
+
+    public void deleteComment(Long commentId) throws ValidationException {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new EntityNotFoundException("존재하지 않는 댓글입니다.")
+        );
+        validateUser(SecurityUtil.getCurrentUserId(), comment);
+        comment.findDeletableComment().ifPresentOrElse(commentRepository::delete, comment::delete);
+    }
+
     /**
      * 권한체크
      * @param userId
@@ -76,17 +94,42 @@ public class CommentService {
     /**
      * ㄱ
      */
-    public void generateRecomment(Long userId, RecommentRequestDto dto) {
-        Comment parentComment = commentRepository.findById(dto.getParentId()).orElseThrow(
+    public RecommentResponseDto createRecomment(RecommentRequestDto dto) {
+        Comment parent = commentRepository.findById(dto.getParentId()).orElseThrow(
                 () -> new EntityNotFoundException("댓글이 존재하지 않습니다.")
         );
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId()).orElseThrow(
+                () -> new RuntimeException("로그인한 유저가 아닙니다")
+        );
+
         Comment recomment = Comment.builder()
-                .post(parentComment.getPost())
+                .post(parent.getPost())
                 .user(user)
                 .content(dto.getContent())
-                .parent(parentComment)
+                .parent(parent)
+                .likeCount(0)
+                .hateCount(0)
                 .build();
-        commentRepository.save(recomment);
+
+        return RecommentResponseDto.of(commentRepository.save(recomment));
     }
+
+
+    public List<CommentResponseDto> getComment(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(
+                    () -> new RuntimeException("게시물이 존재하지 않습니다"));
+
+        List<Comment> commentList = commentRepository.findAllByPostId(post.getId());
+        if (commentList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
+        for (Comment comment : commentList) {
+            commentResponseDtoList.add(CommentResponseDto.of(comment));
+        }
+
+        return commentResponseDtoList;
+    }
+
 }

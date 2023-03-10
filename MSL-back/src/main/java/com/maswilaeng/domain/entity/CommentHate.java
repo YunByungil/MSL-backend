@@ -5,15 +5,16 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "commentLike")
-public class CommentLike {
+@Table(name = "commentHate")
+public class CommentHate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_like_id")
+    @Column(name = "comment_hate_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,7 +26,7 @@ public class CommentLike {
     private Comment comment;
 
     @Builder
-    public CommentLike(User user, Comment comment) {
+    public CommentHate(User user, Comment comment) {
         this.user = user;
         this.comment = comment;
 

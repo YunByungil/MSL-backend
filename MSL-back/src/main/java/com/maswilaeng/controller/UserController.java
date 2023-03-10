@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -64,21 +63,8 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user =  userService.findOne(Long.valueOf(authentication.getName()))
-                .orElseThrow(() -> new UsernameNotFoundException("유효하지 않습니다."));
-
-        userService.updateUser(user.getId(), requestDto);
-
-        log.info("update 실행 : {} " , authentication.getName());
-        log.info("update 실행 : {} ", user.getId());
-        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
-        log.info("user.getUsername = {} ", user.getEmail());
-        log.info("user.getPassword = {} ", user.getPassword());
-        log.info("update 실행 : authentication 바꾸기 전 {} " , authenticationToken);
-        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
-        
-        log.info("update 실행 : authentication 중 {} " , authenticate);
-        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        Long userId = Long.valueOf(authentication.getName());
+        userService.updateUser(userId, requestDto);
 
         return ResponseEntity.ok().build();
     }
@@ -88,6 +74,20 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         userService.userWithdraw(Long.valueOf(authentication.getName()));
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/test/user")
+    public ResponseEntity<?> testGetUser() {
+        log.info("/test/user 요청 들어옴 : accessToken  만료되어도 authentication 존재할까? - >요청전");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("/test/user 요청 들어옴 : accessToken  만료되어도 authentication 존재할까? 요청후 : {}" ,authentication);
+        User user = userService.findOne(Long.valueOf(authentication.getName()))
+                .orElseThrow(
+                        () -> new UsernameNotFoundException("존재하지 않는 회원입니다.")
+                );
+        log.info("/test/user 요청 들어옴 : user : {}", user.getId());
+        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
+        return ResponseEntity.ok().body(userInfoResponseDto);
     }
 
 }

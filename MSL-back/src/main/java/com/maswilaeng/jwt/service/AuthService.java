@@ -4,7 +4,6 @@ import com.maswilaeng.domain.entity.User;
 import com.maswilaeng.domain.repository.UserRepository;
 import com.maswilaeng.dto.user.request.LoginRequestDto;
 import com.maswilaeng.dto.user.request.UserJoinDto;
-import com.maswilaeng.jwt.AESEncryption;
 import com.maswilaeng.jwt.entity.JwtTokenProvider;
 import com.maswilaeng.jwt.entity.TokenInfo;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.maswilaeng.jwt.entity.JwtTokenProvider.ACCESS_TOKEN_EXPIRE_TIME;
+
 
 @Slf4j
 @Service
@@ -24,10 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthService {
 
-    public static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 7일
-
+    public static final Long REFRESH_TOKEN_EXPIRE_TIME = Long.valueOf(1000 * 60 * 60 * 24 * 7); // 7일
     private final UserRepository userRepository;
-    private final AESEncryption aesEncryption;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -39,7 +38,6 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    @Transactional
     public TokenInfo login(LoginRequestDto loginRequestDto) throws Exception {
 
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
@@ -55,70 +53,19 @@ public class AuthService {
 
         // 3. 인증 정보 기반으로 JWT 토큰 생성
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
-        log.info("JWT 토큰 생성 후 tokenInfo : {}", tokenInfo);
+        log.info("JWT 토큰 생성 후 tokenInfo : {}", tokenInfo.toString());
 
         return tokenInfo;
     }
-//
-//        String accessToken = tokenProvider.generateAccessToken(user.getId(), user.getRole());
-//        String refreshToken = tokenProvider.generateRefreshToken(user.getId());
-//
-//        user.updateRefreshToken(refreshToken);
-////
-//        TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
-//                .ACCESS_TOKEN(accessToken)
-//                .REFRESH_TOKEN(refreshToken)
-//                .build();
-//
-//        return LoginResponseDto.builder()
-//                .tokenResponseDto(tokenResponseDto)
-//                .nickName(user.getNickName())
-//                .userImage(user.getUserImage())
-//                .build();
-//
-//        public TokenResponseDto reissue(String refreshToken) {
-//
-//        }
-
-
-//
-//
-//        //1. Login ID/PW를 기반으로 AuthenticationToken 생성
-//        UsernamePasswordAuthenticationToken authenticationToken = loginRequestDto.toAuthentication();
-//
-//        // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
-//        // authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만든 loadUserByUsername이 실행됨
-//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-//
-//        // 3. 인증 정보를 기반으로 JWT 토큰 생성
-//        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
-//
-//        // 4. RefreshToken 저장
-//        RefreshToken refreshToken = RefreshToken.builder()
-//                .key(authentication.getName())
-//                .value(tokenDto.getRefreshToken())
-//                .build();
-//
-//        refreshTokenRepository.save(refreshToken);
-//
-//        // 5. 토큰 발급
-//        log.warn("여기까진 됐어 -> 5번 시작전");
-//        return tokenDto;
-//         ====================================스프링 시큐리티라고 생각됨 ================================================
-//
-
-
-    /**
-     * ====================================스프링 시큐리티라고 생각됨 ================================================
-     *
+/** 재발급
     public TokenDto reissue(TokenRequestDto tokenRequestDto) {
         // 1. Refresh Token 검증
-        if (!tokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
+        if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
             throw new RuntimeException("Refresh Token 이 유효하지 않습니다");
         }
 
         // 2. Access Token 에서 User Id를 가져오기
-        Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+        Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
 
         // 3. 저장소에서 User Id를 기반으로 Refresh Token 값 가져옴
         RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
@@ -130,7 +77,7 @@ public class AuthService {
         }
 
         //5. 새로운 토큰 생성
-        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
+        TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
 
         //6. 저장소 정보 업데이트
         RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
@@ -139,9 +86,7 @@ public class AuthService {
         //7. 토큰 발급
         return tokenDto;
     }
-    ====================================스프링 시큐리티라고 생각됨 ================================================
-    */
-
+*/
 //
 //    public TokenResponseDto updateAccessToken(String refreshToken) {
 //        User user = userRepository.findById(UserContext.userData.get().getUserId()).get();
@@ -166,17 +111,17 @@ public class AuthService {
     }
 
     public void removeRefreshToken(Long userId) {
-
         User user = userRepository.findById(userId).get();
         user.destroyRefreshToken();
     }
 
     public ResponseCookie getAccessTokenCookie(String accessToken) {
+
         return ResponseCookie
                 .from("ACCESS_TOKEN", accessToken)
                 .path("/")
                 .httpOnly(true)
-                .maxAge(REFRESH_TOKEN_EXPIRE_TIME)
+                .maxAge(ACCESS_TOKEN_EXPIRE_TIME)
                 .sameSite("Lax") // 쿠키 scope limitation -> cross-site: "Lax" same, 한 사이트: "Strict"
                 .build();
     }
@@ -190,4 +135,6 @@ public class AuthService {
                 .sameSite("Lax")
                 .build();
     }
+
+
 }

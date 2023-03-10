@@ -27,8 +27,8 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    public static final Long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L;
-    public static final Long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 120L;
+    public static final Long ACCESS_TOKEN_EXPIRE_TIME = 1000 /6 / 20 * 60 * 60L; // 10분
+    public static final Long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7L ; // 7일
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -45,6 +45,8 @@ public class JwtTokenProvider {
         long now = (new Date()).getTime();
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        long accessTokenExpireTime = now + ACCESS_TOKEN_EXPIRE_TIME;
+
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
@@ -54,7 +56,7 @@ public class JwtTokenProvider {
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + 86400000))
+                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME)) // 7일
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -62,6 +64,7 @@ public class JwtTokenProvider {
                 .grantType("Bearer")
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .expiresIn(accessTokenExpireTime)
                 .build();
     }
 

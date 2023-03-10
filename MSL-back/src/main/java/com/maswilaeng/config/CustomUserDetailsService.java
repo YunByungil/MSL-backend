@@ -27,7 +27,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .map(this::createUserDetails)
                 .orElseThrow(
                         () -> new UsernameNotFoundException(username + " -> 존재하지 않는 회원입니다."));
-//        User user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("존재X"));;
         }
 
 

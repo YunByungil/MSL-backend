@@ -14,6 +14,8 @@ public class UserJoinDto {
 
     private String nickName;
 
+    private String phoneNumber;
+
     private String userImage;
 
 
@@ -23,6 +25,7 @@ public class UserJoinDto {
                 .password(password)
                 .nickName(nickName)
                 .userImage(userImage)
+                .phoneNumber(phoneNumber)
                 .build();
     }
 

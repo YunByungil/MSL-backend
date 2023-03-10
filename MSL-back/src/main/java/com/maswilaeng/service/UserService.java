@@ -18,12 +18,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
     private final AESEncryption aesEncryption;
 
-    @Transactional
     public User join(UserJoinDto userJoinDto) throws Exception {
         if (userRepository.findByEmail(userJoinDto.getEmail()).orElse(null) != null)
             throw new DuplicateRequestException("이미 가입 되어있는 유저입니다.");
@@ -73,6 +73,5 @@ public class UserService {
     public void userWithdraw(Long userId) {
         User user = userRepository.findById(userId).get();
         user.withdraw();
-
     }
 }

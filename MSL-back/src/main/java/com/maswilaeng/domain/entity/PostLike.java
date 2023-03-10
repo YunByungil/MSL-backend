@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "commentLike")
-public class CommentLike {
+@Table(name = "postLike")
+public class PostLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_like_id")
+    @Column(name = "post_like_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -21,14 +21,12 @@ public class CommentLike {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id")
-    private Comment comment;
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @Builder
-    public CommentLike(User user, Comment comment) {
+    public PostLike(User user, Post post) {
         this.user = user;
-        this.comment = comment;
-
+        this.post = post;
     }
-
 }
