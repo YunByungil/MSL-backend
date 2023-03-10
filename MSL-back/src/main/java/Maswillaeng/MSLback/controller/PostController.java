@@ -1,5 +1,7 @@
 package Maswillaeng.MSLback.controller;
 
+import Maswillaeng.MSLback.domain.entity.Post;
+import Maswillaeng.MSLback.domain.repository.post.query.PostTestRepository;
 import Maswillaeng.MSLback.dto.post.reponse.PostDetailResponse;
 import Maswillaeng.MSLback.dto.post.reponse.PostListResponse;
 import Maswillaeng.MSLback.dto.post.reponse.PostListResponseDto;
@@ -13,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -21,7 +24,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
-
+    private final PostTestRepository postTestRepository;
     @GetMapping()
     public String index() {
         return "index";
@@ -83,12 +86,24 @@ public class PostController {
 //
 //        return new PostListResponse(collect.size(), HttpStatus.OK.value(), collect);
 //    }
-    @GetMapping("/post/page")
-    public PostListResponse getAllPost() {
-        List<PostListResponseDto> dto = postService.testAllPost();
 
-        return new PostListResponse(dto.size(), HttpStatus.OK.value(), dto);
+    /**
+     * 연습용
+     */
+    @GetMapping("/post/page")
+    public PostListResponse getAllPost(@RequestParam(value = "offset", defaultValue = "0") int offset,
+                                       @RequestParam(value = "limit", defaultValue = "100") int limit) {
+//        List<PostListResponseDto> dto = postService.testAllPost();
+        List<PostListResponseDto> dto2 = postTestRepository.test(offset, limit);
+//        List<Post> dto2 = postTestRepository.fetchJoin();
+        return new PostListResponse(dto2.size(), HttpStatus.OK.value(), dto2);
     }
+//    @GetMapping("/post/page")
+//    public PostListResponse getAllPost() {
+//        List<PostListResponseDto> dto = postService.testAllPost();
+//
+//        return new PostListResponse(dto.size(), HttpStatus.OK.value(), dto);
+//    }
 
     /**
      * 게시글 삭제

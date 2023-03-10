@@ -134,7 +134,8 @@ public class JwtFilter extends OncePerRequestFilter {
             log.info("권한이 없는데용?");
             request.setAttribute("exception", INVALID_PERMISSION.name());
         } catch (Exception e) {
-            log.info("NullException");
+            log.info("NullException, 1) 없는 회원");
+            e.printStackTrace();
             request.setAttribute("exception", UNKNOWN_ERROR.name());
         } finally {
             log.info("여길 지나네");

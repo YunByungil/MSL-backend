@@ -78,7 +78,7 @@ public class PostService {
 
     public List<PostListResponseDto> testAllPost() {
         List<Post> post = postRepository.findAll();
-        return post.stream().map(p -> new PostListResponseDto(p)).collect(Collectors.toList());
+        return post.stream().map(p -> new PostListResponseDto(p, 1, 1)).collect(Collectors.toList());
     }
 
     /**

@@ -23,7 +23,7 @@ public class PostListResponseDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createAt;
 
-    public PostListResponseDto(Post post) {
+    public PostListResponseDto(Post post, int commentCount, int likeCount) {
         this.postId = post.getId();
         this.userId = post.getUser().getId();
         this.nickname = post.getUser().getNickname();
@@ -32,8 +32,8 @@ public class PostListResponseDto {
         this.content = post.getContent();
         this.hits = post.getHits();
         this.category = post.getCategory();
-        this.commentCount = post.getComment().stream().count();
-        this.likeCount = post.getPostLike().stream().count();
+        this.commentCount = (long)commentCount;
+        this.likeCount = (long)likeCount;
         this.createAt = post.getCreateAt();
     }
 }
