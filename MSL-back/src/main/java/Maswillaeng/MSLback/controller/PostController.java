@@ -29,7 +29,7 @@ public class PostController {
     }
 
     @GetMapping("/page")
-    public ResponseEntity<List<PostListResponseDto>> getAllPosts() {
+    public ResponseEntity<?> getAllPosts() { //제네릭의 경우 뭐가 올지 모르니 ?
         List<Post> posts = postService.getAllPosts();
         List<PostListResponseDto> collect = posts.stream()
                 .map(post -> new PostListResponseDto(post.getId(), post.getUser().getNickname(), post.getThumbnail(), post.getTitle()))

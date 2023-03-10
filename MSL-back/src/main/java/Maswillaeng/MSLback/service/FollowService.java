@@ -24,10 +24,12 @@ public class FollowService {
         );
         User follower =  userRepository.findById(followerId).get();
 
-        if(!followRepository.isFollow(userId, followerId)){
+        if(!followRepository.isFollow(userId, followerId)){//복합키면 엔티티를 넣어야함
             Follow follow = Follow.builder().follower(user).following(follower).build();
             followRepository.save(follow);
         }
+        //existBy or user followList 받아와서 찾기 or 쿼리 넣기
+        //isfollow 분리
         else {
             throw new IllegalStateException("이미 구독중입니다");
         }

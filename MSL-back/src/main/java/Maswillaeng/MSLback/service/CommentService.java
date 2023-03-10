@@ -32,11 +32,13 @@ public class CommentService {
         Post post = postRepository.findById(requestDto.getPost().getId()).orElseThrow(
                 () -> new EntityNotFoundException("게시물이 존재하지 않습니다. id=" + postId)
         );
+
         User user = userRepository.findById(requestDto.getUser().getId()).orElseThrow(
                 () -> new EntityNotFoundException("유저이 존재하지 않습니다. id=" + userId)
         );
 
         Comment comment = requestDto.toEntity(post, user);
+        commentRepository.save(comment);
     }
 
     public void saveReply(Long postId, Long commentId, CommentReplyRequestDto requestDto){
@@ -46,7 +48,7 @@ public class CommentService {
                 () -> new EntityNotFoundException("게시물이 존재하지 않습니다. id=" + postId)
         );
         User user = userRepository.findById(requestDto.getUser().getId()).orElseThrow(
-                () -> new EntityNotFoundException("유저이 존재하지 않습니다. id=" + userId)
+                () -> new EntityNotFoundException("유저가 존재하지 않습니다. id=" + userId)
         );
         Comment parentComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalStateException("댓글이 존재하지 않습니다. id=" + commentId));
@@ -74,6 +76,7 @@ public class CommentService {
     }
 
     public void updateComment(Long postId, Long commentId, CommentUpdateRequestDto requestDto){
+        //이 유저의 댓글이 맞는가?
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new EntityNotFoundException("게시물이 존재하지 않습니다. id=" + postId)
         );
