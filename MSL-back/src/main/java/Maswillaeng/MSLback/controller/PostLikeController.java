@@ -26,8 +26,7 @@ public class PostLikeController {
     @PostMapping("/{postId}/like")
     public PostLikeResponse likePost(@PathVariable("postId") Long postId, Authentication authentication) {
         Long userId = Long.parseLong(authentication.getName());
-        long likeCount = postLikeService.likePost(postId, userId);
-        PostLikeResponseDto dto = new PostLikeResponseDto(userId, 1L, 1L, likeCount);
+        PostLikeResponseDto dto = postLikeService.likePost(postId, userId);
         return new PostLikeResponse(HttpStatus.OK.value(), "좋아요!", dto);
     }
 

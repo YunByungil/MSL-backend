@@ -6,6 +6,7 @@ import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.PostLikeRepository;
 import Maswillaeng.MSLback.domain.repository.PostRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
+import Maswillaeng.MSLback.dto.post.reponse.PostLikeResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +27,7 @@ public class PostLikeService {
      * @param postId
      * @param userId
      */
-    public long likePost(Long postId, Long userId) {
+    public PostLikeResponseDto likePost(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalStateException("해당 게시글이 존재하지 않습니다."));
 
@@ -44,7 +45,8 @@ public class PostLikeService {
             /**
              * 쿼리를 한 번 더 날려도 될까?
              */
-            return postLikeRepository.countByPostId(postId);
+            Long likeCount = postLikeRepository.countByPostId(postId);
+            return new PostLikeResponseDto(userId, post.getId(), postId, likeCount);
         } else {
             throw new IllegalStateException("해당 게시글에 이미 좋아요를 누르셨습니다.");
         }
