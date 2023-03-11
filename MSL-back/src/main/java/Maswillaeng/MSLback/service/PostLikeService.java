@@ -26,7 +26,7 @@ public class PostLikeService {
      * @param postId
      * @param userId
      */
-    public void likePost(Long postId, Long userId) {
+    public long likePost(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalStateException("해당 게시글이 존재하지 않습니다."));
 
@@ -41,13 +41,17 @@ public class PostLikeService {
                     .build();
 
             postLikeRepository.save(postLike);
+            /**
+             * 쿼리를 한 번 더 날려도 될까?
+             */
+            return postLikeRepository.countByPostId(postId);
         } else {
             throw new IllegalStateException("해당 게시글에 이미 좋아요를 누르셨습니다.");
         }
     }
 
 
-    public void unlikePost(Long postId, Long userId) {
+    public long unlikePost(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalStateException("해당 게시글이 존재하지 않습니다."));
 
@@ -63,5 +67,6 @@ public class PostLikeService {
 //                .build();
 
         postLikeRepository.delete(postLike);
+        return postLikeRepository.countByPostId(postId);
     }
 }
