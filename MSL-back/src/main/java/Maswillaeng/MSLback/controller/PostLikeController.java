@@ -1,7 +1,11 @@
 package Maswillaeng.MSLback.controller;
 
+import Maswillaeng.MSLback.dto.post.reponse.PostLikeResponseDto;
 import Maswillaeng.MSLback.service.PostLikeService;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +24,11 @@ public class PostLikeController {
      * @return
      */
     @PostMapping("/{postId}/like")
-    public ResponseEntity likePost(@PathVariable("postId") Long postId, Authentication authentication) {
+    public PostLikeResponse likePost(@PathVariable("postId") Long postId, Authentication authentication) {
         Long userId = Long.parseLong(authentication.getName());
-        postLikeService.likePost(postId, userId);
-        return ResponseEntity.ok().body("좋아요!");
+        long likeCount = postLikeService.likePost(postId, userId);
+        PostLikeResponseDto dto = new PostLikeResponseDto(userId, 1L, 1L, likeCount);
+        return new PostLikeResponse(HttpStatus.OK.value(), "좋아요!", dto);
     }
 
     /**
@@ -34,5 +39,14 @@ public class PostLikeController {
         Long userId = Long.parseLong(authentication.getName());
         postLikeService.unlikePost(postId, userId);
         return ResponseEntity.ok().body("좋아요 취소!");
+    }
+
+    @Getter
+    @AllArgsConstructor
+    static class PostLikeResponse<T> {
+
+        private int code;
+        private String message;
+        private T result;
     }
 }
