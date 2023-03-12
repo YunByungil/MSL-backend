@@ -1,0 +1,39 @@
+server:
+  address: localhost
+  port: 8080
+
+spring:
+  datasource:
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/maswilaeng?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: chlckd12#
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+logging:
+  level:
+    com.tutorial: debug
+
+
+
+jwt:
+  header: Authorization
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+
+
+import:
+  key: 5161304000601633
+  secret: EZiNkyjk3eOAnikh95U24zgwsDcyzD4wYmuLr3WtnG1v9LkV1t3I3PYyIlp8TTCNNx7i9yd6Lw2JK5Ki

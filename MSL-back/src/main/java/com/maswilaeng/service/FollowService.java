@@ -17,7 +17,7 @@ public class FollowService {
     /** 구독 기능 */
     public void following(Long userId, Long followingUserId) {
         // 팔로우하고 있는지 확인 (팔로우 리스트 조인해서)
-        User user = userRepository.findIfFollowingById(userId);//팔로우 대상 유저
+//        User user = userRepository.findIfFollowingById(userId);//팔로우 대상 유저
 
 
     }

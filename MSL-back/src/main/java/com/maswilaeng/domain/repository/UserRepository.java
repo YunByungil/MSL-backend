@@ -23,6 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long>{
     @EntityGraph(attributePaths = "authorities")
     Optional<User> findOneWithAuthoritiesByEmail(String email);
 
-    @Query("select u from User u left join fetch u.followerList where u.id =:userId")
-    User findIfFollowingById(@Param("userId") Long userId);
+//    @Query("select u from User u left join fetch u.followerList where u.id =:userId")
+//    User findIfFollowingById(@Param("userId") Long userId);
 }
