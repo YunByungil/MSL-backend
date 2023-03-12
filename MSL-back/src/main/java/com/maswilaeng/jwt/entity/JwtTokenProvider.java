@@ -27,7 +27,7 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    public static final Long ACCESS_TOKEN_EXPIRE_TIME = 1000 /6 / 20 * 60 * 60L; // 10분
+    public static final Long ACCESS_TOKEN_EXPIRE_TIME = 1000 /6 * 60 * 60L; // 10분
     public static final Long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7L ; // 7일
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {

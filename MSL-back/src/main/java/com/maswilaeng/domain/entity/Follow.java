@@ -16,17 +16,17 @@ public class Follow {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follower_id")
-    private User follower;
+    @JoinColumn(name = "to_user_id")
+    private User toUser;
 
     @ManyToOne
-    @JoinColumn(name = "following_id")
-    private User following;
+    @JoinColumn(name = "from_user_id")
+    private User fromUser;
 
     @Builder
-    public Follow(User follower, User following) {
-        this.follower = follower;
-        this.following = following;
+    public Follow(User toUser, User fromUser) {
+        this.toUser = toUser;
+        this.fromUser = fromUser;
     }
 
 }
