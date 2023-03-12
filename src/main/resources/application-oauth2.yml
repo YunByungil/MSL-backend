@@ -1,0 +1,9 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: xxxxxx-xxxxx.apps.googleusercontent.com
+            client-secret: XXXXXX-xxxx-XXXXXXXX-XXXXXXX
+            scope: email,profile
