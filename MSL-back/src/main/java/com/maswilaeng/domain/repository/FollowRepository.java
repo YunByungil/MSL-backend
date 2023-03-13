@@ -17,9 +17,19 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     boolean existsByToUser_IdAndFromUser_Id(Long toUserId, Long fromUserId);
 
+    /** 내가 팔로우 하고 있는 사람 목록 조회 */
     @Query("SELECT f.toUser FROM Follow f WHERE f.fromUser.id = :fromUserId")
     List<User> findToUsersByFromUserId(@Param("fromUserId") Long fromUserId);
 
+    /** 나를 팔로잉 하고 있는 사람 목록 조회 */
     @Query("SELECT f.fromUser FROM Follow f WHERE f.toUser.id = :toUserId")
     List<User> findFromUsersByToUserId(@Param("toUserId") Long toUserId);
+//
+    /** 내가 팔로우 하고 있는 사람 목록 조회 (fetch join)*/
+    @Query("SELECT f FROM Follow f join fetch f.toUser WHERE f.fromUser.id = :fromUserId")
+    List<Follow> findJoinToUsersByFromUserId(@Param("fromUserId") Long fromUserId);
+
+    /** 나를 팔로잉 하고 있는 사람 목록 조회 (fetch join)*/
+    @Query("SELECT f FROM Follow f join fetch f.fromUser WHERE f.toUser.id = :toUserId")
+    List<Follow> findJoinFromUsersByToUserId(@Param("toUserId") Long toUserId);
 }

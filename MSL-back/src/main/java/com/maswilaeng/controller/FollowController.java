@@ -1,5 +1,6 @@
 package com.maswilaeng.controller;
 
+import com.maswilaeng.domain.entity.Follow;
 import com.maswilaeng.domain.entity.User;
 import com.maswilaeng.domain.repository.UserRepository;
 import com.maswilaeng.dto.follow.request.FollowRequestDto;
@@ -25,25 +26,19 @@ public class FollowController {
      * 팔로우
      */
     @PostMapping
-    public ResponseEntity<?> follow(@RequestBody FollowRequestDto followRequestDto) {
-        try {
-            User toUser = userRepository.findById(followRequestDto.getToUserId()).orElseThrow(() -> new Exception("ToUser : 찾을수 없어용"));
-            User fromUser = userRepository.findById(followRequestDto.getFromUserId()).orElseThrow(() -> new Exception("fromUser : 찾을수 없어용"));
-            followService.following(toUser, fromUser);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    public ResponseEntity<?> follow(@RequestBody FollowRequestDto followRequestDto) throws Exception {
+        followService.createFollow(followRequestDto.getToUserId(), followRequestDto.getFromUserId());
+        return ResponseEntity.ok().build();
     }
+
+
 
     /**
      * 언팔로우
      */
     @DeleteMapping
     public ResponseEntity<?> unfollow(@RequestBody FollowRequestDto followRequestDto) throws Exception {
-        User toUser = userRepository.findById(followRequestDto.getToUserId()).orElseThrow(() -> new Exception("ToUser : 찾을수 없어용"));
-        User fromUser = userRepository.findById(followRequestDto.getFromUserId()).orElseThrow(() -> new Exception("fromUser : 찾을수 없어용"));
-        followService.deleteFollow(toUser, fromUser);
+        followService.deleteFollow(followRequestDto.getToUserId(), followRequestDto.getFromUserId());
         return ResponseEntity.ok().build();
     }
 
@@ -52,30 +47,23 @@ public class FollowController {
      */
     @GetMapping("/isFollowing")
     public ResponseEntity<?> isFollowing(@RequestParam Long toUserId, @RequestParam Long fromUserId) throws Exception {
-        User toUser = userRepository.findById(toUserId).orElseThrow(() -> new Exception("ToUser : 찾을수 없어용"));
-        User fromUser = userRepository.findById(fromUserId).orElseThrow(() -> new Exception("fromUser : 찾을수 없어용"));
-        boolean isFollowing = followService.isFollowing(toUser, fromUser);
-        return ResponseEntity.ok(isFollowing);
+        return ResponseEntity.ok(followService.isFollowing(toUserId, fromUserId));
     }
 
     /**
-     * 팔로잉 목록 조회
+     * 팔로잉 목록 조회 (fetch join)
      */
     @GetMapping("/followingList")
     public ResponseEntity<?> followingList(@RequestParam Long fromUserId) throws Exception {
-        User fromUser = userRepository.findById(fromUserId).orElseThrow(() -> new Exception("fromUser : 찾을수 없어용"));
-        List<User> followingList = followService.getFollowingList(fromUser);
-        return ResponseEntity.ok(followingList);
+        return ResponseEntity.ok(followService.getFollowingList(fromUserId));
     }
 
     /**
-     * 팔로워 목록 조회
+     * 팔로워 목록 조회(fetch join)
      */
     @GetMapping("/followerList")
     public ResponseEntity<?> followerList(@RequestParam Long toUserId) throws Exception {
-        User toUser = userRepository.findById(toUserId).orElseThrow(() -> new Exception("ToUser : 찾을수 없어용"));
-        List<User> followerList = followService.getFollowerList(toUser);
-        return ResponseEntity.ok(followerList);
+        return ResponseEntity.ok(followService.getFollowerList(toUserId));
     }
 }
 
