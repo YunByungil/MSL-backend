@@ -8,6 +8,7 @@ import Maswillaeng.MSLback.domain.repository.CommentHateRepository;
 import Maswillaeng.MSLback.domain.repository.CommentLikeRepository;
 import Maswillaeng.MSLback.domain.repository.CommentRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
+import Maswillaeng.MSLback.dto.comment.response.CommentLikeAndHateResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class CommentHateService {
     private final CommentRepository commentRepository;
     private final CommentLikeRepository commentLikeRepository;
 
-    public void hateComment(Long commentId, Long userId) {
+    public CommentLikeAndHateResponseDto hateComment(Long commentId, Long userId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalStateException("해당 댓글이 존재하지 않습니다."));
 
@@ -51,9 +52,14 @@ public class CommentHateService {
                 .comment(comment)
                 .build();
         commentHateRepository.save(commentHate);
+
+        long likeCount = commentLikeRepository.countByCommentId(commentId);
+        long hateCount = commentHateRepository.countByCommentId(commentId);
+
+        return new CommentLikeAndHateResponseDto(userId, comment.getUser().getId(), commentId, likeCount, hateCount);
     }
 
-    public void unHateComment(Long commentId, Long userId) {
+    public CommentLikeAndHateResponseDto unHateComment(Long commentId, Long userId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalStateException("해당 댓글이 존재하지 않습니다."));
 
@@ -64,5 +70,9 @@ public class CommentHateService {
                 .orElseThrow(() -> new IllegalStateException("해당 댓글에 싫어요를 누르지 않았습니다."));
 
         commentHateRepository.delete(commentHate);
+        long likeCount = commentLikeRepository.countByCommentId(commentId);
+        long hateCount = commentHateRepository.countByCommentId(commentId);
+
+        return new CommentLikeAndHateResponseDto(userId, comment.getUser().getId(), commentId, likeCount, hateCount);
     }
 }

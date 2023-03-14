@@ -40,16 +40,16 @@ public class CommentLikeController {
      * 댓글 싫어요
      */
     @PostMapping("/{commentId}/commenthate")
-    public ResponseEntity hateComment(@PathVariable("commentId") Long commentId, Authentication authentication) {
+    public CommentLikeAndHateResponse hateComment(@PathVariable("commentId") Long commentId, Authentication authentication) {
          Long userId = Long.parseLong(authentication.getName());
-         commentHateService.hateComment(commentId, userId);
-         return ResponseEntity.ok().body("댓글 싫어요!");
+        CommentLikeAndHateResponseDto dto = commentHateService.hateComment(commentId, userId);
+        return new CommentLikeAndHateResponse(HttpStatus.OK.value(), "댓글 싫어요!", dto);
     }
 
     @DeleteMapping("/{commentId}/commenthate")
-    public ResponseEntity unHateComment(@PathVariable("commentId") Long commentId, Authentication authentication) {
+    public CommentLikeAndHateResponse unHateComment(@PathVariable("commentId") Long commentId, Authentication authentication) {
         Long userId = Long.parseLong(authentication.getName());
-        commentHateService.unHateComment(commentId, userId);
-        return ResponseEntity.ok().body("댓글 싫어요 취소 완료!");
+        CommentLikeAndHateResponseDto dto = commentHateService.unHateComment(commentId, userId);
+        return new CommentLikeAndHateResponse(HttpStatus.OK.value(), "댓글 싫어요 취소!", dto);
     }
 }
