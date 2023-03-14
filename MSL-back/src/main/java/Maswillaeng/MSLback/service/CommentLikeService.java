@@ -54,6 +54,7 @@ public class CommentLikeService {
                 .build();
 
         commentLikeRepository.save(commentLike);
+        long likeCount = commentLikeRepository.countByCommentId(commentId);
     }
 
     public void unlikeComment(Long commentId, Long userId) {
