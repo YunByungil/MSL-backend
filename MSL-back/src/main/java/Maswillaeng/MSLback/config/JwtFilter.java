@@ -99,7 +99,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
     private void exceptionAccess(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String accessCookie) throws ServletException, IOException {
-        // TODO: 아직 수정해야 됨 PrinciplaDetails를 구현해야 된다. (권한, login)
+        // TODO: userId를 넘기지 말고 principalDetails를 넘겨서 원하는 값을 쓸 수 있게 하자.
         try {
             log.info("엑세스토큰 시작점");
             Long userId = jwtUtil.getUserId(accessCookie);
