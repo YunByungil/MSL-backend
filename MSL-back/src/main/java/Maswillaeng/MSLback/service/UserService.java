@@ -1,5 +1,6 @@
 package Maswillaeng.MSLback.service;
 
+import Maswillaeng.MSLback.domain.entity.Follow;
 import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.PostRepository;
@@ -111,10 +112,19 @@ public class UserService {
      * 유저 조회 테스트
      * 생쿼리로 날린 거라 쿼리 수정해야 됨.
      */
-    public UserDetailResponseDto testMember(Long userId) {
-        User user = findOne(userId);
+    public UserDetailResponseDto testMember(Long userId, Long myId) {
+        // 내 정보일 때,
+        User user = findOne(myId);
+        if (userId == myId) {
+            List<Post> findPostList = postRepository.findByUserId(myId);
+            return new UserDetailResponseDto(user, true, findPostList);
+        }
+        // 남 정보일 때,
+        User findUser = findOne(userId);
         List<Post> findPostList = postRepository.findByUserId(userId);
-        return new UserDetailResponseDto(user, findPostList);
+        boolean status = false;
+
+        return new UserDetailResponseDto(findUser, status, findPostList);
     }
 
     public List<User> findAll() {

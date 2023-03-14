@@ -37,12 +37,12 @@ public class UserDetailResponseDto {
     private int followingCount;
     private List<userPost> postList = new ArrayList<>();
 
-    public UserDetailResponseDto(User user, List<Post> post) {
+    public UserDetailResponseDto(User user, boolean status, List<Post> post) {
         this.userId = user.getId();
         this.nickname = user.getNickname();
         this.userImage = user.getUserImage();
         this.introduction = user.getIntroduction();
-        this.followState = false;
+        this.followState = status;
         this.followerCount = user.getFollowingList().size();
         this.followingCount = user.getFollowerList().size();
         this.postList = post.stream().map(p -> new userPost(p)).collect(Collectors.toList());

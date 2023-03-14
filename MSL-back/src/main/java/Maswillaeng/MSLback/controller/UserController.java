@@ -54,11 +54,14 @@ public class UserController {
     /**
      * 유저 조회 테스트 (마이 페이지라고 생각하자 일단은)
      */
-    @GetMapping("/user")
-    public LoginResponseDto testMember(Authentication authentication) {
-        Long userId = Long.parseLong(authentication.getName());
+    @GetMapping("/user/{userId}")
+    public LoginResponseDto testMember(@PathVariable("userId") Long userId, Authentication authentication) {
+        if (authentication == null) {
+
+        }
+        Long myId = Long.parseLong(authentication.getName());
 //        UserListDTO userListDTO = new UserListDTO(user);
-        UserDetailResponseDto dto = userService.testMember(userId);
+        UserDetailResponseDto dto = userService.testMember(userId, myId);
         return new LoginResponseDto(HttpStatus.OK.value(), dto);
     }
 
