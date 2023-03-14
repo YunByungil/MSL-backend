@@ -34,10 +34,10 @@ public class PostLikeController {
      * 좋아요 취소
      */
     @DeleteMapping("/{postId}/like")
-    public ResponseEntity unlikePost(@PathVariable("postId") Long postId, Authentication authentication) {
+    public PostLikeResponse unlikePost(@PathVariable("postId") Long postId, Authentication authentication) {
         Long userId = Long.parseLong(authentication.getName());
-        postLikeService.unlikePost(postId, userId);
-        return ResponseEntity.ok().body("좋아요 취소!");
+        PostLikeResponseDto dto = postLikeService.unlikePost(postId, userId);
+        return new PostLikeResponse(HttpStatus.OK.value(), "좋아요 취소!", dto);
     }
 
     @Getter

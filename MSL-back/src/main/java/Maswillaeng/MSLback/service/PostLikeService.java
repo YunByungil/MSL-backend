@@ -53,7 +53,7 @@ public class PostLikeService {
     }
 
 
-    public long unlikePost(Long postId, Long userId) {
+    public PostLikeResponseDto unlikePost(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalStateException("해당 게시글이 존재하지 않습니다."));
 
@@ -69,6 +69,7 @@ public class PostLikeService {
 //                .build();
 
         postLikeRepository.delete(postLike);
-        return postLikeRepository.countByPostId(postId);
+        Long likeCount = postLikeRepository.countByPostId(postId);
+        return new PostLikeResponseDto(userId, post.getId(), postId, likeCount);
     }
 }
