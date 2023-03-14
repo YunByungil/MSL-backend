@@ -1,9 +1,12 @@
 package Maswillaeng.MSLback.controller;
 
+import Maswillaeng.MSLback.dto.comment.response.CommentLikeAndHateResponse;
+import Maswillaeng.MSLback.dto.comment.response.CommentLikeAndHateResponseDto;
 import Maswillaeng.MSLback.service.CommentHateService;
 import Maswillaeng.MSLback.service.CommentLikeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +23,10 @@ public class CommentLikeController {
      * 댓글 좋아요
      */
     @PostMapping("/{commentId}/commentlike")
-    public ResponseEntity likeComment(@PathVariable("commentId") Long commentId, Authentication authentication) {
+    public CommentLikeAndHateResponse likeComment(@PathVariable("commentId") Long commentId, Authentication authentication) {
         Long userId = Long.parseLong(authentication.getName());
-        commentLikeService.likeComment(commentId, userId);
-        return ResponseEntity.ok().body("댓글 좋아요!");
+        CommentLikeAndHateResponseDto dto = commentLikeService.likeComment(commentId, userId);
+        return new CommentLikeAndHateResponse(HttpStatus.OK.value(), "좋아요!", dto);
     }
 
     @DeleteMapping("/{commentId}/commentlike")

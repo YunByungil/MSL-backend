@@ -8,6 +8,7 @@ import Maswillaeng.MSLback.domain.repository.CommentHateRepository;
 import Maswillaeng.MSLback.domain.repository.CommentLikeRepository;
 import Maswillaeng.MSLback.domain.repository.CommentRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
+import Maswillaeng.MSLback.dto.comment.response.CommentLikeAndHateResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class CommentLikeService {
     /**
      * 댓글 좋아요
      */
-    public void likeComment(Long commentId, Long userId) {
+    public CommentLikeAndHateResponseDto likeComment(Long commentId, Long userId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalStateException("해당 댓글이 존재하지 않습니다."));
 
@@ -55,6 +56,9 @@ public class CommentLikeService {
 
         commentLikeRepository.save(commentLike);
         long likeCount = commentLikeRepository.countByCommentId(commentId);
+        long hateCount = commentHateRepository.countByCommentId(commentId);
+
+        return new CommentLikeAndHateResponseDto(userId, comment.getUser().getId(), commentId, likeCount, hateCount);
     }
 
     public void unlikeComment(Long commentId, Long userId) {
