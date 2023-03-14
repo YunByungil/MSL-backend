@@ -114,18 +114,25 @@ public class UserService {
      */
     public UserDetailResponseDto testMember(Long userId, Long myId) {
         // 내 정보일 때,
-        User user = findOne(myId);
         if (userId == myId) {
+            User user = findOne(myId);
             List<Post> findPostList = postRepository.findByUserId(myId);
             return new UserDetailResponseDto(user, true, findPostList);
         }
         // 남 정보일 때,
         User findUser = findOne(userId);
         List<Post> findPostList = postRepository.findByUserId(userId);
-        boolean status = false;
+//        boolean status = false;
+        boolean status = findUser.getFollowingList().stream()
+                .filter(f -> f.getFollower().getId().equals(myId))
+                .findFirst()
+                .isPresent();
+
+
 
         return new UserDetailResponseDto(findUser, status, findPostList);
     }
+
 
     public List<User> findAll() {
         return userRepository.findAll();
