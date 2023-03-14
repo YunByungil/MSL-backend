@@ -6,3 +6,10 @@
 - [ ] 유저 정보 조회할 때, N + 1 문제 해결하기
 - [ ] 유저 정보 비회원도 허용할 수 있게 로직 수정하기
 - [ ] 게시판 상세정보 구현
+
+
+<hr>
+
+UserDetailResponseDto를 보면 stream을 이용해서 size를 갖고 오는데  
+CommentHate나, like등을 쿼리로 안 돌리고 stream을 통해서 가능할까?  
+
