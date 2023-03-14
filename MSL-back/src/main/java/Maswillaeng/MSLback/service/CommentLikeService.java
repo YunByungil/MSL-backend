@@ -61,7 +61,7 @@ public class CommentLikeService {
         return new CommentLikeAndHateResponseDto(userId, comment.getUser().getId(), commentId, likeCount, hateCount);
     }
 
-    public void unlikeComment(Long commentId, Long userId) {
+    public CommentLikeAndHateResponseDto unlikeComment(Long commentId, Long userId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalStateException("해당 댓글이 존재하지 않습니다."));
 
@@ -71,6 +71,11 @@ public class CommentLikeService {
         CommentLike commentLike = commentLikeRepository.findByCommentIdAndUserId(commentId, userId)
                 .orElseThrow(() -> new IllegalStateException("해당 댓글에 좋아요를 누르지 않았습니다."));
 
+        // TODO: 코멘트, 유저, 좋아요 여부, 좋아요 개수, 싫어요 개수 쿼리가 너무 많이 나가는데 어떻게 줄일까?
         commentLikeRepository.delete(commentLike);
+        long likeCount = commentLikeRepository.countByCommentId(commentId);
+        long hateCount = commentHateRepository.countByCommentId(commentId);
+
+        return new CommentLikeAndHateResponseDto(userId, comment.getUser().getId(), commentId, likeCount, hateCount);
     }
 }

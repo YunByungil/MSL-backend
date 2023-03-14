@@ -30,10 +30,10 @@ public class CommentLikeController {
     }
 
     @DeleteMapping("/{commentId}/commentlike")
-    public ResponseEntity unlikeComment(@PathVariable("commentId") Long commentId, Authentication authentication) {
+    public CommentLikeAndHateResponse unlikeComment(@PathVariable("commentId") Long commentId, Authentication authentication) {
         Long userId = Long.parseLong(authentication.getName());
-        commentLikeService.unlikeComment(commentId, userId);
-        return ResponseEntity.ok().body("댓글 좋아요 취소 완료!");
+        CommentLikeAndHateResponseDto dto = commentLikeService.unlikeComment(commentId, userId);
+        return new CommentLikeAndHateResponse(HttpStatus.OK.value(), "댓글 좋아요 취소!", dto);
     }
 
     /**
