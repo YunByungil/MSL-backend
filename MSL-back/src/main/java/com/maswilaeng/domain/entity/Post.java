@@ -45,7 +45,7 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     private Set<HashTag> hashTagSet;
 
     /* 게시글 수정 */
@@ -66,6 +66,7 @@ public class Post extends BaseTimeEntity {
         this.category = category;
         this.likeCount = likeCount;
         this.hateCount = hateCount;
+
     }
 
     @ColumnDefault("0")

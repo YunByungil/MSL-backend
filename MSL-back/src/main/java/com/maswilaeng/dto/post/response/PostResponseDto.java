@@ -1,12 +1,15 @@
 package com.maswilaeng.dto.post.response;
 
+import com.maswilaeng.domain.entity.HashTag;
 import com.maswilaeng.domain.entity.Post;
+import com.maswilaeng.domain.entity.Tag;
 import com.maswilaeng.dto.comment.response.CommentResponseDto;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -22,7 +25,7 @@ public class PostResponseDto {
     private Integer likeCount;
     private Integer hateCount;
     private List<CommentResponseDto> commentList;
-
+    private Set<String> hashTagSet;
 
 
     /* Dto -> Entity */
@@ -38,6 +41,9 @@ public class PostResponseDto {
         this.commentList = post.getCommentList().stream()
                 .map(CommentResponseDto::new)   //여기서 문제 발생일듯
                 .collect(Collectors.toList());
+        this.hashTagSet = post.getHashTagSet().stream()
+                .map(HashTag -> HashTag.getTag().getTagName())
+                .collect(Collectors.toSet());
 
     }
 }

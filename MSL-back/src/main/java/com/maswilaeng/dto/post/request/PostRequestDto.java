@@ -26,7 +26,7 @@ public class PostRequestDto {
 
     private Integer hateCount;
 
-    private Set<String> hashTagSet;
+    private Set<String> hashTagSet = new HashSet<>();
 
     /* Dto -> Entity */
     @Builder

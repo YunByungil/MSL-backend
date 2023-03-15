@@ -35,6 +35,7 @@ public class PostService {
                 () -> new RuntimeException("로그인 한 회원 정보가 존재하지 않습니다.")
         );
         Post post = postRequestDto.toEntity(user);
+
         Set<HashTag> hashTags = hashTagService.saveHashTags(postRequestDto.getHashTagSet(), post);
         post.setHashTagSet(hashTags);
 

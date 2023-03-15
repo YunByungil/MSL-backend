@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -20,16 +21,23 @@ import java.util.stream.Collectors;
 public class HashTagService {
 
 
-    private static HashTagRepository hashTagRepository;
-    private static TagRepository tagRepository;
+    private final HashTagRepository hashTagRepository;
+    private final TagRepository tagRepository;
 
-    public Set<HashTag> saveHashTags(Set<String> Tags, Post post) {
-        // Tags 는 글을 등록할 때 작성자가 쓴 해쉬태그들.
-        return Tags.stream()
-                .map(tagName -> findOrCreateTag(tagName)) //tagName에 맞는 Tag를 만들어주었고
-                .map(tag -> new HashTag(tag, post))//만들어준 tag를 post와 엮어준다.
+    public Set<HashTag> saveHashTags(Set<String> tags, Post post) {
+
+        Set<Tag> tagSet = findOrCreateTag(tags);
+        return tagSet.stream()
+                .map(tag -> new HashTag(tag, post))
                 .collect(Collectors.toSet());
-   }
+
+        // Tags 는 글을 등록할 때 작성자가 쓴 해쉬태그들.
+
+//        return tags.stream()
+//                .map(tagName -> findOrCreateTag(tags)) //tagName에 맞는 Tag를 만들어주었고
+//                .map(tagSet -> new HashTag(, post))//만들어준 tag를 post와 엮어준다.
+//                .collect(Collectors.toSet());
+    }
 
     public void deleteHashTags(Set<String> TagsToRemove, Post post) {
         hashTagRepository.deleteByPostId(post.getId());
@@ -65,14 +73,18 @@ public class HashTagService {
      * Query를 엄청 보낼 것 같다.
      * TODO : List로 바꿔서 한번에 조회하기
      */
-    private Tag findOrCreateTag(String tagName) {
-        Tag tag = tagRepository.findTagByTagName(tagName);
-        if (tag == null) {
-            tag = Tag.builder()
-                    .tagName(tagName)
-                    .build();
+    private Set<Tag> findOrCreateTag(Set<String> tagNameSet) {
+        Set<Tag> tags = tagRepository.findByNameSet(tagNameSet);
+        for (String tagName : tagNameSet) {
+            if (!tags.contains(tagName)) {
+                Tag tag = Tag.builder()
+                        .tagName(tagName)
+                        .build();
+                tagRepository.save(tag);
+            }
         }
-        return tagRepository.save(tag);
+        Set<Tag> tagSet = tagRepository.findByNameSet(tagNameSet);
+        return tagSet;
     }
 
     public List<PostResponseDto> findPostByHashTag(String hashTagName) {

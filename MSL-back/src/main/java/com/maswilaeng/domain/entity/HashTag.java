@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Getter
+@Table(name = "hashTag")
 public class HashTag {
 
     @Id
