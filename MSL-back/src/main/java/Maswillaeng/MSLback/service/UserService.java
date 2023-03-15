@@ -127,10 +127,16 @@ public class UserService {
                 .filter(f -> f.getFollower().getId().equals(myId))
                 .findFirst()
                 .isPresent();
-
-
-
         return new UserDetailResponseDto(findUser, status, findPostList);
+    }
+
+    /**
+     * 비로그인 상태로 user정보 확인
+     */
+    public UserDetailResponseDto noLoginAndGetMember(Long userId) {
+        User findUser = findOne(userId);
+        List<Post> findPostList = postRepository.findByUserId(userId);
+        return new UserDetailResponseDto(findUser, false, findPostList);
     }
 
 

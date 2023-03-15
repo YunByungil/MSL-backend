@@ -56,9 +56,16 @@ public class UserController {
      */
     @GetMapping("/user/{userId}")
     public LoginResponseDto testMember(@PathVariable("userId") Long userId, Authentication authentication) {
+        /*
+        로그인 상태가 아닐 때, (비로그인)
+         */
         if (authentication == null) {
-
+            UserDetailResponseDto dto = userService.noLoginAndGetMember(userId);
+            return new LoginResponseDto(HttpStatus.OK.value(), dto);
         }
+        /*
+        내가 로그인 상태일 때,
+         */
         Long myId = Long.parseLong(authentication.getName());
 //        UserListDTO userListDTO = new UserListDTO(user);
         UserDetailResponseDto dto = userService.testMember(userId, myId);
