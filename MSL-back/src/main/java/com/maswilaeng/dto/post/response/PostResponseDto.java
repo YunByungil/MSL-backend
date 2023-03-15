@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Getter
 @ToString
 public class PostResponseDto {
-    private Long post_id;
+    private Long postId;
     private String thumbnail;
     private String title;
     private String content;
@@ -27,7 +27,7 @@ public class PostResponseDto {
 
     /* Dto -> Entity */
     public PostResponseDto(Post post) {
-        this.post_id = post.getId();
+        this.postId = post.getId();
         this.thumbnail = post.getThumbnail();
         this.title = post.getTitle();
         this.content = post.getContent();

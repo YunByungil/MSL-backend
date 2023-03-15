@@ -53,7 +53,7 @@ public class PostController {
     /* DELETE */
     @DeleteMapping("/post/{postId}")
     public ResponseEntity deletePost(@PathVariable Long postId) throws Exception {
-        postService.delete(postId);
+        postService.deletePost(postId);
         return ResponseEntity.ok().body(ResponseDto.of(HttpStatus.OK));
     }
 
@@ -66,7 +66,7 @@ public class PostController {
 
         for (Post post : posts) {
             PostResponseDto dto = new PostResponseDto(post);
-            result.put(String.valueOf(dto.getPost_id()), dto);
+            result.put(String.valueOf(dto.getPostId()), dto);
         }
 
         result.put("code", HttpStatus.OK.value());

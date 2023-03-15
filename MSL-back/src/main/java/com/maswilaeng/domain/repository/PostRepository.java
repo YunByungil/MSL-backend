@@ -27,18 +27,18 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByUserId(@Param("userId") Long userId, PageRequest createdAt);
 
     @Modifying
-    @Query("UPDATE Post p SET p.likeCount = p.likeCount + 1 WHERE p.id = :post_id")
-    void addLikeCount(@Param("post_id") Long postId);
+    @Query("UPDATE Post p SET p.likeCount = p.likeCount + 1 WHERE p.id = :postId")
+    void addLikeCount(@Param("postId") Long postId);
 
     @Modifying
-    @Query("UPDATE Post p SET p.likeCount = p.likeCount - 1 WHERE p.id = :post_id")
-    void subLikeCount(@Param("post_id") Long postId);
+    @Query("UPDATE Post p SET p.likeCount = p.likeCount - 1 WHERE p.id = :postId")
+    void subLikeCount(@Param("postId") Long postId);
 
     @Modifying
-    @Query("UPDATE Post p SET p.hateCount = p.hateCount + 1 WHERE p.id = :post_id")
-    void addHateCount(@Param("post_id") Long postId);
+    @Query("UPDATE Post p SET p.hateCount = p.hateCount + 1 WHERE p.id = :postId")
+    void addHateCount(@Param("postId") Long postId);
 
     @Modifying
-    @Query("UPDATE Post p SET p.hateCount = p.hateCount - 1 WHERE p.id = :post_id")
-    void subHateCount(@Param("post_id") Long postId);
+    @Query("UPDATE Post p SET p.hateCount = p.hateCount - 1 WHERE p.id = :postId")
+    void subHateCount(@Param("postId") Long postId);
 }

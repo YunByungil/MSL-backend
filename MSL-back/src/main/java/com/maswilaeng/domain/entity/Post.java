@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -44,9 +45,12 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<HashTag> hashTagSet;
 
     /* 게시글 수정 */
     public void update(PostUpdateDto postUpdateDto) {
+
         this.thumbnail = postUpdateDto.getThumbnail();
         this.title = postUpdateDto.getTitle();
         this.content = postUpdateDto.getContent();
@@ -71,5 +75,9 @@ public class Post extends BaseTimeEntity {
     @ColumnDefault("0")
     @Column(name = "hate_count", nullable = false)
     private Integer hateCount;
+
+    public void setHashTagSet(Set<HashTag> hashTagSet) {
+        this.hashTagSet = hashTagSet;
+    }
 }
 

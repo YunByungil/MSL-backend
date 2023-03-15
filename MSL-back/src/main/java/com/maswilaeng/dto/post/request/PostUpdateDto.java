@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Getter
 @NoArgsConstructor
 public class PostUpdateDto {
@@ -16,4 +18,6 @@ public class PostUpdateDto {
 
     @NotNull
     private String content;
+
+    private Set<String> hashTagSet;
 }
