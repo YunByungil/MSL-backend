@@ -71,6 +71,7 @@ public class SecurityConfig {
                 .accessDeniedHandler(new CustomAccessDeniedHandler()) // exception 권한
                 .and()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.GET).permitAll() // 비회원은 GET 요청 다 이용 가능하다.
                 .antMatchers("/api/sign", "/api/login", "/api/token", "/api/logout", "/home").permitAll()
                 .antMatchers("/api/**")
                 .access("hasRole('ROLE_USER')")
