@@ -12,7 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +32,7 @@ public class PostService {
                 .orElseThrow(
                         () -> new IllegalStateException("없는 회원")
                 );
+
         Post post = dto.toEntity(user);
         postRepository.save(post);
     }
