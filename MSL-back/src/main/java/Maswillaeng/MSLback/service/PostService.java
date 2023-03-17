@@ -1,5 +1,6 @@
 package Maswillaeng.MSLback.service;
 
+import Maswillaeng.MSLback.domain.entity.HashTag;
 import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.PostRepository;
@@ -25,6 +26,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final HashTagService hashTagService;
 
     @Transactional
     public void addPost(Long id, PostRequestDto dto) {
@@ -35,6 +37,11 @@ public class PostService {
 
         Post post = dto.toEntity(user);
         postRepository.save(post);
+        hashTagService.addHashTag(post, dto.getTag());
+//        for (HashTag hashTag : hashTags) {
+//            System.out.println("hashTag = " + hashTag.getTag());
+//            System.out.println("hashTag.getPost() = " + hashTag.getPost());
+//        }
     }
 
     /**

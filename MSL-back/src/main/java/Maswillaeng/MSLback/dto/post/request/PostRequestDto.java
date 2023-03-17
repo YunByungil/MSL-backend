@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -18,8 +20,8 @@ public class PostRequestDto {
     private String title;
     private String content;
     private Category category;
-    private Set<String> tag = new LinkedHashSet<>();
-
+//    private Set<String> tag = new LinkedHashSet<>();
+    private List<String> tag = new ArrayList<>();
     public Post toEntity(User user) {
         return Post.builder()
                 .user(user)

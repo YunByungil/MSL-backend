@@ -40,6 +40,9 @@ public class Post extends BaseEntity{
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<PostLike> postLike = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post")
+    private List<HashTag> hashTag = new ArrayList<>();
+
     @Builder
     public Post(User user, String thumbnail, String title, String content, Category category) {
         this.user = user;
@@ -55,5 +58,9 @@ public class Post extends BaseEntity{
         this.thumbnail = dto.getThumbnail();
         this.title = dto.getTitle();
         this.content = dto.getContent();
+    }
+
+    public void addHashTag(List<HashTag> tag) {
+        this.hashTag = tag;
     }
 }
