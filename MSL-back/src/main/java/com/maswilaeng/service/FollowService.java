@@ -4,6 +4,7 @@ import com.maswilaeng.domain.entity.Follow;
 import com.maswilaeng.domain.entity.User;
 import com.maswilaeng.domain.repository.FollowRepository;
 import com.maswilaeng.domain.repository.UserRepository;
+import com.maswilaeng.dto.follow.response.FollowingListResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -58,28 +59,23 @@ public class FollowService {
     /**
      * 사용자가 팔로우 하는 목록 조회(fetch join)
      */
-    public List<Follow> getFollowingList(Long fromUserId) {
-        return followRepository.findJoinToUsersByFromUserId(fromUserId);
+    public List<FollowingListResponseDto> getFollowingList(Long fromUserId) {
+        List<Follow> followingList = followRepository.findJoinToUsersByFromUserId(fromUserId);
+        return  followingList.stream()
+                .map(f -> f.getToUser())
+                .map(FollowingListResponseDto::new)
+                .toList();
     }
 
     /**
      * 사용자를 팔로우 하는 목록 조회(fetch join)
      */
-    public List<Follow> getFollowerList(Long toUserId) {
-        return followRepository.findJoinFromUsersByToUserId(toUserId);
+    public List<FollowingListResponseDto> getFollowerList(Long toUserId) {
+        List<Follow> followerList = followRepository.findJoinFromUsersByToUserId(toUserId);
+        return followerList.stream()
+                .map(f -> f.getFromUser())
+                .map(FollowingListResponseDto::new)
+                .toList();
     }
-////
-//    /**
-//     * 사용자가 팔로우 하는 목록 조회
-//     */
-//    public List<User> getFollowingListNoJoin(User fromUser) {
-//            return followRepository.findToUsersByFromUserId(fromUser.getId());
-//    }
-//
-//    /**
-//     * 사용자를 팔로우 하는 목록 조회
-//     */
-//    public List<User> getFollowerListNoJoin(User toUser) {
-//        return followRepository.findFromUsersByToUserId(toUser.getId());
-//    }
+
 }

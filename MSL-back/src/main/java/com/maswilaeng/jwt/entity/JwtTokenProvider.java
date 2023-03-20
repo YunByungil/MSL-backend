@@ -29,6 +29,7 @@ public class JwtTokenProvider {
 
     public static final Long ACCESS_TOKEN_EXPIRE_TIME = 1000 /6 * 60 * 60L; // 10분
     public static final Long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7L ; // 7일
+    public static Long accessTokenExpireTime;
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -45,7 +46,7 @@ public class JwtTokenProvider {
         long now = (new Date()).getTime();
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-        long accessTokenExpireTime = now + ACCESS_TOKEN_EXPIRE_TIME;
+        accessTokenExpireTime = now + ACCESS_TOKEN_EXPIRE_TIME;
 
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())

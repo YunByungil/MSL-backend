@@ -10,7 +10,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class PostUpdateDto {
 
-    private Long Id;
+    private Long postId;
 
     private String thumbnail;
 

@@ -49,11 +49,13 @@ public class PostService {
     }
 
 
-    public void updatePost(Long userId, PostUpdateDto updateDto) throws Exception { // id 없는 객체 -> null "mergeX"
+    public void updatePost(PostUpdateDto updateDto) throws Exception { // id 없는 객체 -> null "mergeX"
 
-        Post toUpdatePost = postRepository.findById(updateDto.getId()).get();
+        Long currentUserId = SecurityUtil.getCurrentUserId();
 
-        if (!Objects.equals(toUpdatePost.getUser().getId(), userId)) {
+        Post toUpdatePost = postRepository.findById(updateDto.getPostId()).get();
+
+        if (!currentUserId.equals(toUpdatePost.getUser().getId())) {
             throw new Exception("해당 게시물 접근 권한 없음");
         }
 

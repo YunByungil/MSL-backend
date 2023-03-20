@@ -55,7 +55,7 @@ public class FollowController {
      */
     @GetMapping("/followingList")
     public ResponseEntity<?> followingList(@RequestParam Long fromUserId) throws Exception {
-        return ResponseEntity.ok(followService.getFollowingList(fromUserId));
+        return ResponseEntity.ok().body(followService.getFollowingList(fromUserId));
     }
 
     /**
@@ -63,7 +63,7 @@ public class FollowController {
      */
     @GetMapping("/followerList")
     public ResponseEntity<?> followerList(@RequestParam Long toUserId) throws Exception {
-        return ResponseEntity.ok(followService.getFollowerList(toUserId));
+        return ResponseEntity.ok().body(followService.getFollowerList(toUserId));
     }
 }
 

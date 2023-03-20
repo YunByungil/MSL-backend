@@ -6,6 +6,7 @@ import com.maswilaeng.domain.repository.PostRepository;
 import com.maswilaeng.dto.common.ResponseDto;
 import com.maswilaeng.dto.post.request.PostRequestDto;
 import com.maswilaeng.dto.post.request.PostUpdateDto;
+import com.maswilaeng.dto.post.response.PostListResponseDto;
 import com.maswilaeng.dto.post.response.PostResponseDto;
 import com.maswilaeng.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -36,7 +39,7 @@ public class PostController {
 
     /* READ */
     @GetMapping("/post/{postId}")
-    public ResponseEntity<?> getPost(@PathVariable Long postId) {
+    public ResponseEntity<?> getPostDetails(@PathVariable Long postId) {
         Post post = postService.findPostById(postId);
         return ResponseEntity.ok().body(ResponseDto.of(
                 HttpStatus.OK, new PostResponseDto(post)
@@ -44,9 +47,9 @@ public class PostController {
     }
 
     /* UPDATE */
-    @PutMapping("/post/{postId}")
-    public ResponseEntity<?> updatePost(@PathVariable @RequestBody PostUpdateDto postUpdateDto) throws Exception {
-        postService.updatePost(postRepository.findUserIdById(postUpdateDto.getId()), postUpdateDto);
+    @PutMapping("/post")
+    public ResponseEntity<?> updatePost(@RequestBody PostUpdateDto postUpdateDto) throws Exception {
+        postService.updatePost(postUpdateDto);
         return ResponseEntity.ok().body(ResponseDto.of(HttpStatus.OK));
     }
 
@@ -59,18 +62,21 @@ public class PostController {
 
     /* List of posts*/
     @GetMapping("/post")
-    public ResponseEntity<Map<String, Object>> getAllPost() throws JsonProcessingException {
+    public ResponseEntity<Object> getAllPost() throws JsonProcessingException {
         List<Post> posts = postService.searchAll();
 
-        Map<String, Object> result = new HashMap<>();
-
-        for (Post post : posts) {
-            PostResponseDto dto = new PostResponseDto(post);
-            result.put(String.valueOf(dto.getPostId()), dto);
-        }
-
-        result.put("code", HttpStatus.OK.value());
-        result.put("totalCount", result.size() - 1);
+        Set<PostListResponseDto> result = posts.stream()
+                .map(PostListResponseDto::new)
+                .collect(Collectors.toSet());
+//        Map<String, Object> result = new HashMap<>();
+//
+//        for (Post post : posts) {
+//            PostResponseDto dto = new PostResponseDto(post);
+//            result.put(String.valueOf(dto.getPostId()), dto); // 특별히 넣을때만
+//        }
+//
+//        result.put("code", HttpStatus.OK.value());
+//        result.put("totalCount", result.size() - 1);
 
         return ResponseEntity.ok().body(result);
     }

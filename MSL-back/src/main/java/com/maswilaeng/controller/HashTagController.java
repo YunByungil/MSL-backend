@@ -1,6 +1,8 @@
 package com.maswilaeng.controller;
 
+import com.maswilaeng.domain.entity.Tag;
 import com.maswilaeng.dto.common.ResponseDto;
+import com.maswilaeng.dto.post.response.PostListResponseDto;
 import com.maswilaeng.dto.post.response.PostResponseDto;
 import com.maswilaeng.service.HashTagService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,12 @@ public class HashTagController {
 
     @GetMapping("/tag")
     public ResponseEntity<?> getPostListHashTag(@RequestParam String tag) {
-        List<PostResponseDto> postByHashTag = hashTagService.findPostByHashTag(tag);
+        List<PostListResponseDto> postByHashTag = hashTagService.findPostByHashTag(tag);
         return ResponseEntity.ok().body(ResponseDto.of(HttpStatus.OK, postByHashTag));
+    }
+
+    @GetMapping("/tag/all")
+    public ResponseEntity<?> findAllTags() {
+        return ResponseEntity.ok().body(hashTagService.findAllTags());
     }
 }

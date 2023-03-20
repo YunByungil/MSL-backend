@@ -6,25 +6,39 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public class UserInfoResponseDto {
 
     private String email;
 
-    private String nickname;
+    private String nickName;
 
     private String userImage;
 
-    private String phoneNumber;
-
     private String introduction;
+
+    private boolean followState;
+
+    private int followerCnt;
+
+    private int followingCnt;
+
+    public UserInfoResponseDto(User user, boolean isFollowed){
+        this.email = user.getEmail();
+        this.nickName = user.getNickName();
+        this.userImage = user.getUserImage();
+        this.introduction = user.getIntroduction();
+        this.followState =  isFollowed;
+        this.followerCnt = user.getFollowingList().size();
+        this.followingCnt = user.getFollowerList().size();
+    }
 
     public UserInfoResponseDto (User user) {
         this.email = user.getEmail();
-        this.nickname = user.getNickName();
-        this.phoneNumber = user.getPhoneNumber();
+        this.nickName = user.getNickName();
         this.userImage = user.getUserImage();
         this.introduction = user.getIntroduction();
+        this.followState =  false;
+        this.followerCnt = user.getFollowingList().size();
+        this.followingCnt = user.getFollowerList().size();
     }
 }

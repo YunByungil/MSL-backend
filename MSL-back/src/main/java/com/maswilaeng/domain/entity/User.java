@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @Table(name = "users")
@@ -43,7 +42,6 @@ public class User extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    // 수정 필요
     @Column(length = 1000)
     private String refreshToken;
 
@@ -51,6 +49,13 @@ public class User extends BaseTimeEntity{
     private int withdrawYn;
 
     private LocalDateTime withdrawAt;
+
+    @OneToMany(mappedBy = "fromUser")
+    private Set<Follow> followerList = new HashSet<>();
+
+    @OneToMany(mappedBy = "toUser")
+    private Set<Follow> followingList = new HashSet<>();
+
 
     @Builder
     public User(String email, String password, String nickName, String phoneNumber,
@@ -87,4 +92,6 @@ public class User extends BaseTimeEntity{
     public void encryptPassword(String encryptedPw) {
         this.password = encryptedPw;
     }
+
+
 }

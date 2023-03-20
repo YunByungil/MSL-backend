@@ -10,14 +10,14 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public class ResponseDto<T> {
 
-    private int status;
+    private int code;
     private String message;
-    private T data;
+    private T result;
 
-    public ResponseDto(int status) { this.status = status; }
+    public ResponseDto(int status) { this.code = status; }
 
     public ResponseDto(int status, String message) {
-        this.status = status;
+        this.code = status;
         this.message = message;
     }
 
@@ -26,18 +26,18 @@ public class ResponseDto<T> {
     }
 
     public ResponseDto(int status, T data) {
-        this.status = status;
-        this.data = data;
+        this.code = status;
+        this.result = data;
     }
 
     public ResponseDto(String message, T data) {
         this.message = message;
-        this.data = data;
+        this.result = data;
     }
 
     public static <T> ResponseDto<T> of(String message, T data) { return new ResponseDto<>(message, data); }
 
-    public static ResponseDto<?> of(HttpStatus httpStatus) { return new ResponseDto<>(httpStatus.value()); }
+    public static ResponseDto of(HttpStatus httpStatus) { return new ResponseDto(httpStatus.value()); }
 
     public static ResponseDto<?> of(String Message) {
         return new ResponseDto<>(Message);

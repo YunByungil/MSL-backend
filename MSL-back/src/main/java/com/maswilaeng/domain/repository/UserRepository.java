@@ -14,15 +14,15 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
     boolean existsByEmail(String email);
 
-    // 쿼리 수행시 Eager조회. authorities 정보 같이 가져옴
-//    @EntityGraph(attributePaths = "authorities")
-//    Optional<User> findOneWithAuthoritiesByUserName(String username);
-
     boolean existsByNickName(String nickName);
 
     @EntityGraph(attributePaths = "authorities")
     Optional<User> findOneWithAuthoritiesByEmail(String email);
 
-//    @Query("select u from User u left join fetch u.followerList where u.id =:userId")
-//    User findIfFollowingById(@Param("userId") Long userId);
+    @Query("select u from User u left join fetch u.followingList f1 left join fetch u.followerList f2 where u.id =:userId")
+    User findIfFollowingById(@Param("userId")Long userId);
+
+    @Query("select u from User u left join fetch u.followerList f where u.id =:userId")
+    User findIfFollowedById(@Param("userId")Long userId);
+
 }

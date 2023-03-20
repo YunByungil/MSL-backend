@@ -5,6 +5,7 @@ import com.maswilaeng.domain.entity.Post;
 import com.maswilaeng.domain.entity.Tag;
 import com.maswilaeng.domain.repository.HashTagRepository;
 import com.maswilaeng.domain.repository.TagRepository;
+import com.maswilaeng.dto.post.response.PostListResponseDto;
 import com.maswilaeng.dto.post.response.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,21 +52,22 @@ public class HashTagService {
 
     public Set<HashTag> updateHashTag(Set<String> tagsToUpdate, Post post) {
         Set<HashTag> beforeUpdate = hashTagRepository.findByPost(post);
-        Set<String> stringBeforeUpdateTags = beforeUpdate.stream().map(b -> b.getTag().getTagName())
+        Set<String> stringBeforeUpdateTags = beforeUpdate.stream()
+                .map(b -> b.getTag().getTagName())
                 .collect(Collectors.toSet());
 
         //기존 태그 - 업데이트 : 삭제할 태그
         Set<String> tagsToDelete = stringBeforeUpdateTags.stream()
-                .filter(tag -> tagsToUpdate.contains(tag))
+                .filter(tag -> !tagsToUpdate.contains(tag))
                 .collect(Collectors.toSet());
 
-        //업데이트 태그 - 기존 태그 : 새로 생성할 태그
-        Set<String> tagsToInsert = tagsToUpdate.stream()
-                .filter(tag -> stringBeforeUpdateTags.contains(tag))
-                .collect(Collectors.toSet());
+//        //업데이트 태그 - 기존 태그 : 새로 생성할 태그
+//        Set<String> tagsToInsert = tagsToUpdate.stream()
+//                .filter(tag -> !stringBeforeUpdateTags.contains(tag))
+//                .collect(Collectors.toSet());
 
         deleteHashTags(tagsToDelete ,post);
-        return saveHashTags(tagsToInsert, post);
+        return saveHashTags(tagsToUpdate, post);
     }
 
 
@@ -87,11 +89,16 @@ public class HashTagService {
         return tagSet;
     }
 
-    public List<PostResponseDto> findPostByHashTag(String hashTagName) {
+    public List<PostListResponseDto> findPostByHashTag(String hashTagName) {
         List<Post> posts = hashTagRepository.findPostByHashTag(hashTagName);
 
         return posts.stream()
-                .map(post -> new PostResponseDto(post))
+                .map(post -> new PostListResponseDto(post))
                 .collect(Collectors.toList());
+    }
+
+
+    public List<Tag> findAllTags() {
+        return tagRepository.findAll();
     }
 }

@@ -2,6 +2,7 @@ package com.maswilaeng.controller;
 
 import com.maswilaeng.domain.entity.User;
 import com.maswilaeng.dto.user.request.UserUpdateRequestDto;
+import com.maswilaeng.dto.user.response.UserFindResponseDto;
 import com.maswilaeng.dto.user.response.UserInfoResponseDto;
 import com.maswilaeng.jwt.service.AuthService;
 import com.maswilaeng.service.UserService;
@@ -18,6 +19,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -38,20 +41,12 @@ public class UserController {
         return ResponseEntity.ok().body(userDetails.getUsername());
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<?> getUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("/user 요청 들어옴 : authentication : {}", authentication);
-        User user = userService.findOne(Long.valueOf(authentication.getName()))
-                .orElseThrow(
-                        () -> new UsernameNotFoundException("존재하지 않는 회원입니다.")
-                );
-        log.info("/user 요청 들어옴 : user : {}", user.getId());
-        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
-        return ResponseEntity.ok().body(userInfoResponseDto);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getUser(@PathVariable Long userId) {
+        return ResponseEntity.ok().body(userService.getUser(userId));
     }
 
-    @GetMapping("/authtest")
+    @GetMapping("/authTest")
     public ResponseEntity<?> getAuth(Authentication authentication) {
         return ResponseEntity.ok().body(authentication);
     }
@@ -81,13 +76,9 @@ public class UserController {
         log.info("/test/user 요청 들어옴 : accessToken  만료되어도 authentication 존재할까? - >요청전");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("/test/user 요청 들어옴 : accessToken  만료되어도 authentication 존재할까? 요청후 : {}" ,authentication);
-        User user = userService.findOne(Long.valueOf(authentication.getName()))
-                .orElseThrow(
-                        () -> new UsernameNotFoundException("존재하지 않는 회원입니다.")
-                );
-        log.info("/test/user 요청 들어옴 : user : {}", user.getId());
-        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
-        return ResponseEntity.ok().body(userInfoResponseDto);
+        UserFindResponseDto dto = userService.findOne(Long.valueOf(authentication.getName()));
+        log.info("/test/user 요청 들어옴 : user : {}", dto.getNickName());
+        return ResponseEntity.ok().body(dto);
     }
 
 }

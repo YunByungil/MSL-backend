@@ -4,6 +4,8 @@ import com.maswilaeng.domain.entity.User;
 import com.maswilaeng.domain.repository.UserRepository;
 import com.maswilaeng.dto.user.request.LoginRequestDto;
 import com.maswilaeng.dto.user.request.UserJoinDto;
+import com.maswilaeng.jwt.dto.LoginResponseDto;
+import com.maswilaeng.jwt.dto.TokenResponseDto;
 import com.maswilaeng.jwt.entity.JwtTokenProvider;
 import com.maswilaeng.jwt.entity.TokenInfo;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +40,7 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public TokenInfo login(LoginRequestDto loginRequestDto) throws Exception {
+    public LoginResponseDto login(LoginRequestDto loginRequestDto) throws Exception {
 
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
@@ -54,8 +56,19 @@ public class AuthService {
         // 3. 인증 정보 기반으로 JWT 토큰 생성
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
         log.info("JWT 토큰 생성 후 tokenInfo : {}", tokenInfo.toString());
+        log.info("JWT 토큰 생성 후 authentication.getName : {}", authentication.getName());
 
-        return tokenInfo;
+        User user = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
+        LoginResponseDto loginResponseDto = LoginResponseDto.builder()
+                        .tokenResponseDto(TokenResponseDto.builder()
+                                .ACCESS_TOKEN(tokenInfo.getAccessToken())
+                                .REFRESH_TOKEN(tokenInfo.getRefreshToken())
+                                .build())
+                        .nickName(user.getNickName())
+                        .userImage(user.getUserImage())
+                        .build();
+        return loginResponseDto;
     }
 /** 재발급
     public TokenDto reissue(TokenRequestDto tokenRequestDto) {

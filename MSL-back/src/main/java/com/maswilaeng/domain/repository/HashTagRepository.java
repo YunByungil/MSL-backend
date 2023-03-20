@@ -24,4 +24,5 @@ public interface HashTagRepository extends JpaRepository<HashTag, Long> {
 
     @Query("select distinct p from Post p join fetch p.hashTagSet h where h.tag.tagName =:hashTag")
     List<Post> findPostByHashTag(@Param("hashTag")String hashTag);
+
 }

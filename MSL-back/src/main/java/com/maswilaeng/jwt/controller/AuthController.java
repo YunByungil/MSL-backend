@@ -6,6 +6,7 @@ import com.maswilaeng.dto.common.ResponseDto;
 import com.maswilaeng.dto.user.request.LoginRequestDto;
 import com.maswilaeng.dto.user.request.UserJoinDto;
 import com.maswilaeng.dto.user.response.LoginSuccessResponseDto;
+import com.maswilaeng.jwt.dto.LoginResponseDto;
 import com.maswilaeng.jwt.entity.TokenInfo;
 import com.maswilaeng.jwt.service.AuthService;
 import com.maswilaeng.utils.SecurityUtil;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.HashMap;
+
+import static com.maswilaeng.jwt.entity.JwtTokenProvider.accessTokenExpireTime;
 
 @Slf4j
 @RestController
@@ -58,58 +61,40 @@ public class AuthController {
             authService.signup(userJoinDto);
         }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ResponseDto.of(HttpStatus.OK));
     }
 
 
     @PostMapping("/api/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) throws Exception {
-        TokenInfo tokenInfo = authService.login(loginRequestDto);
+        LoginResponseDto dto = authService.login(loginRequestDto);
 
-        User user = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(
-                () -> new UsernameNotFoundException("해당 이메일의 유저가 존재하지 않습니다.")
-        );
-
-        log.info("tokenInfo.getExpiresIn() : {}", tokenInfo.getExpiresIn());
-        long remainingSeconds = tokenInfo.getExpiresIn() - ((new Date()).getTime());
-        log.info("remainingSeconds : {}", remainingSeconds);
-
-
-        long hours = remainingSeconds/1000 / 3600;
-        long minutes = (remainingSeconds/1000 % 3600) / 60;
-        long seconds = remainingSeconds/1000 % 60;
+        long timeLeft = accessTokenExpireTime - (new Date()).getTime();
+        long hours = timeLeft/1000 / 3600;
+        long minutes = (timeLeft/1000 % 3600) / 60;
+        long seconds = timeLeft/1000 % 60;
 
         String remainingTime = String.format("%02d:%02d:%02d", hours, minutes, seconds);
 
 
-        LoginSuccessResponseDto dto = LoginSuccessResponseDto.builder()
-                .nickName(user.getNickName())
-                .userImage(user.getUserImage())
-                .accessTokenExpiresIn(tokenInfo.getExpiresIn())
+        LoginSuccessResponseDto loginSuccessResponseDto = LoginSuccessResponseDto.builder()
+                .nickName(dto.getNickName())
+                .userImage(dto.getUserImage())
+                .accessTokenExpiresIn(remainingTime)
                 .build();
 
         ResponseCookie AccessToken = authService.getAccessTokenCookie(
-                tokenInfo.getAccessToken()
+                dto.getTokenResponseDto().getACCESS_TOKEN()
         );
 
         ResponseCookie RefreshToken = authService.getRefreshTokenCookie(
-                tokenInfo.getRefreshToken()
+                dto.getTokenResponseDto().getREFRESH_TOKEN()
         );
-
-
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("nickName", user.getNickName());
-        result.put("userImage", user.getUserImage());
-        result.put("remainTime", remainingTime);
-
-        HashMap<String, Object> response = new HashMap<>();
-        response.put("code", HttpStatus.OK.value());
-        response.put("result", result);
 
         return ResponseEntity.ok()
                 .header("Set-Cookie", AccessToken.toString())
                 .header("Set-Cookie", RefreshToken.toString())
-                .body(response);
+                .body(ResponseDto.of(HttpStatus.OK, loginSuccessResponseDto));
     }
 
 
