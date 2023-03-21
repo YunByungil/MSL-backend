@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -76,10 +77,11 @@ public class PostService {
 //        Post post = findOne(id);
 //        return post;
 //    }
-    public PostDetailDto getPost(Long id) {
-        System.out.println("check!!!");
-        Post post = findOne(id);
-        PostDetailDto dto = new PostDetailDto(post);
+    public PostDetailDto getPost(Long postId) {
+
+        Post findPost = postRepository.findByPostIdAndPostFetchJoinUser(postId)
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 게시글입니다."));
+        PostDetailDto dto = new PostDetailDto(findPost);
         return dto;
     }
 
