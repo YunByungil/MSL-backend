@@ -12,6 +12,7 @@ import com.maswilaeng.utils.SecurityUtil;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -70,13 +71,15 @@ public class UserService {
 
     public UserInfoResponseDto getUser(Long userId){
         User user = userRepository.findIfFollowingById(userId);
-        if(SecurityUtil.getCurrentUserId() == null) {
+
+        // 로그인 하지 않은 사용자 체크
+        Class<? extends Authentication> aClass = SecurityContextHolder.getContext().getAuthentication().getClass();
+        if(aClass.equals(AnonymousAuthenticationToken.class)) {
             return new UserInfoResponseDto(user);
         } else {
             User loginUser = userRepository.findIfFollowedById(SecurityUtil.getCurrentUserId());
             boolean following = followService.isFollowing(userId, loginUser.getId());
             return new UserInfoResponseDto(user, following);
-
         }
     }
 

@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
     Optional<User> findOneWithAuthoritiesByEmail(String email);
 
     @Query("select u from User u left join fetch u.followingList f1 left join fetch u.followerList f2 where u.id =:userId")
-    User findIfFollowingById(@Param("userId")Long userId);
+    User findIfFollowingById(@Param("userId") Long userId);
 
     @Query("select u from User u left join fetch u.followerList f where u.id =:userId")
     User findIfFollowedById(@Param("userId")Long userId);

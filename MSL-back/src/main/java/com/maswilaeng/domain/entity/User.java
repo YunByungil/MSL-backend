@@ -56,6 +56,11 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "toUser")
     private Set<Follow> followingList = new HashSet<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<PostLike> postLikeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> postList = new ArrayList<>();
 
     @Builder
     public User(String email, String password, String nickName, String phoneNumber,

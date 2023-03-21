@@ -7,6 +7,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -42,6 +43,12 @@ public class Post extends BaseTimeEntity {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
+    @ColumnDefault("0")
+    private Long hits;
+
+    @OneToMany(mappedBy = "post")
+    private Set<PostLike> postLikeSet = new HashSet<>();
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList;
 
@@ -58,7 +65,7 @@ public class Post extends BaseTimeEntity {
 
     // Java Build design pattern. 생성 시점에 값 채우기
     @Builder
-    public Post(String thumbnail, String title, String content, User user, Category category, Integer likeCount, Integer hateCount) {
+    public Post(String thumbnail, String title, String content, User user, Category category, Integer likeCount, Integer hateCount, Long hits) {
         this.thumbnail = thumbnail;
         this.title = title;
         this.user = user;
@@ -66,7 +73,7 @@ public class Post extends BaseTimeEntity {
         this.category = category;
         this.likeCount = likeCount;
         this.hateCount = hateCount;
-
+        this.hits = hits;
     }
 
     @ColumnDefault("0")
@@ -80,5 +87,10 @@ public class Post extends BaseTimeEntity {
     public void setHashTagSet(Set<HashTag> hashTagSet) {
         this.hashTagSet = hashTagSet;
     }
+
+    public void increaseHits() {
+        this.hits = this.hits + 1L;
+    }
+
 }
 

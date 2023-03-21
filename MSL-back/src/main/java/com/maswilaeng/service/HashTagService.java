@@ -42,13 +42,12 @@ public class HashTagService {
 
     public void deleteHashTags(Set<String> TagsToRemove, Post post) {
         hashTagRepository.deleteByPostId(post.getId());
-        for (String tagName:TagsToRemove) {
-            //post와 연결된 Tag가 아닐 경우에는 삭제
-            if (hashTagRepository.findByTagName(tagName).size() == 0) {
-                tagRepository.deleteByTagName(tagName);
-            }
-        }
+        Set<String> removeTags = TagsToRemove.stream()
+                .filter(t -> hashTagRepository.findByTagName(t).size() == 0)
+                .collect(Collectors.toSet());
+        tagRepository.deleteByTagName(removeTags);
     }
+
 
     public Set<HashTag> updateHashTag(Set<String> tagsToUpdate, Post post) {
         Set<HashTag> beforeUpdate = hashTagRepository.findByPost(post);
@@ -83,10 +82,10 @@ public class HashTagService {
                         .tagName(tagName)
                         .build();
                 tagRepository.save(tag);
+                tags.add(tag);
             }
         }
-        Set<Tag> tagSet = tagRepository.findByNameSet(tagNameSet);
-        return tagSet;
+        return tags;
     }
 
     public List<PostListResponseDto> findPostByHashTag(String hashTagName) {

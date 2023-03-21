@@ -7,11 +7,16 @@ import com.maswilaeng.domain.repository.PostRepository;
 import com.maswilaeng.domain.repository.UserRepository;
 import com.maswilaeng.dto.post.request.PostRequestDto;
 import com.maswilaeng.dto.post.request.PostUpdateDto;
+import com.maswilaeng.dto.post.response.PostResponseDto;
+import com.maswilaeng.dto.user.response.UserInfoResponseDto;
 import com.maswilaeng.utils.SecurityUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,10 +47,20 @@ public class PostService {
         postRepository.save(post);
     }
 
-    @Transactional(readOnly = true)
-    public Post findPostById(Long postId) {
-        return postRepository.findById(postId).orElseThrow(() ->
+
+    public PostResponseDto findPostById(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() ->
                 new EntityNotFoundException("해당 게시글이 존재하지 않습니다. id: " + postId));
+        post.increaseHits();
+        // 로그인 하지 않은 사용자 체크
+        Class<? extends Authentication> aClass = SecurityContextHolder.getContext().getAuthentication().getClass();
+        if(aClass.equals(AnonymousAuthenticationToken.class)) {
+            return new PostResponseDto(post);
+        } else {
+            Long currentUserId = SecurityUtil.getCurrentUserId();
+            return new PostResponseDto(post, currentUserId);
+        }
+
     }
 
 

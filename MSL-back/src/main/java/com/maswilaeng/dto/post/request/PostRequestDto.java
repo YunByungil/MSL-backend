@@ -28,6 +28,8 @@ public class PostRequestDto {
 
     private Set<String> hashTagSet = new HashSet<>();
 
+    private Long hits;
+
     /* Dto -> Entity */
     @Builder
     public Post toEntity(User user) {
@@ -39,6 +41,7 @@ public class PostRequestDto {
                 .category(Category.valueOf(category))
                 .likeCount(0)
                 .hateCount(0)
+                .hits(0L)
                 .build();
     }
 }

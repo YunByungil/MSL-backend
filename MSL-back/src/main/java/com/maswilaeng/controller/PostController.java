@@ -40,14 +40,14 @@ public class PostController {
     /* READ */
     @GetMapping("/post/{postId}")
     public ResponseEntity<?> getPostDetails(@PathVariable Long postId) {
-        Post post = postService.findPostById(postId);
+        PostResponseDto dto = postService.findPostById(postId);
         return ResponseEntity.ok().body(ResponseDto.of(
-                HttpStatus.OK, new PostResponseDto(post)
+                HttpStatus.OK, dto
         ));
     }
 
     /* UPDATE */
-    @PutMapping("/post")
+    @PutMapping("/post/{postId}")
     public ResponseEntity<?> updatePost(@RequestBody PostUpdateDto postUpdateDto) throws Exception {
         postService.updatePost(postUpdateDto);
         return ResponseEntity.ok().body(ResponseDto.of(HttpStatus.OK));
