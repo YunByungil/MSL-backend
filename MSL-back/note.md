@@ -41,3 +41,14 @@
 UserDetailResponseDto를 보면 stream을 이용해서 size를 갖고 오는데  
 CommentHate나, like등을 쿼리로 안 돌리고 stream을 통해서 가능할까?  
 
+44줄까찌 남겨놓기
+## Parameter value [1] did not match expected type
+### 내가 만든 쿼리
+유튜브 댓글처럼, 대댓글을 불러오기 위한 쿼리를 생성했다.  
+이 api를 호출했을 때, 부모 댓글을 기준으로 자식 댓글을 불러온다.  
+
+### 예외 발생 원인
+쿼리를 자세히 보자.  
+c.parent 자체는 객체, parentId는 Long타입이기 때문에 바인딩이 안 돼서 발생한 예외다.  
+
+

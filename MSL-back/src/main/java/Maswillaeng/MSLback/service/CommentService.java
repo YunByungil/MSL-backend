@@ -9,11 +9,13 @@ import Maswillaeng.MSLback.domain.repository.UserRepository;
 import Maswillaeng.MSLback.dto.comment.request.CommentRequestDto;
 import Maswillaeng.MSLback.dto.comment.request.CommentUpdateDto;
 import Maswillaeng.MSLback.dto.comment.request.ReCommentRequestDto;
+import Maswillaeng.MSLback.dto.comment.response.CommentResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -101,6 +103,18 @@ public class CommentService {
         }
 
         commentRepository.delete(comment);
+    }
+
+    /**
+     * 대댓글 불러오기
+     */
+    public List<CommentResponseDto> getChildComment(Long postId, Long commentId, Long userId) {
+        List<Comment> findChildComment = commentRepository.findByParentId(commentId);
+
+        List<CommentResponseDto> dto = findChildComment.stream()
+                .map(c -> new CommentResponseDto(c))
+                .collect(Collectors.toList());
+        return dto;
     }
 
 }

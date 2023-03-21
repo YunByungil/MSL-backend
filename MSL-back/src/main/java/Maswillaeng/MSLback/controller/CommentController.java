@@ -3,11 +3,15 @@ package Maswillaeng.MSLback.controller;
 import Maswillaeng.MSLback.dto.comment.request.CommentRequestDto;
 import Maswillaeng.MSLback.dto.comment.request.CommentUpdateDto;
 import Maswillaeng.MSLback.dto.comment.request.ReCommentRequestDto;
+import Maswillaeng.MSLback.dto.comment.response.ChildCommentResponse;
+import Maswillaeng.MSLback.dto.comment.response.CommentResponseDto;
 import Maswillaeng.MSLback.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -85,5 +89,19 @@ public class CommentController {
 
         return ResponseEntity.ok().body("댓글 삭제 완료");
     }
+
+    /**
+     * 대댓글 불러오기
+     */
+    @GetMapping("/post/{postId}/{commentId}/comment")
+    public ChildCommentResponse getChildComment(@PathVariable("postId") Long postId,
+                                                @PathVariable("commentId") Long commentId,
+                                                Authentication authentication) {
+        List<CommentResponseDto> childComment = commentService.getChildComment(postId, commentId, 1L);
+        System.out.println("\"childComment\" = " + "childComment");
+        return new ChildCommentResponse(childComment);
+
+    }
+
 
 }
