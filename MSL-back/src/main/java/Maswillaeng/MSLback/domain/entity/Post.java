@@ -58,6 +58,7 @@ public class Post extends BaseEntity{
         this.thumbnail = dto.getThumbnail();
         this.title = dto.getTitle();
         this.content = dto.getContent();
+        this.category = dto.getCategory();
     }
 
     public void addHashTag(List<HashTag> tag) {
