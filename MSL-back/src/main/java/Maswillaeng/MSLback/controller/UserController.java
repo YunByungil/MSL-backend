@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @Slf4j
@@ -28,17 +30,15 @@ public class UserController {
     private final CookieUtil cookieUtil;
 
 
-//    /**
-//     * 모든 회원 조회
-//     */
-//    @GetMapping("/test")
-//    public Result memberList() {
-//        List<User> users = userService.findAll();
-//        List<UserListDTO> collect = users.stream()
-//                .map(u -> new UserListDTO(u))
-//                .collect(Collectors.toList());
-//        return new Result(collect);
-//    }
+    /**
+     * 모든 회원 조회 (프론트에서 유효성 검사)
+     * TODO: Response 수정
+     */
+    @GetMapping("/user-list")
+    public Result memberList() {
+        List<UserListDTO> allUserList = userService.findAll();
+        return new Result(allUserList);
+    }
 
     /**
      * 회원 조회할 때, 반환 값을 어떻게 해야될지,

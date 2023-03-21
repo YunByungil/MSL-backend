@@ -12,14 +12,10 @@ public class UserListDTO {
     private String email;
     private String nickname;
     private String phoneNumber;
-    private String userImage;
-    private String introduction;
 
     public UserListDTO(User user) {
         this.email = user.getEmail();
         this.nickname = user.getNickname();
         this.phoneNumber = user.getPhoneNumber();
-        this.userImage = user.getUserImage();
-        this.introduction = user.getIntroduction();
     }
 }

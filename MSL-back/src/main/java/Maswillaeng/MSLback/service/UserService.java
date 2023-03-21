@@ -9,6 +9,7 @@ import Maswillaeng.MSLback.dto.user.reponse.TokenResponse;
 import Maswillaeng.MSLback.dto.user.reponse.UserDetailResponseDto;
 import Maswillaeng.MSLback.dto.user.reponse.UserLoginResponseDto;
 import Maswillaeng.MSLback.dto.user.request.UserJoinDTO;
+import Maswillaeng.MSLback.dto.user.request.UserListDTO;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateDTO;
 import Maswillaeng.MSLback.utils.CookieUtil;
 import Maswillaeng.MSLback.utils.JwtUtil;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -140,8 +142,12 @@ public class UserService {
     }
 
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserListDTO> findAll() {
+        List<User> allUser = userRepository.findAll();
+
+        return allUser.stream()
+                .map(u -> new UserListDTO(u))
+                .collect(Collectors.toList());
     }
 
 //    public void validateDuplicateEmail(String email) {
