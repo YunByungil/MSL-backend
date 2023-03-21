@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,8 +40,8 @@ public class HashTagService {
 
         List<HashTag> hashTag = post.getHashTag();
         for (HashTag hashtag : hashTag) {
-            hashtag.getTag().getId();
             hashTagRepository.delete(hashtag);
+            deleteTags(hashtag.getTag());
         }
     }
 
@@ -48,9 +49,13 @@ public class HashTagService {
         return tagRepository.findByName(tag)
                 .orElseGet(() -> tagRepository.save(new Tag(tag)));
 
+
     }
     
-    private void deleteTags(Long tagId) {
-        tagRepository.findById(tagId);
+    public void deleteTags(Tag tag) {
+        if (!hashTagRepository.existsByTag(tag)) {
+            System.out.println("\"\" = " + "존재한다");
+            tagRepository.deleteById(tag.getId());
+        }
     }
 }

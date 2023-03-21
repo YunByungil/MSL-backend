@@ -108,6 +108,10 @@ public class PostService {
         }
         System.out.println("log.info(\"deletePost, postId = {}\", postId);");
         postRepository.deleteById(postId);
+        List<HashTag> hashTag = post.getHashTag();
+        for (HashTag hashtag : hashTag) {
+            hashTagService.deleteTags(hashtag.getTag());
+        }
     }
 
 
