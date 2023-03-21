@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserListDTO {
+    private Long userId;
     private String email;
     private String nickname;
     private String phoneNumber;
 
     public UserListDTO(User user) {
+        this.userId = user.getId();
         this.email = user.getEmail();
         this.nickname = user.getNickname();
         this.phoneNumber = user.getPhoneNumber();
