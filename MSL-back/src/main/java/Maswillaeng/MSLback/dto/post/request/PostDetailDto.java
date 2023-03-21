@@ -19,19 +19,56 @@ import java.util.stream.Collectors;
 public class PostDetailDto {
 
     private Long postId;
+    private Long writerId;
     private String nickname;
     private String userImage;
     private String thumbnail;
     private String title;
     private String content;
     private Category category;
+    private Long hits;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createAt;
+
+    private boolean likeState;
+    private Long likeCount;
+    private Long commentCount;
 
     private List<String> tag = new ArrayList<>();
     private List<CommentResponseDto> comment = new ArrayList<>();
 
-    public PostDetailDto(Post post) {
+    /**
+     * 로그인
+     */
+    public PostDetailDto(Post post, boolean state, Long userId) {
+        this.postId = post.getId();
+        this.writerId = post.getUser().getId();
+        this.nickname = post.getUser().getNickname();
+        this.userImage = post.getUser().getUserImage();
+        this.thumbnail = post.getThumbnail();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.category = post.getCategory();
+        this.hits = post.getHits();
+        this.createAt = post.getCreateAt();
+
+        this.likeState = state;
+        this.likeCount = post.getPostLike().stream().count();
+        this.commentCount = post.getComment().stream().count();
+
+        this.tag = post.getHashTag().stream()
+                .map(t -> t.getTag().getName())
+                .collect(Collectors.toList());
+        this.comment = post.getComment().stream()
+                .filter(c -> c.getParent() == null)
+                .map(c -> new CommentResponseDto(c, userId))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 비로그인
+     */
+    public PostDetailDto(Post post, boolean state) {
         this.postId = post.getId();
         this.nickname = post.getUser().getNickname();
         this.userImage = post.getUser().getUserImage();
@@ -40,6 +77,11 @@ public class PostDetailDto {
         this.content = post.getContent();
         this.category = post.getCategory();
         this.createAt = post.getCreateAt();
+
+        this.likeState = state;
+        this.likeCount = post.getPostLike().stream().count();
+        this.commentCount = post.getComment().stream().count();
+
         this.tag = post.getHashTag().stream()
                 .map(t -> t.getTag().getName())
                 .collect(Collectors.toList());

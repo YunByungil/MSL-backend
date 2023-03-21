@@ -38,6 +38,11 @@ public class Comment extends BaseEntity{
     @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
     private List<Comment> child = new ArrayList<>();
 
+    @OneToMany(mappedBy = "comment")
+    private List<CommentLike> commentLike = new ArrayList<>();
+    @OneToMany(mappedBy = "comment")
+    private List<CommentHate> commentHate = new ArrayList<>();
+
     /**
      * addComment
      * @param post

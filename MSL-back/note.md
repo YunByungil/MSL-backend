@@ -9,6 +9,7 @@
 - [x] 게시판 상세정보 구현 - PostController#getPost()
   - [x] 쿼리 개선 PostDetailDto, CommentResponseDto 
   - post - user => fetchJoin, post - hashTag => fetchJoin (뻥튀기)
+  - [x] 비회원, 회원 접근 여부 확인 후 likeState, 좋아요 개수, 댓글 개수, 대댓글 개수 추가하기
 - [ ] `게시글 전체 목록 HashTag 추가하기!`
 - [ ] 대댓글 불러오는 api 생성
 - [ ] 팔로우, 팔로워 갖고오는 api 생성

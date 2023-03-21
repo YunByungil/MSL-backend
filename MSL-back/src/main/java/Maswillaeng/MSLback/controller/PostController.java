@@ -67,8 +67,13 @@ public class PostController {
      * 게시글 상세 조회
      */
     @GetMapping("/post/{postId}")
-    public PostDetailResponse getPost(@PathVariable Long postId) {
-        PostDetailDto dto = postService.getPost(postId);
+    public PostDetailResponse getPost(@PathVariable Long postId, Authentication authentication) {
+        if (authentication == null) {
+            PostDetailDto dto = postService.noLoginAndGetPost(postId);
+            return new PostDetailResponse(HttpStatus.OK.value(), dto);
+        }
+        Long userId = Long.parseLong(authentication.getName());
+        PostDetailDto dto = postService.getPost(postId, userId);
 //        PostDetailDto dto = new PostDetailDto(post);
         return new PostDetailResponse(HttpStatus.OK.value(), dto);
     }

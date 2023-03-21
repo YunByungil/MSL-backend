@@ -3,6 +3,7 @@ package Maswillaeng.MSLback.service;
 import Maswillaeng.MSLback.domain.entity.HashTag;
 import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.entity.User;
+import Maswillaeng.MSLback.domain.repository.PostLikeRepository;
 import Maswillaeng.MSLback.domain.repository.PostRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
 import Maswillaeng.MSLback.dto.post.request.PostDetailDto;
@@ -10,6 +11,7 @@ import Maswillaeng.MSLback.dto.post.reponse.PostListResponseDto;
 import Maswillaeng.MSLback.dto.post.request.PostRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,11 +25,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final HashTagService hashTagService;
+    private final PostLikeRepository postLikeRepository;
 
     @Transactional
     public void addPost(Long id, PostRequestDto dto) {
@@ -77,11 +81,33 @@ public class PostService {
 //        Post post = findOne(id);
 //        return post;
 //    }
-    public PostDetailDto getPost(Long postId) {
+
+    /**
+     * 게시글 상세 조회
+     * 로그인 상태로 접근
+     */
+    public PostDetailDto getPost(Long postId, Long userId) {
 
         Post findPost = postRepository.findByPostIdAndPostFetchJoinUser(postId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 게시글입니다."));
-        PostDetailDto dto = new PostDetailDto(findPost);
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
+        // TODO: 쿼리 수를 줄일 수 있을까? 다시 한 번 생각하기
+        log.info("state 검사");
+        boolean state = postLikeRepository.existsPostLikeByUser(findUser);
+        log.info("state 검사");
+        PostDetailDto dto = new PostDetailDto(findPost, state, userId);
+        return dto;
+    }
+    /**
+     * 게시글 상세 조회
+     * "비로그인" 상태로 접근
+     */
+    public PostDetailDto noLoginAndGetPost(Long postId) {
+
+        Post findPost = postRepository.findByPostIdAndPostFetchJoinUser(postId)
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 게시글입니다."));
+        PostDetailDto dto = new PostDetailDto(findPost, false);
         return dto;
     }
 
