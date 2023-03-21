@@ -56,7 +56,7 @@ public class AuthController {
                 .body(responseDto);
     }
 
-    @GetMapping("/duplicate/email")
+    @PostMapping("/duplicate/email")
     public ResponseEntity emailDuplicate(@RequestBody Map<String, String> email){
         if(email == null) {
             return ResponseEntity.badRequest().build();
@@ -70,7 +70,7 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/duplicate/nickname")
+    @PostMapping("/duplicate/nickname")
     public ResponseEntity nicknameDuplicate(@RequestBody Map<String, String> nickname){
         if(nickname == null) {
             return ResponseEntity.badRequest().build();
