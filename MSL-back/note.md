@@ -6,10 +6,11 @@
 - [x] 유저 정보 조회할 때, N + 1 문제 해결하기
   - [x] batch_size로 해결 완료
 - [x] 유저 정보 비회원도 허용할 수 있게 로직 수정하기
-- [x] 게시판 상세정보 구현
+- [x] 게시판 상세정보 구현 - PostController#getPost()
   - [x] 쿼리 개선 PostDetailDto, CommentResponseDto 
   - post - user => fetchJoin, post - hashTag => fetchJoin (뻥튀기)
 - [ ] `게시글 전체 목록 HashTag 추가하기!`
+- [ ] 대댓글 불러오는 api 생성
 - [ ] 팔로우, 팔로워 갖고오는 api 생성
 - [ ] 로그아웃 로직 수정하기
 - [ ] 회원 탈퇴 구현하기
