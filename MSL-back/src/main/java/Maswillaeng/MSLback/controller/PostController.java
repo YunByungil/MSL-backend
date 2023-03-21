@@ -108,7 +108,7 @@ public class PostController {
     /**
      * 게시글 삭제
      */
-    @DeleteMapping("/postD/{postId}")
+    @DeleteMapping("/post/{postId}")
     public PostResponse deletePost(Authentication authentication, @PathVariable Long postId) {
         /*
         대체 왜 /post/{postId}로 하면 1번 게시글이 삭제가 안 될까..

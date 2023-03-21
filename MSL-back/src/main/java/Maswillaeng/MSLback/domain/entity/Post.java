@@ -40,7 +40,7 @@ public class Post extends BaseEntity{
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<PostLike> postLike = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<HashTag> hashTag = new ArrayList<>();
 
     @Builder

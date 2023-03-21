@@ -39,6 +39,7 @@ public class HashTagService {
 
         List<HashTag> hashTag = post.getHashTag();
         for (HashTag hashtag : hashTag) {
+            hashtag.getTag().getId();
             hashTagRepository.delete(hashtag);
         }
     }
@@ -47,5 +48,9 @@ public class HashTagService {
         return tagRepository.findByName(tag)
                 .orElseGet(() -> tagRepository.save(new Tag(tag)));
 
+    }
+    
+    private void deleteTags(Long tagId) {
+        tagRepository.findById(tagId);
     }
 }
