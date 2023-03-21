@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -56,12 +57,12 @@ public class AuthController {
     }
 
     @GetMapping("/duplicate/email")
-    public ResponseEntity emailDuplicate(@RequestParam String email){
+    public ResponseEntity emailDuplicate(@RequestBody Map<String, String> email){
         if(email == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        if(authService.emailDuplicate(email)) {
+        if(authService.emailDuplicate(email.get("email"))) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         else{
@@ -70,11 +71,11 @@ public class AuthController {
     }
 
     @GetMapping("/duplicate/nickname")
-    public ResponseEntity nicknameDuplicate(@RequestParam String nickname){
+    public ResponseEntity nicknameDuplicate(@RequestBody Map<String, String> nickname){
         if(nickname == null) {
             return ResponseEntity.badRequest().build();
         }
-        if(authService.nicknameDuplicate(nickname)) {
+        if(authService.nicknameDuplicate(nickname.get("nickName"))) {
 
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }

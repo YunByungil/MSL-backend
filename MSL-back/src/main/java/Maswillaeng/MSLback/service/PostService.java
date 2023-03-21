@@ -39,7 +39,7 @@ public class PostService {
     public Post getPostById(Long postId){
         Post post = postsRepository.findById(postId)
                 .orElseThrow(() -> new IllegalStateException("게시물이 존재하지 않습니다. id=" +  postId));
-        return post; //optional null처리  .orElse();
+        return post;
     }
 
     public void updatePost(Long postId, PostsUpdateRequestDto requestDto) {
