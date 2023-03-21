@@ -31,6 +31,18 @@ public class HashTagService {
         }
     }
 
+    public void updateHashTag(Post post, List<String> tags) {
+//        for (String tag : tags) {
+//            Tag t = findTags(tag);
+//            hashTagRepository.save(new HashTag(t, post));
+//        }
+
+        List<HashTag> hashTag = post.getHashTag();
+        for (HashTag hashtag : hashTag) {
+            hashTagRepository.delete(hashtag);
+        }
+    }
+
     private Tag findTags(String tag) {
         return tagRepository.findByName(tag)
                 .orElseGet(() -> tagRepository.save(new Tag(tag)));

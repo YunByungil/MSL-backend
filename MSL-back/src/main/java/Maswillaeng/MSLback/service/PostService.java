@@ -58,6 +58,10 @@ public class PostService {
         근데 Optional때문에 놔둬도 될 거 같기도 하고 (가독성)
          */
         Post post = findOne(id);
+        List<String> tag = dto.getTag();
+//        List<HashTag> postTag = post.getHashTag();
+        hashTagService.updateHashTag(post, tag);
+        hashTagService.addHashTag(post, tag);
         post.update(dto);
     }
 
