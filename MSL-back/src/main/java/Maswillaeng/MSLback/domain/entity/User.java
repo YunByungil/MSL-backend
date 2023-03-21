@@ -3,7 +3,6 @@ package Maswillaeng.MSLback.domain.entity;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,7 +11,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
@@ -46,18 +44,16 @@ public class User extends BaseTimeEntity {
     private int withdrawYn;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private RoleType role;
 
     private String refreshToken;
-
 
     private LocalDateTime withdrawAt;
 
 
     @Builder
     public User(String email, String password, String nickname, String phoneNumber, String userImage,
-                String introduction, RoleType role, String refreshToken) {
+                String introduction, RoleType role) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
@@ -65,8 +61,8 @@ public class User extends BaseTimeEntity {
         this.userImage = userImage;
         this.introduction = introduction;
         this.withdrawYn = 0;
+        this.refreshToken = null;
         this.role = role;
-        this.refreshToken = refreshToken;
     }
 
 
@@ -78,7 +74,7 @@ public class User extends BaseTimeEntity {
         this.introduction = requestDto.getIntroduction();
     }
 
-    public void setPassword(String encodePwd) {
+    public void updatePw(String encodePwd) {
         this.password = encodePwd;
     }
 

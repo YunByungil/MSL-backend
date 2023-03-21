@@ -1,35 +1,46 @@
 package Maswillaeng.MSLback.service;
 
+import Maswillaeng.MSLback.Util.AESUtil;
 import Maswillaeng.MSLback.domain.entity.RoleType;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
-import Maswillaeng.MSLback.dto.auth.request.UserTokenRequestDto;
 import Maswillaeng.MSLback.dto.auth.response.UserTokenResponseDto;
 import Maswillaeng.MSLback.dto.auth.request.UserJoinRequestDto;
 import Maswillaeng.MSLback.dto.auth.request.UserLoginRequestDto;
-import Maswillaeng.MSLback.jwt.TokenProvider;
+import Maswillaeng.MSLback.Util.TokenProvider;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
-@Transactional
+@Transactional //하나하나 지정하기
 public class AuthService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final AESUtil aesUtil;
     private final TokenProvider tokenProvider;
 
-    public void join(UserJoinRequestDto userJoinDto){
-        User user = userJoinDto.toEntity();
-        user.setPassword(passwordEncoder.encode(userJoinDto.getPassword()));
+    public boolean nicknameDuplicate(String nickname){
+        return userRepository.existsByNickname(nickname);
+    }
+
+    public boolean emailDuplicate(String email){
+        return userRepository.existsByEmail(email);
+    }
+
+    public boolean joinDuplicate(UserJoinRequestDto userJoinDto) {
+        return nicknameDuplicate(userJoinDto.getNickname()) || emailDuplicate(userJoinDto.getEmail());
+    }
+
+    public void join(UserJoinRequestDto requestDto){
+        User user = requestDto.toEntity();
+        String encryptPw = aesUtil.encrypt(requestDto.getPassword());
+        user.updatePw(encryptPw);
         user.updateRole(RoleType.USER);
         userRepository.save(user);
     }
@@ -40,8 +51,9 @@ public class AuthService {
 //        }  //프론트에서 하는게 맞지않나?
         User user = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL입니다."));;
+        String encryptPw = aesUtil.encrypt(requestDto.getPassword());
 
-        if (passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+        if (encryptPw.equals(user.getPassword())) {
             String accessToken = tokenProvider.createAccessToken(user);
             String refreshToken = tokenProvider.createRefreshToken(user);
 

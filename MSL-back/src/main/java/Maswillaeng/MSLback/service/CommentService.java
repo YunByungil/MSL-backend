@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -26,19 +25,13 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
 
-    public void saveComment(Long postId, CommentRequestDto requestDto){
-        Long userId = requestDto.getUser().getId();
-
+    public void saveComment(CommentRequestDto requestDto){
         Post post = postRepository.findById(requestDto.getPost().getId()).orElseThrow(
-                () -> new EntityNotFoundException("게시물이 존재하지 않습니다. id=" + postId)
+                () -> new EntityNotFoundException("Post not found")
         );
-
-        User user = userRepository.findById(requestDto.getUser().getId()).orElseThrow(
-                () -> new EntityNotFoundException("유저이 존재하지 않습니다. id=" + userId)
-        );
+        User user = userRepository.findById(requestDto.getUser().getId()).get();
 
         Comment comment = requestDto.toEntity(post, user);
-        commentRepository.save(comment);
     }
 
     public void saveReply(Long postId, Long commentId, CommentReplyRequestDto requestDto){

@@ -10,18 +10,16 @@ import lombok.NoArgsConstructor;
 @Getter
 public class UserResponseDto {
     private String email;
-    private String phoneNumber;
     private String nickname;
     private String userImage;
     private String introduction;
-    private String password;
 
+
+    @Builder
     public UserResponseDto(User user){
         this.email = user.getEmail();
-        this.phoneNumber = user.getPhoneNumber();
         this.nickname = user.getNickname();
-//        this.userImage = user.getUserImage();
-//        this.introduction = user.getIntroduction();
-        this.password = user.getPassword();
+        this.userImage = user.getUserImage();
+        this.introduction = user.getIntroduction();
     }
 }

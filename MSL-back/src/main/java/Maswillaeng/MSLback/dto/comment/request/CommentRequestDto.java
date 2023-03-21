@@ -18,6 +18,7 @@ public class CommentRequestDto {
     private String content;
 
     public Comment toEntity(Post post, User user) {
+
         return Comment.builder()
                 .user(user)
                 .post(post)

@@ -23,7 +23,7 @@ public class PostController {
 
 
     @PostMapping
-    public ResponseEntity<Object> savePost(@RequestBody PostsSaveRequestDto requestDto) {
+    public ResponseEntity savePost(@RequestBody PostsSaveRequestDto requestDto) {
         postService.savePost(requestDto);
         return ResponseEntity.ok().build();
     }

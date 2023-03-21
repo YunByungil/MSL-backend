@@ -1,6 +1,6 @@
 package Maswillaeng.MSLback.controller;
 
-import Maswillaeng.MSLback.dto.auth.request.UserTokenRequestDto;
+import Maswillaeng.MSLback.domain.repository.UserRepository;
 import Maswillaeng.MSLback.dto.auth.response.UserTokenResponseDto;
 import Maswillaeng.MSLback.dto.auth.request.UserJoinRequestDto;
 import Maswillaeng.MSLback.dto.auth.request.UserLoginRequestDto;
@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 
 @RequiredArgsConstructor
@@ -19,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthController {
     private final AuthService authService;
     private final UserService userService;
+    private final UserRepository userRepository;
+
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody UserLoginRequestDto requestDto) throws IllegalAccessException {
@@ -36,7 +37,7 @@ public class AuthController {
     }
     @PostMapping("/sign")
     public ResponseEntity join(@RequestBody UserJoinRequestDto userJoinDto){
-        if (userService.joinDuplicate(userJoinDto)) {
+        if (authService.joinDuplicate(userJoinDto)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } else {
             authService.join(userJoinDto);
@@ -60,11 +61,12 @@ public class AuthController {
             return ResponseEntity.badRequest().build();
         }
 
-        if(userService.emailDuplicate(email)) {
+        if(authService.emailDuplicate(email)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         else{
-            return ResponseEntity.ok().build();}
+            return ResponseEntity.ok().build();
+        }
     }
 
     @GetMapping("/duplicate/nickname")
@@ -72,7 +74,8 @@ public class AuthController {
         if(nickname == null) {
             return ResponseEntity.badRequest().build();
         }
-        if(userService.nicknameDuplicate(nickname)) {
+        if(authService.nicknameDuplicate(nickname)) {
+
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         else{

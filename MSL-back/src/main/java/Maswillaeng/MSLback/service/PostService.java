@@ -23,7 +23,7 @@ public class PostService {
     private final UserRepository userRepository;
 
     public void savePost(PostsSaveRequestDto requestDto) {
-        Long userId = requestDto.getUser().getId();
+        Long userId = requestDto.getId();
         User user = userRepository.findById(userId).orElseThrow(
                         () -> new IllegalStateException("회원이 존재하지 않습니다. id=" + userId));
 
@@ -42,8 +42,8 @@ public class PostService {
         return post; //optional null처리  .orElse();
     }
 
-
     public void updatePost(Long postId, PostsUpdateRequestDto requestDto) {
+
         Post post = postsRepository.findById(postId)
                 .orElseThrow(
                         ()-> new IllegalStateException("게시물이 존재하지 않습니다. id=" + postId)); //get null처리 안하고 강제

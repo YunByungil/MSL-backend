@@ -22,7 +22,7 @@ public class CommentController {
     @PostMapping
     public ResponseEntity saveComment(@PathVariable("postId") Long postId,
                                       @RequestBody CommentRequestDto requestDto) {
-        commentService.saveComment(postId, requestDto);
+        commentService.saveComment(requestDto);
         return ResponseEntity.ok().build();
     }
 
