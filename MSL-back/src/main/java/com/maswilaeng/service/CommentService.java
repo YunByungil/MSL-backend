@@ -8,9 +8,9 @@ import com.maswilaeng.domain.repository.PostRepository;
 import com.maswilaeng.domain.repository.UserRepository;
 import com.maswilaeng.dto.comment.request.CommentRequestDto;
 import com.maswilaeng.dto.comment.request.CommentUpdateRequestDto;
-import com.maswilaeng.dto.comment.request.RecommentRequestDto;
+import com.maswilaeng.dto.comment.request.ReCommentRequestDto;
 import com.maswilaeng.dto.comment.response.CommentResponseDto;
-import com.maswilaeng.dto.comment.response.RecommentResponseDto;
+import com.maswilaeng.dto.comment.response.ReCommentResponseDto;
 import com.maswilaeng.utils.SecurityUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
@@ -94,7 +94,7 @@ public class CommentService {
     /**
      * ㄱ
      */
-    public RecommentResponseDto createRecomment(RecommentRequestDto dto) {
+    public ReCommentResponseDto createReComment(ReCommentRequestDto dto) {
         Comment parent = commentRepository.findById(dto.getParentId()).orElseThrow(
                 () -> new EntityNotFoundException("댓글이 존재하지 않습니다.")
         );
@@ -102,7 +102,7 @@ public class CommentService {
                 () -> new RuntimeException("로그인한 유저가 아닙니다")
         );
 
-        Comment recomment = Comment.builder()
+        Comment reComment = Comment.builder()
                 .post(parent.getPost())
                 .user(user)
                 .content(dto.getContent())
@@ -111,7 +111,7 @@ public class CommentService {
                 .hateCount(0)
                 .build();
 
-        return RecommentResponseDto.of(commentRepository.save(recomment));
+        return ReCommentResponseDto.of(commentRepository.save(reComment));
     }
 
 

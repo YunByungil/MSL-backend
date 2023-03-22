@@ -22,7 +22,7 @@ public interface HashTagRepository extends JpaRepository<HashTag, Long> {
 
     Set<HashTag> findByPost(Post post);
 
-    @Query("select distinct p from Post p join fetch p.hashTagSet h where h.tag.tagName =:hashTag")
+    @Query("select p from Post p join p.hashTagSet h where h.tag.tagName like %:hashTag%")
     List<Post> findPostByHashTag(@Param("hashTag")String hashTag);
 
 }

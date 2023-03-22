@@ -25,9 +25,9 @@ public class UserInfoResponseDto {
 
     private boolean followState;
 
-    private int followerCnt;
+    private int followerCount;
 
-    private int followingCnt;
+    private int followingCount;
 
     private List<PostResponseDto> postList;
 
@@ -39,8 +39,8 @@ public class UserInfoResponseDto {
         this.userImage = user.getUserImage();
         this.introduction = user.getIntroduction();
         this.followState =  isFollowed;
-        this.followerCnt = user.getFollowingList().size();
-        this.followingCnt = user.getFollowerList().size();
+        this.followingCount = user.getFollowingList().size();
+        this.followerCount = user.getFollowerList().size();
         this.likedPostList = user.getPostLikeList().stream()
                 .map(postLike -> postLike.getPost())
                 .map(PostResponseDto::new)
@@ -56,8 +56,8 @@ public class UserInfoResponseDto {
         this.userImage = user.getUserImage();
         this.introduction = user.getIntroduction();
         this.followState =  false;
-        this.followerCnt = user.getFollowingList().size();
-        this.followingCnt = user.getFollowerList().size();
+        this.followingCount = user.getFollowingList().size();
+        this.followerCount = user.getFollowerList().size();
         this.likedPostList = user.getPostLikeList().stream()
                 .map(postLike -> postLike.getPost())
                 .map(PostResponseDto::new)

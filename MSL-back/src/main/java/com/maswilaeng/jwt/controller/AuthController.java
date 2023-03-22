@@ -3,6 +3,7 @@ package com.maswilaeng.jwt.controller;
 import com.maswilaeng.domain.entity.User;
 import com.maswilaeng.domain.repository.UserRepository;
 import com.maswilaeng.dto.common.ResponseDto;
+import com.maswilaeng.dto.duplicate.request.DuplicateRequestDto;
 import com.maswilaeng.dto.user.request.LoginRequestDto;
 import com.maswilaeng.dto.user.request.UserJoinDto;
 import com.maswilaeng.dto.user.response.LoginSuccessResponseDto;
@@ -18,10 +19,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Optional;
 
 import static com.maswilaeng.jwt.entity.JwtTokenProvider.accessTokenExpireTime;
 
@@ -33,27 +36,38 @@ public class AuthController {
     private final UserRepository userRepository;
 
     @PostMapping("/api/duplicate-email")
-    public ResponseEntity<Object> duplicateEmail(@RequestBody String email) {
-        if (userRepository.existsByEmail(email)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    public ResponseEntity<Object> duplicateEmail(@RequestBody DuplicateRequestDto dto) {
+
+        if (authService.notDuplicateEmail(dto.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("중복된 이메일이 존재합니다.");
         } else {
             return ResponseEntity.ok().build();
         }
     }
 
     @PostMapping("/api/duplicate-nickname")
-    public ResponseEntity<Object> duplicateNickname(@RequestBody String nickname) {
-        if (userRepository.existsByNickName(nickname)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    public ResponseEntity<Object> duplicateNickname(@RequestBody DuplicateRequestDto dto) {
+
+        if (authService.notDuplicateNickName(dto.getNickName())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("중복된 닉네임이 존재합니다.");
         } else {
             return ResponseEntity.ok().build();
+        }
+    }
+
+    @PostMapping("/api/duplicate-phoneNumber")
+    public ResponseEntity<Object> duplicatePhoneNumber(@RequestBody DuplicateRequestDto dto) {
+
+        if (authService.notDuplicatePhoneNumber(dto.getPhoneNumber())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("중복된 핸드폰 번호가 존재합니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).build();
         }
     }
 
     @PostMapping("/api/sign")
     public ResponseEntity<Object> signup(@RequestBody UserJoinDto userJoinDto) throws Exception {
         User user = userJoinDto.toUser();
-        log.info("회원가입 요청 들어온 user : {}", user.getEmail());
 
         if (authService.notDuplicate(user)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

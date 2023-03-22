@@ -42,6 +42,7 @@ public class UserService {
                         .email(userJoinDto.getEmail())
                         .userImage(userJoinDto.getUserImage())
                         .introduction("hi")
+                        .phoneNumber(userJoinDto.getPhoneNumber())
                         .build();
 
         return userRepository.save(user);

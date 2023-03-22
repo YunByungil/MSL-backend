@@ -2,12 +2,13 @@ package com.maswilaeng.controller;
 
 import com.maswilaeng.dto.comment.request.CommentRequestDto;
 import com.maswilaeng.dto.comment.request.CommentUpdateRequestDto;
-import com.maswilaeng.dto.comment.request.RecommentRequestDto;
+import com.maswilaeng.dto.comment.request.ReCommentRequestDto;
 import com.maswilaeng.dto.comment.response.CommentResponseDto;
 import com.maswilaeng.dto.common.ResponseDto;
 import com.maswilaeng.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +28,10 @@ public class CommentController {
         return ResponseEntity.ok(commentService.createComment(dto));
     }
 
-    @PostMapping("/recomment")
-    public ResponseEntity<?> saveReComment(@RequestBody RecommentRequestDto dto) {
-        commentService.createRecomment(dto);
-        return ResponseEntity.ok().body(ResponseDto.of(
-                "댓글 등록 완료"
-        ));
+    @PostMapping("/reComment")
+    public ResponseEntity<?> saveReComment(@RequestBody ReCommentRequestDto dto) {
+
+        return ResponseEntity.ok(commentService.createReComment(dto));
     }
 
     @PutMapping("/comment")
@@ -40,6 +39,7 @@ public class CommentController {
         commentService.updateComment(dto);
 
         return ResponseEntity.ok().body(ResponseDto.of(
+                HttpStatus.OK,
                 "댓글 수정 완료"
         ));
     }
@@ -49,6 +49,7 @@ public class CommentController {
         commentService.deleteComment(commentId);
 
         return ResponseEntity.ok().body(ResponseDto.of(
+                HttpStatus.OK,
                 "댓글 삭제 완료"
         ));
     }

@@ -100,14 +100,17 @@ public class PostService {
         postRepository.delete(post);
     }
 
-//    public UserPostListResponseDto getUserPostList(Long userId) {
-//        return new UserPostListResponseDto(postRepository.findPostByUserId(userId));
-//    }
-
     /* search */
     @Transactional(readOnly = true)
     public List<Post> searchAll() {
         List<Post> postList = postRepository.findAll();
         return postList;
+    }
+
+    public List<PostResponseDto> findPostListByUserId(Long userId) {
+        List<Post> postsByUserId = postRepository.findPostsByUserId(userId);
+        return postsByUserId.stream()
+                .map(PostResponseDto::new)
+                .toList();
     }
 }

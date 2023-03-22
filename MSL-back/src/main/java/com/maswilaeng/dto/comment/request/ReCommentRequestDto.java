@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class RecommentRequestDto {
+public class ReCommentRequestDto {
     private Long parentId;
     private String content;
 

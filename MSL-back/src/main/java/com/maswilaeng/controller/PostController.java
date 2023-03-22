@@ -68,19 +68,15 @@ public class PostController {
         Set<PostListResponseDto> result = posts.stream()
                 .map(PostListResponseDto::new)
                 .collect(Collectors.toSet());
-//        Map<String, Object> result = new HashMap<>();
-//
-//        for (Post post : posts) {
-//            PostResponseDto dto = new PostResponseDto(post);
-//            result.put(String.valueOf(dto.getPostId()), dto); // 특별히 넣을때만
-//        }
-//
-//        result.put("code", HttpStatus.OK.value());
-//        result.put("totalCount", result.size() - 1);
-
         return ResponseEntity.ok().body(result);
     }
+
+    /* user Post */
+    @GetMapping("/userPostList/{userId}")
+    public ResponseEntity<Object> getUserPost(@RequestParam("userId") Long userId) {
+        return ResponseEntity.ok().body(postService.findPostListByUserId(userId));
+    }
+
 }
 
-//fetch , dto로 빼는것
 

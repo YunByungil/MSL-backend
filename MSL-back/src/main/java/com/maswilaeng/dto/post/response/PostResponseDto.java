@@ -24,6 +24,7 @@ public class PostResponseDto {
     private String thumbnail;
     private String title;
     private String content;
+    private String phoneNumber;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private Integer likeCount;
@@ -55,13 +56,14 @@ public class PostResponseDto {
                 .collect(Collectors.toSet());
         this.isLiked = false;
         this.hits = post.getHits();
-
+        this.phoneNumber = post.getUser().getPhoneNumber();
     }
 
     public PostResponseDto(Post post, Long userId) {
         this.postId = post.getId();
         this.userId = post.getUser().getId();
         this.nickName = post.getUser().getNickName();
+        this.phoneNumber = post.getUser().getPhoneNumber();
         this.userImage = post.getUser().getUserImage();
         this.title = post.getTitle();
         this.createdAt = post.getCreatedAt();

@@ -12,23 +12,23 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RecommentResponseDto {
+public class ReCommentResponseDto {
 
     private Long commentId;
     private String content;
     private String nickName;
-    private Comment parent;
+    private Long parentId;
     private LocalDateTime createdAt;
 
 //    private boolean isWritten;
 
-    public static RecommentResponseDto of(Comment comment) {
-        return RecommentResponseDto.builder()
+    public static ReCommentResponseDto of(Comment comment) {
+        return ReCommentResponseDto.builder()
                 .commentId(comment.getId())
                 .content(comment.getContent())
                 .nickName(comment.getUser().getNickName())
                 .createdAt(comment.getCreatedAt())
-                .parent(comment.getParent())
+                .parentId(comment.getParent().getId())
 //                .isWritten(bool)
                 .build();
     }

@@ -3,9 +3,11 @@ package com.maswilaeng.controller;
 import com.maswilaeng.domain.entity.Follow;
 import com.maswilaeng.domain.entity.User;
 import com.maswilaeng.domain.repository.UserRepository;
+import com.maswilaeng.dto.common.ResponseDto;
 import com.maswilaeng.dto.follow.request.FollowRequestDto;
 import com.maswilaeng.service.FollowService;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +30,7 @@ public class FollowController {
     @PostMapping
     public ResponseEntity<?> follow(@RequestBody FollowRequestDto followRequestDto) throws Exception {
         followService.createFollow(followRequestDto.getToUserId(), followRequestDto.getFromUserId());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(ResponseDto.of(HttpStatus.OK));
     }
 
 
@@ -39,7 +41,7 @@ public class FollowController {
     @DeleteMapping
     public ResponseEntity<?> unfollow(@RequestBody FollowRequestDto followRequestDto) throws Exception {
         followService.deleteFollow(followRequestDto.getToUserId(), followRequestDto.getFromUserId());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(ResponseDto.of(HttpStatus.OK));
     }
 
     /**

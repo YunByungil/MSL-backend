@@ -2,6 +2,7 @@ package com.maswilaeng.domain.repository;
 
 import com.maswilaeng.domain.entity.Post;
 import com.maswilaeng.domain.entity.User;
+import com.maswilaeng.dto.post.response.PostResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,15 +15,11 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-//    List<PostResponseDto> findPostByUserId(Long userId);
+    List<Post> findPostsByUserId(Long userId);
 
     List<Post> findByTitleContaining(String keyword);
 
-    Post findByUser(User user);
-
     Optional<Post> findById(Long Id);
-
-    Long findUserIdById(Long Id);
 
     Page<Post> findByUserId(@Param("userId") Long userId, PageRequest createdAt);
 
