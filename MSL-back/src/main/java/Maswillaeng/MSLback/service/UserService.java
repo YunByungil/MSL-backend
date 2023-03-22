@@ -189,4 +189,16 @@ public class UserService {
         User findUser = findOne(userId);
         findUser.deleteRefreshToken();
     }
+
+    public void checkEmailDuplicate(String email) {
+        if (userRepository.existsByEmail(email)) {
+            throw new IllegalStateException("이미 존재하는 Email입니다.");
+        }
+    }
+    public void checkNicknameDuplicate(String nickname) {
+
+    }
+    public void checkPhoneNumberDuplicate(String phoneNumber) {
+
+    }
 }

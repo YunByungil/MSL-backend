@@ -41,6 +41,15 @@ public class UserController {
     }
 
     /**
+     * 이메일 중복 검사 api
+     */
+    @GetMapping("/email-duplicate")
+    public ResponseEntity checkEmailDuplicate(String email) {
+        userService.checkEmailDuplicate(email);
+        return ResponseEntity.ok().body("이미 존재하는 Email입니다.");
+    }
+
+    /**
      * 회원 조회할 때, 반환 값을 어떻게 해야될지,
      * res에는 분명 배열 형태인데 dto넘기는 건데 왜 배열이지?
      */
