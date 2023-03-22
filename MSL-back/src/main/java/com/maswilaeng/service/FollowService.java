@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -64,7 +65,7 @@ public class FollowService {
         return  followingList.stream()
                 .map(f -> f.getToUser())
                 .map(FollowingListResponseDto::new)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     /**
@@ -75,7 +76,7 @@ public class FollowService {
         return followerList.stream()
                 .map(f -> f.getFromUser())
                 .map(FollowingListResponseDto::new)
-                .toList();
+                .collect(Collectors.toList());
     }
 
 }

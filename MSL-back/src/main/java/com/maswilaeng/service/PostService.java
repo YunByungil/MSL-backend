@@ -10,8 +10,8 @@ import com.maswilaeng.dto.post.request.PostUpdateDto;
 import com.maswilaeng.dto.post.response.PostResponseDto;
 import com.maswilaeng.dto.user.response.UserInfoResponseDto;
 import com.maswilaeng.utils.SecurityUtil;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.ValidationException;
+import javax.persistence.EntityNotFoundException;
+import javax.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -111,6 +111,6 @@ public class PostService {
         List<Post> postsByUserId = postRepository.findPostsByUserId(userId);
         return postsByUserId.stream()
                 .map(PostResponseDto::new)
-                .toList();
+                .collect(Collectors.toList());
     }
 }

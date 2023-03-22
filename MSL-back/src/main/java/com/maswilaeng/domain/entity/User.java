@@ -1,7 +1,8 @@
 package com.maswilaeng.domain.entity;
 
+import javax.persistence.*;
+
 import com.maswilaeng.dto.user.request.UserUpdateRequestDto;
-import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

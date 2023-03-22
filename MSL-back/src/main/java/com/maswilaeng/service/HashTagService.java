@@ -6,7 +6,6 @@ import com.maswilaeng.domain.entity.Tag;
 import com.maswilaeng.domain.repository.HashTagRepository;
 import com.maswilaeng.domain.repository.TagRepository;
 import com.maswilaeng.dto.post.response.PostListResponseDto;
-import com.maswilaeng.dto.post.response.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Transactional

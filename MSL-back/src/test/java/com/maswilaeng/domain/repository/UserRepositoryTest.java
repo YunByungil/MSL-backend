@@ -4,7 +4,7 @@ import com.maswilaeng.domain.entity.User;
 import com.maswilaeng.dto.user.request.UserJoinDto;
 import com.maswilaeng.jwt.controller.AuthController;
 import com.maswilaeng.jwt.service.AuthService;
-import jakarta.persistence.EntityManager;
+import javax.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

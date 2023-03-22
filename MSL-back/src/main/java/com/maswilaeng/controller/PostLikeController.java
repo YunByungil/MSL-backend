@@ -2,7 +2,7 @@ package com.maswilaeng.controller;
 
 import com.maswilaeng.dto.post.request.PostLikeRequestDto;
 import com.maswilaeng.service.PostLikeService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

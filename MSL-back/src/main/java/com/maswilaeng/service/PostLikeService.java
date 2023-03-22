@@ -10,7 +10,7 @@ import com.maswilaeng.domain.repository.PostRepository;
 import com.maswilaeng.domain.repository.UserRepository;
 import com.maswilaeng.dto.post.request.PostLikeRequestDto;
 import com.maswilaeng.utils.SecurityUtil;
-import jakarta.persistence.EntityNotFoundException;
+import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

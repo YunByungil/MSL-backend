@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 public class UserInfoResponseDto {
@@ -44,10 +45,10 @@ public class UserInfoResponseDto {
         this.likedPostList = user.getPostLikeList().stream()
                 .map(postLike -> postLike.getPost())
                 .map(PostResponseDto::new)
-                .toList();
+                .collect(Collectors.toList());
         this.postList = user.getPostList().stream()
                 .map(PostResponseDto::new)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public UserInfoResponseDto (User user) {
@@ -61,9 +62,9 @@ public class UserInfoResponseDto {
         this.likedPostList = user.getPostLikeList().stream()
                 .map(postLike -> postLike.getPost())
                 .map(PostResponseDto::new)
-                .toList();
+                .collect(Collectors.toList());
         this.postList = user.getPostList().stream()
                 .map(PostResponseDto::new)
-                .toList();
+                .collect(Collectors.toList());
     }
 }

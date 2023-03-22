@@ -6,7 +6,7 @@ import com.maswilaeng.dto.user.response.UserFindResponseDto;
 import com.maswilaeng.dto.user.response.UserInfoResponseDto;
 import com.maswilaeng.jwt.service.AuthService;
 import com.maswilaeng.service.UserService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

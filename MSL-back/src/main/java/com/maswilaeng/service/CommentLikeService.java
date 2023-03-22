@@ -4,7 +4,7 @@ import com.maswilaeng.domain.entity.*;
 import com.maswilaeng.domain.repository.*;
 import com.maswilaeng.dto.comment.request.CommentLikeRequestDto;
 import com.maswilaeng.utils.SecurityUtil;
-import jakarta.persistence.EntityNotFoundException;
+import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -3,7 +3,7 @@ package com.maswilaeng.controller;
 import com.maswilaeng.dto.comment.request.CommentLikeRequestDto;
 import com.maswilaeng.dto.common.ResponseDto;
 import com.maswilaeng.service.CommentLikeService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

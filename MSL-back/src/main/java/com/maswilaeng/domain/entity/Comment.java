@@ -1,6 +1,6 @@
 package com.maswilaeng.domain.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static jakarta.persistence.FetchType.LAZY;
+import static javax.persistence.FetchType.LAZY;
 
 
 @Entity

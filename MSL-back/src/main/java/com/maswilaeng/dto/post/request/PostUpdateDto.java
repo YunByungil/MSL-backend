@@ -1,6 +1,6 @@
 package com.maswilaeng.dto.post.request;
 
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

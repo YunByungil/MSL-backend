@@ -1,7 +1,7 @@
 package com.maswilaeng.domain.entity;
 
 import com.maswilaeng.dto.post.request.PostUpdateDto;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.LastModifiedDate;
