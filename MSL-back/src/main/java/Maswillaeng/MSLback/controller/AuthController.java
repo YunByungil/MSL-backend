@@ -23,7 +23,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody UserLoginRequestDto requestDto) throws IllegalAccessException {
+    public ResponseEntity login(@RequestBody UserLoginRequestDto requestDto) throws Exception {
         UserTokenResponseDto responseDto = authService.login(requestDto);
         return ResponseEntity.ok()
                 .header("Set-Cookie", responseDto.getAccessToken())
@@ -37,11 +37,12 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
     @PostMapping("/sign")
-    public ResponseEntity join(@RequestBody UserJoinRequestDto userJoinDto){
-        if (authService.joinDuplicate(userJoinDto)) {
+    public ResponseEntity join(@RequestBody UserJoinRequestDto requestDto) throws Exception {
+        System.out.println(requestDto.getPassword());
+        if (authService.joinDuplicate(requestDto)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } else {
-            authService.join(userJoinDto);
+            authService.join(requestDto);
             return ResponseEntity.ok().build();
         }
     }

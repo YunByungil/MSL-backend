@@ -1,6 +1,6 @@
 package Maswillaeng.MSLback.service;
 
-import Maswillaeng.MSLback.Util.AESUtil;
+import Maswillaeng.MSLback.Util.AESEncryption;
 import Maswillaeng.MSLback.domain.entity.RoleType;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 @Transactional //하나하나 지정하기
 public class AuthService {
     private final UserRepository userRepository;
-    private final AESUtil aesUtil;
+    private final AESEncryption aesEncryption;
     private final TokenProvider tokenProvider;
 
     public boolean nicknameDuplicate(String nickname){
@@ -37,21 +37,19 @@ public class AuthService {
         return nicknameDuplicate(userJoinDto.getNickname()) || emailDuplicate(userJoinDto.getEmail());
     }
 
-    public void join(UserJoinRequestDto requestDto){
-        User user = requestDto.toEntity();
-        String encryptPw = aesUtil.encrypt(requestDto.getPassword());
-        user.updatePw(encryptPw);
-        user.updateRole(RoleType.USER);
+    public void join(UserJoinRequestDto requestDto) throws Exception {
+        String encryptPw = aesEncryption.encrypt(requestDto.getPassword());
+        User user = requestDto.toEntity(encryptPw);
         userRepository.save(user);
     }
 
-    public UserTokenResponseDto login(UserLoginRequestDto requestDto) throws IllegalAccessException {
+    public UserTokenResponseDto login(UserLoginRequestDto requestDto) throws Exception {
 //        if(requestDto.getEmail().equals(null) || requestDto.getPassword().equals(null)){
 //            throw new IllegalAccessException("로그인 정보가 입력되지 않았습니다.");
 //        }  //프론트에서 하는게 맞지않나?
         User user = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL입니다."));;
-        String encryptPw = aesUtil.encrypt(requestDto.getPassword());
+        String encryptPw = aesEncryption.encrypt(requestDto.getPassword());
 
         if (encryptPw.equals(user.getPassword())) {
             String accessToken = tokenProvider.createAccessToken(user);

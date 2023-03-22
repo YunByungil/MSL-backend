@@ -1,5 +1,6 @@
 package Maswillaeng.MSLback.controller;
 
+import Maswillaeng.MSLback.Util.AuthenticationPrincipal;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.dto.user.reponse.UserResponseDto;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
@@ -17,6 +18,13 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+
+
+    @GetMapping("/test")
+    public ResponseEntity principalTest(@AuthenticationPrincipal Long userId){
+        System.out.printf(userId.toString());
+        return ResponseEntity.ok(userId);
+    }
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponseDto> findByUserId(@PathVariable Long userId){

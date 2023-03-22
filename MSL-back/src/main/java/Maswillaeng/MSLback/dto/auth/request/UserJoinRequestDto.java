@@ -12,10 +12,10 @@ public class UserJoinRequestDto {
     private String nickname;
     private String phoneNumber;
 
-    public User toEntity(){
+    public User toEntity(String encryptPw){
         return User.builder()
                 .email(email)
-                .password(password)
+                .password(encryptPw)
                 .nickname(nickname)
                 .phoneNumber(phoneNumber)
                 .build();
