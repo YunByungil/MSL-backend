@@ -196,7 +196,9 @@ public class UserService {
         }
     }
     public void checkNicknameDuplicate(String nickname) {
-
+        if (userRepository.existsByNickname(nickname)) {
+            throw new IllegalStateException("이미 존재하는 Nickname입니다.");
+        }
     }
     public void checkPhoneNumberDuplicate(String phoneNumber) {
 
