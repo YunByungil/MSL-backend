@@ -97,7 +97,12 @@ public class CommentController {
     public ChildCommentResponse getChildComment(@PathVariable("postId") Long postId,
                                                 @PathVariable("commentId") Long commentId,
                                                 Authentication authentication) {
-        List<CommentResponseDto> childComment = commentService.getChildComment(postId, commentId, 1L);
+        if (authentication == null) {
+            List<CommentResponseDto> childComment = commentService.getChildComment(postId, commentId);
+            return new ChildCommentResponse(childComment);
+        }
+        Long userId = Long.parseLong(authentication.getName());
+        List<CommentResponseDto> childComment = commentService.getChildComment(postId, commentId, userId);
         System.out.println("\"childComment\" = " + "childComment");
         return new ChildCommentResponse(childComment);
 

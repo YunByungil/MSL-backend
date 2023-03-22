@@ -106,9 +106,21 @@ public class CommentService {
     }
 
     /**
-     * 대댓글 불러오기
+     * 대댓글 불러오기 (로그인)
      */
     public List<CommentResponseDto> getChildComment(Long postId, Long commentId, Long userId) {
+        List<Comment> findChildComment = commentRepository.findByParentId(commentId);
+
+        List<CommentResponseDto> dto = findChildComment.stream()
+                .map(c -> new CommentResponseDto(c, userId))
+                .collect(Collectors.toList());
+        return dto;
+    }
+
+    /**
+     * 대댓글 불러오기 ("비"로그인)
+     */
+    public List<CommentResponseDto> getChildComment(Long postId, Long commentId) {
         List<Comment> findChildComment = commentRepository.findByParentId(commentId);
 
         List<CommentResponseDto> dto = findChildComment.stream()
