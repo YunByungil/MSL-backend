@@ -93,6 +93,9 @@ public class UserService {
     @Transactional
     public Long join(UserJoinDTO dto) {
 //        validateDuplicateEmail(user.getEmail());
+        checkNicknameDuplicate(dto.getNickname());
+        checkEmailDuplicate(dto.getEmail());
+        checkPhoneNumberDuplicate(dto.getPhoneNumber());
         User user = userRepository.save(dto.toEntity(encoder.encode(dto.getPassword())));
         return user.getId();
     }

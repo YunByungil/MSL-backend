@@ -26,13 +26,15 @@
 <hr>
 
 - [x] 모든 회원 이메일, 닉네임, 전화번호 정보 받는 api 생성 (프론트 유효성 검사) - UserController#memberList()
-  - [ ] 중복검사 api로 만들기로 바뀜
+  - [x] Email 중복검사 api - UserService#checkEmailDuplicate()
+  - [x] Nickname 중복검사 api - UserService#checkNicknameDuplicate()
+  - [x] PhoneNumber 중복검사 api - UserService#checkPhoneNumberDuplicate()
 <hr>
 
 ## 회원가입 예외 목록
 <hr>
 
-- [ ] 회원가입 눌렀을 때, 중복 검사 로직 추가
+- [x] 회원가입 눌렀을 때, 중복 검사 로직 추가 
 ## 댓글 기능 목록
 <hr>
 
