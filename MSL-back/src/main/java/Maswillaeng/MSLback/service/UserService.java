@@ -201,6 +201,8 @@ public class UserService {
         }
     }
     public void checkPhoneNumberDuplicate(String phoneNumber) {
-
+        if (userRepository.existsByPhoneNumber(phoneNumber)) {
+            throw new IllegalStateException("이미 존재하는 PhoneNumber입니다.");
+        }
     }
 }
