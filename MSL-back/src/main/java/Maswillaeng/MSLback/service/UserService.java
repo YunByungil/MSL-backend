@@ -2,7 +2,9 @@ package Maswillaeng.MSLback.service;
 
 import Maswillaeng.MSLback.domain.entity.Follow;
 import Maswillaeng.MSLback.domain.entity.Post;
+import Maswillaeng.MSLback.domain.entity.PostLike;
 import Maswillaeng.MSLback.domain.entity.User;
+import Maswillaeng.MSLback.domain.repository.PostLikeRepository;
 import Maswillaeng.MSLback.domain.repository.PostRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
 import Maswillaeng.MSLback.dto.user.reponse.TokenResponse;
@@ -32,6 +34,7 @@ public class UserService {
     private final ValidateService validateService;
     private final CookieUtil cookieUtil;
     private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
     private final BCryptPasswordEncoder encoder;
 
     @Value("${jwt.secret}")
@@ -118,13 +121,21 @@ public class UserService {
      * 생쿼리로 날린 거라 쿼리 수정해야 됨.
      */
     public UserDetailResponseDto testMember(Long userId, Long myId) {
+        List<PostLike> findPostLikeList = postLikeRepository.findPostLikeByUserIdAndFetchJoinPost(userId);
         // 내 정보일 때,
         if (userId == myId) {
             User user = findOne(myId);
             List<Post> findPostList = postRepository.findByUserId(myId);
-            return new UserDetailResponseDto(user, true, findPostList);
+            return new UserDetailResponseDto(user, true, findPostList, findPostLikeList);
         }
         // 남 정보일 때,
+        for (PostLike postLike : findPostLikeList) {
+            System.out.println("postLike = " + postLike.getPost().getTitle());
+            System.out.println("postLike.getPost().getContent() = " + postLike.getPost().getContent());
+        }
+        /*
+        TODO: likePost 불러올 때, 쿼리 개선하기
+         */
         User findUser = findOne(userId);
         List<Post> findPostList = postRepository.findByUserId(userId);
 //        boolean status = false;
@@ -132,16 +143,17 @@ public class UserService {
                 .filter(f -> f.getFollower().getId().equals(myId))
                 .findFirst()
                 .isPresent();
-        return new UserDetailResponseDto(findUser, status, findPostList);
+        return new UserDetailResponseDto(findUser, status, findPostList, findPostLikeList);
     }
 
     /**
      * 비로그인 상태로 user정보 확인
      */
     public UserDetailResponseDto noLoginAndGetMember(Long userId) {
+        List<PostLike> findPostLikeList = postLikeRepository.findPostLikeByUserIdAndFetchJoinPost(userId);
         User findUser = findOne(userId);
         List<Post> findPostList = postRepository.findByUserId(userId);
-        return new UserDetailResponseDto(findUser, false, findPostList);
+        return new UserDetailResponseDto(findUser, false, findPostList, findPostLikeList);
     }
 
 

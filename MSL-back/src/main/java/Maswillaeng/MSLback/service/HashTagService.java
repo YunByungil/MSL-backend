@@ -37,7 +37,7 @@ public class HashTagService {
 //            Tag t = findTags(tag);
 //            hashTagRepository.save(new HashTag(t, post));
 //        }
-
+        // TODO: 업데이트 확인 ->
         List<HashTag> hashTag = post.getHashTag();
         for (HashTag hashtag : hashTag) {
             hashTagRepository.delete(hashtag);

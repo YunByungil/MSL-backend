@@ -1,6 +1,7 @@
 package Maswillaeng.MSLback.dto.user.reponse;
 
 import Maswillaeng.MSLback.domain.entity.Post;
+import Maswillaeng.MSLback.domain.entity.PostLike;
 import Maswillaeng.MSLback.domain.entity.User;
 import lombok.Getter;
 
@@ -36,8 +37,9 @@ public class UserDetailResponseDto {
     private int followerCount;
     private int followingCount;
     private List<userPost> postList = new ArrayList<>();
+    private List<UserLikePostResponseDto> likePostList = new ArrayList<>();
 
-    public UserDetailResponseDto(User user, boolean status, List<Post> post) {
+    public UserDetailResponseDto(User user, boolean status, List<Post> post, List<PostLike> postLike) {
         this.userId = user.getId();
         this.nickname = user.getNickname();
         this.userImage = user.getUserImage();
@@ -46,6 +48,9 @@ public class UserDetailResponseDto {
         this.followerCount = user.getFollowingList().size();
         this.followingCount = user.getFollowerList().size();
         this.postList = post.stream().map(p -> new userPost(p)).collect(Collectors.toList());
+        this.likePostList = postLike.stream()
+                .map(p -> new UserLikePostResponseDto(p))
+                .collect(Collectors.toList());
     }
 }
 
