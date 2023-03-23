@@ -30,11 +30,18 @@ public interface PostRepository extends JpaRepository<Post, Long> {
      * 게시글 상세보기
      * @param postId
      */
+//    @Query("select p " +
+//            "from Post p " +
+//            "join fetch p.user " +
+//            "join fetch p.hashTag ht " +
+//            "join fetch ht.tag t " +
+//            "where p.id =:postId")
+//    Optional<Post> findByPostIdAndPostFetchJoinUser(@Param("postId") Long postId);
     @Query("select p " +
             "from Post p " +
             "join fetch p.user " +
-            "join fetch p.hashTag ht " +
-            "join fetch ht.tag t " +
+            "left join fetch p.hashTag ht " +
+            "left join fetch ht.tag t " +
             "where p.id =:postId")
     Optional<Post> findByPostIdAndPostFetchJoinUser(@Param("postId") Long postId);
 }
