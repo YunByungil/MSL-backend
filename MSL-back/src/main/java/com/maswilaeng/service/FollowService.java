@@ -81,5 +81,4 @@ public class FollowService {
                 .map(FollowingListResponseDto::new)
                 .collect(Collectors.toList());
     }
-
 }
