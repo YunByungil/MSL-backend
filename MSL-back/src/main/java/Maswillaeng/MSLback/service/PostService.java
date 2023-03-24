@@ -1,8 +1,10 @@
 package Maswillaeng.MSLback.service;
 
+import Maswillaeng.MSLback.domain.entity.Follow;
 import Maswillaeng.MSLback.domain.entity.HashTag;
 import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.entity.User;
+import Maswillaeng.MSLback.domain.repository.FollowRepository;
 import Maswillaeng.MSLback.domain.repository.PostLikeRepository;
 import Maswillaeng.MSLback.domain.repository.PostRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
@@ -32,6 +34,7 @@ public class PostService {
     private final UserRepository userRepository;
     private final HashTagService hashTagService;
     private final PostLikeRepository postLikeRepository;
+    private final FollowRepository followRepository;
 
     @Transactional
     public void addPost(Long id, PostRequestDto dto) {
@@ -95,6 +98,14 @@ public class PostService {
         // TODO: 쿼리 수를 줄일 수 있을까? 다시 한 번 생각하기
         log.info("state 검사");
         boolean state = postLikeRepository.existsPostLikeByUser(findUser);
+        /*
+        게시글 상세조회를 했을 때, 내가 작성자를 팔로우 했는지 안 했는지 확인하는 쿼리를 날리는게 좋을까? 다른 방법이 있을까?
+         */
+        /*
+        팔로우를 좀 더 효율적으로 갖고올 수 없을까? 쿼리가 너무 많이 나감
+         */
+        Optional<Follow> followState = followRepository.findByFollowerIdAndFollowingId(userId, findPost.getUser().getId());
+        System.out.println("followState.isPresent() = " + followState.isPresent());
         log.info("state 검사");
         PostDetailDto dto = new PostDetailDto(findPost, state, userId);
         return dto;
