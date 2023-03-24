@@ -31,6 +31,7 @@ public class PostDetailDto {
     private LocalDateTime createAt;
 
     private boolean likeState;
+    private boolean followState;
     private Long likeCount;
     private Long commentCount;
 
@@ -40,7 +41,7 @@ public class PostDetailDto {
     /**
      * 로그인
      */
-    public PostDetailDto(Post post, boolean state, Long userId) {
+    public PostDetailDto(Post post, boolean state, boolean isFollow, Long userId) {
         this.postId = post.getId();
         this.writerId = post.getUser().getId();
         this.nickname = post.getUser().getNickname();
@@ -53,6 +54,7 @@ public class PostDetailDto {
         this.createAt = post.getCreateAt();
 
         this.likeState = state;
+        this.followState = isFollow;
         this.likeCount = post.getPostLike().stream().count();
         this.commentCount = post.getComment().stream().count();
 
