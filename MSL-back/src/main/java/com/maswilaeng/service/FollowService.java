@@ -24,22 +24,22 @@ public class FollowService {
     /** 팔로우 기능 */
     public FollowResponseDto createFollow(Long toUserId, Long fromUserId) throws Exception {
 
-//        팔로우하고 있는지 확인 (팔로우 리스트 조인해서)
+        User toUser = userRepository.findById(toUserId).orElseThrow(
+                () -> new UsernameNotFoundException("toUser를 찾을 수 없습니다")
+        );
+        User fromUser = userRepository.findById(fromUserId).orElseThrow(
+                () -> new UsernameNotFoundException("fromUser를 찾을 수 없습니다")
+        );
+        // 팔로우하고 있는지 확인 (팔로우 리스트 조인해서)
         if (!isFollowing(toUserId, fromUserId)) {
             //팔로우 하고 있지 않을 경우
-            User toUser = userRepository.findById(toUserId).orElseThrow(
-                    () -> new UsernameNotFoundException("toUser를 찾을 수 없습니다")
-            );
-            User fromUser = userRepository.findById(fromUserId).orElseThrow(
-                    () -> new UsernameNotFoundException("fromUser를 찾을 수 없습니다")
-            );
             Follow follow = new Follow(toUser, fromUser);
             followRepository.save(follow);
         }
         else{
             throw new Exception("이미 팔로우를 눌렀습니다");
         }
-        int followerCount = userRepository.findById(toUserId).get().getFollowerList().size();
+        int followerCount = toUser.getFollowerList().size();
         return new FollowResponseDto(toUserId, fromUserId, followerCount);
     }
 
