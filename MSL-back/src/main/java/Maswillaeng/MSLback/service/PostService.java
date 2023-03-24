@@ -107,7 +107,7 @@ public class PostService {
         Optional<Follow> followState = followRepository.findByFollowerIdAndFollowingId(userId, findPost.getUser().getId());
         System.out.println("followState.isPresent() = " + followState.isPresent());
         log.info("state 검사");
-        PostDetailDto dto = new PostDetailDto(findPost, state, userId);
+        PostDetailDto dto = new PostDetailDto(findPost, state, followState.isPresent(), userId);
         return dto;
     }
     /**
