@@ -5,6 +5,7 @@ import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.FollowRepository;
 import Maswillaeng.MSLback.domain.repository.PostRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
+import Maswillaeng.MSLback.dto.follow.request.FollowRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class FollowService {
      * @param myId
      * @param userId
      */
-    public void addFollow(Long myId, Long userId) {
+    public FollowRequestDto addFollow(Long myId, Long userId) {
         User myAccount = userRepository.findById(myId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
 
@@ -47,12 +48,14 @@ public class FollowService {
 
         followRepository.save(follow);
         Long count = followRepository.countByFollowing(yourAccount);
+
+        return new FollowRequestDto(userId, myId, count);
     }
 
     /**
      * 팔로우 취소 기능
      */
-    public void unFollow(Long myId, Long userId) {
+    public FollowRequestDto unFollow(Long myId, Long userId) {
         User myAccount = userRepository.findById(myId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
 
@@ -69,6 +72,8 @@ public class FollowService {
 
         followRepository.delete(follow);
         Long count = followRepository.countByFollowing(yourAccount);
+
+        return new FollowRequestDto(userId, myId, count);
     }
 
 }
