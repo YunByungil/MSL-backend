@@ -1,6 +1,7 @@
 package Maswillaeng.MSLback.domain.repository;
 
 import Maswillaeng.MSLback.domain.entity.Follow;
+import Maswillaeng.MSLback.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -10,11 +11,11 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     /**
      * 팔로우, 팔로워 개수 확인
-     * @param userId
+     * @param user
      * @return
      */
-    Long countByFollowing(Long userId);
-    Long countByFollower(Long userId);
+    Long countByFollowing(User user);
+    Long countByFollower(User user);
 
     /**
      * 내가 이 사람을 팔로우하고 있는지 확인

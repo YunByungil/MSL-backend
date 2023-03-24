@@ -59,7 +59,7 @@
 ## 팔로우 기능 목록
 <hr>
 
-- [ ] 팔로우, 팔로우 취소했을 때 Body값 수정 (팔로우한 사람Id, 당한 사람Id)
+- [x] 팔로우, 팔로우 취소했을 때 Body값 수정 (팔로우한 사람Id, 당한 사람Id) - FollowController#addFollow(),unFollow()
 
 
 UserDetailResponseDto를 보면 stream을 이용해서 size를 갖고 오는데  

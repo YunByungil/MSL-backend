@@ -46,6 +46,7 @@ public class FollowService {
                 .build();
 
         followRepository.save(follow);
+        Long count = followRepository.countByFollowing(yourAccount);
     }
 
     /**
@@ -67,6 +68,7 @@ public class FollowService {
 //                .build();
 
         followRepository.delete(follow);
+        Long count = followRepository.countByFollowing(yourAccount);
     }
 
 }
