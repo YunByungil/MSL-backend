@@ -60,6 +60,8 @@
 <hr>
 
 - [x] 팔로우, 팔로우 취소했을 때 Body값 수정 (팔로우한 사람Id, 당한 사람Id) - FollowController#addFollow(),unFollow()
+- [ ] 쿼리 개선 방법 생각해보기: 팔로우 할 유저, 팔로우 건 유저, 팔로우 유무, 팔로우(insert),  
+팔로워 개수 총 5번 쿼리 나가는 거 개선 생각해보자
 
 
 UserDetailResponseDto를 보면 stream을 이용해서 size를 갖고 오는데  
