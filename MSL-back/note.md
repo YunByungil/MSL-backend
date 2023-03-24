@@ -54,8 +54,12 @@
 - [x] 댓글 로그인, 비로그인 상태 나누기
 - [x] 대댓글 불러오는 api 생성
   - [x] 대댓글 불러올 때, 1. 로그인 중 2. 비로그인 상태 나눠서 불러오기
-- [ ] 댓글 작성했을 때, Body값 수정하기 (userId, postId, commentId, content) 
+- [ ] 댓글 작성했을 때, Body값 수정하기 (userId, postId, commentId, content)
 
+## 팔로우 기능 목록
+<hr>
+
+- [ ] 팔로우, 팔로우 취소했을 때 Body값 수정 (팔로우한 사람Id, 당한 사람Id)
 
 
 UserDetailResponseDto를 보면 stream을 이용해서 size를 갖고 오는데  
