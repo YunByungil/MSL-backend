@@ -21,6 +21,16 @@ public class AuthController {
     private final UserService userService;
     private final UserRepository userRepository;
 
+    @PostMapping("/sign")
+    public ResponseEntity join(@RequestBody UserJoinRequestDto requestDto) throws Exception {
+        System.out.println(requestDto.getPassword());
+        if (authService.joinDuplicate(requestDto)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } else {
+            authService.join(requestDto);
+            return ResponseEntity.ok().build();
+        }
+    }
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody UserLoginRequestDto requestDto) throws Exception {
@@ -35,16 +45,6 @@ public class AuthController {
     public ResponseEntity logout(HttpServletRequest request){
         authService.logout(request);
         return ResponseEntity.ok().build();
-    }
-    @PostMapping("/sign")
-    public ResponseEntity join(@RequestBody UserJoinRequestDto requestDto) throws Exception {
-        System.out.println(requestDto.getPassword());
-        if (authService.joinDuplicate(requestDto)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        } else {
-            authService.join(requestDto);
-            return ResponseEntity.ok().build();
-        }
     }
 
     //Access Token을 재발급 위한 api

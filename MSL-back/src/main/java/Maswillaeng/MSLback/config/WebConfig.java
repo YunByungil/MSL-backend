@@ -20,24 +20,24 @@ public class WebConfig implements WebMvcConfigurer {
     private final JwtTokenInterceptor jwtTokenInterceptor;
     private final AuthenticationArgumentResolver authenticationArgumentResolver;
 
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) { //보안 정책
-//        registry.addMapping("/**")
-//                .allowedOrigins("http://localhost:3000", "http://localhost:8080")
-//                .allowedHeaders("*")
-//                .allowedMethods("GET","POST","PUT","DELETE")
-//                .allowCredentials(true)
-//                .maxAge(3600);
-//    }
-//
-//    @Override
-//    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-//        argumentResolvers.add(authenticationArgumentResolver);
-//    }
+    @Override
+    public void addCorsMappings(CorsRegistry registry) { //보안 정책
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000", "http://localhost:8080")
+                .allowedHeaders("*")
+                .allowedMethods("GET","POST","PUT","DELETE")
+                .allowCredentials(true)
+                .maxAge(3600);
+    }
 
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(jwtTokenInterceptor)
-//                .addPathPatterns("/**")
-//                .excludePathPatterns("/api/auth/**");
-//    }
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(authenticationArgumentResolver);
+    }
+
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(jwtTokenInterceptor)
+                .addPathPatterns("/api/**")
+                .excludePathPatterns("/api/auth/**");
+    }
 }

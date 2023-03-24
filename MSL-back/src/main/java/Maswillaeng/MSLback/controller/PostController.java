@@ -1,10 +1,12 @@
 package Maswillaeng.MSLback.controller;
 
+import Maswillaeng.MSLback.Util.AuthenticationPrincipal;
 import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.dto.post.request.PostsSaveRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostsUpdateRequestDto;
 import Maswillaeng.MSLback.dto.post.response.PostListResponseDto;
 import Maswillaeng.MSLback.dto.post.response.PostResponseDto;
+import Maswillaeng.MSLback.dto.user.reponse.UserResponseDto;
 import Maswillaeng.MSLback.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,21 +23,20 @@ public class PostController {
 
     private final PostService postService;
 
-
     @PostMapping
-    public ResponseEntity savePost(@RequestBody PostsSaveRequestDto requestDto) {
-        postService.savePost(requestDto);
+    public ResponseEntity savePost(@AuthenticationPrincipal Long userId, @RequestBody PostsSaveRequestDto requestDto) {
+        postService.savePost(userId, requestDto);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllPosts() { //제네릭의 경우 뭐가 올지 모르니 ?
+    public ResponseEntity<?> getAllPosts() {
         List<Post> posts = postService.getAllPosts();
-        List<PostListResponseDto> collect = posts.stream()
+        List<PostListResponseDto> postList = posts.stream()
                 .map(post -> new PostListResponseDto(post.getId(), post.getUser().getNickname(), post.getThumbnail(), post.getTitle()))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(collect);
+        return ResponseEntity.ok(postList);
     }
     @GetMapping("/{postId}")
     public ResponseEntity<PostResponseDto> getPostById(@PathVariable Long postId) {
@@ -53,6 +54,15 @@ public class PostController {
     public ResponseEntity<Object> deletePost(@PathVariable Long postId){
         postService.deletePost(postId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> findPostsByUserId(@PathVariable Long userId){
+        List<Post> posts = postService.findPostsByUserId(userId);
+        List<PostListResponseDto> postList = posts.stream()
+                .map(post -> new PostListResponseDto(post.getId(), post.getUser().getNickname(), post.getThumbnail(), post.getTitle()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(postList);
     }
 }
 

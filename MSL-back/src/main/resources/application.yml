@@ -5,28 +5,20 @@ spring:
       path: /h2-console
 
   datasource:
-    url: jdbc:h2:mem:test
-    driverClassName: org.h2.Driver
-    username: sa
+    url: jdbc:h2:tcp://localhost/~/msl
+    driver-class-name: org.h2.Driver
+    username: root
     password:
 
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    jpa:
-      defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
 
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
         show_sql: true
         format_sql: true
-    defer-datasource-initialization: true
-
-logging:
-  level:
-    me.silvernine: DEBUG
 
 secret:
   access: "6e5162b6d720e12d29458c2d2977be26"

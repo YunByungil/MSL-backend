@@ -66,7 +66,6 @@ public class AuthService {
     }
 
     public void logout(HttpServletRequest request){
-        String accessToken = request.getHeader("ACCESS_TOKEN");
         String refreshToken = request.getHeader("REFRESH_TOKEN");
         Claims claimsToken = tokenProvider.getClaimsToken(refreshToken);
         Long userId = Long.valueOf(claimsToken.get("userId").toString());
@@ -80,11 +79,6 @@ public class AuthService {
         Claims claimsToken = tokenProvider.getClaimsToken(refreshToken);
         Long userId = Long.valueOf(claimsToken.get("userId").toString());
         User user = userRepository.findById(userId).get();
-        //accessToken이 만료됐고 refreshToken이 맞으면 accessToken을 새로 발급(refreshToken의 내용을 통해서)
-//        if(!tokenProvider.isValidAccessToken(accessToken)){  //클라이언트에서 토큰 재발급 api로의 요청을 확정해주면 이 조건문은 필요없다.
-//            //Access 토큰 만료됨
-//            System.out.println("Access 토큰 만료됨");
-//          }
         if(!tokenProvider.isValidRefreshToken(refreshToken)) { //들어온 Refresh 토큰이 유효한지
             //입력으로 들어온 Refresh 토큰이 유효하지 않음, 재로그인 요청
 

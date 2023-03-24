@@ -2,6 +2,7 @@ package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.Util.AuthenticationPrincipal;
 import Maswillaeng.MSLback.domain.entity.User;
+import Maswillaeng.MSLback.dto.post.response.PostListResponseDto;
 import Maswillaeng.MSLback.dto.user.reponse.UserResponseDto;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import Maswillaeng.MSLback.service.UserService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController

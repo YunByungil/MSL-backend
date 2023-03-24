@@ -21,9 +21,7 @@ public class PostService {
 
     private final PostRepository postsRepository;
     private final UserRepository userRepository;
-
-    public void savePost(PostsSaveRequestDto requestDto) {
-        Long userId = requestDto.getId();
+    public void savePost(Long userId, PostsSaveRequestDto requestDto) {
         User user = userRepository.findById(userId).orElseThrow(
                         () -> new IllegalStateException("회원이 존재하지 않습니다. id=" + userId));
 
@@ -32,7 +30,7 @@ public class PostService {
     }
 
     public List<Post> getAllPosts(){
-        List<Post> posts = postsRepository.findAll(); //50개씩
+        List<Post> posts = postsRepository.findAll();
         return posts;
     }
 
@@ -56,5 +54,12 @@ public class PostService {
                         () -> new IllegalArgumentException("게시물이 존재하지 않습니다. id=" + postId)
                 );
         postsRepository.delete(post);
+    }
+
+    public List<Post> findPostsByUserId(Long userId){
+        userRepository.findById(userId).orElseThrow(
+                () -> new IllegalStateException("회원이 존재하지 않습니다. id=" + userId));
+        List<Post> posts = postsRepository.findAllByUserId(userId);
+        return posts;
     }
 }
