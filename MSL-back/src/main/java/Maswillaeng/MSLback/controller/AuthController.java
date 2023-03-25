@@ -7,11 +7,14 @@ import Maswillaeng.MSLback.dto.auth.request.UserLoginRequestDto;
 import Maswillaeng.MSLback.service.AuthService;
 import Maswillaeng.MSLback.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+
+import static Maswillaeng.MSLback.Util.AuthConstants.BEARER_PREFIX;
 
 @RequiredArgsConstructor
 @RestController
@@ -36,7 +39,7 @@ public class AuthController {
     public ResponseEntity login(@RequestBody UserLoginRequestDto requestDto) throws Exception {
         UserTokenResponseDto responseDto = authService.login(requestDto);
         return ResponseEntity.ok()
-                .header("Set-Cookie", responseDto.getAccessToken())
+                .header(HttpHeaders.AUTHORIZATION, BEARER_PREFIX + responseDto.getAccessToken())
                 .header("Set-Cookie", responseDto.getRefreshToken())//리프레시 토큰 경로
                 .body(responseDto);
     }
@@ -51,8 +54,9 @@ public class AuthController {
     @PostMapping("/issue")
     public ResponseEntity issueAccessToken(HttpServletRequest request) throws Exception {
         UserTokenResponseDto responseDto = authService.issueAccessToken(request);
+
         return ResponseEntity.ok()
-                .header("Set-Cookie", responseDto.getAccessToken())
+                .header(HttpHeaders.AUTHORIZATION, BEARER_PREFIX + responseDto.getAccessToken())
                 .header("Set-Cookie", responseDto.getRefreshToken())
                 .body(responseDto);
     }

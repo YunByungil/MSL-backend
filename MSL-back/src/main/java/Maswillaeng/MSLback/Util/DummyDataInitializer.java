@@ -1,14 +1,15 @@
 package Maswillaeng.MSLback.Util;
 
 import Maswillaeng.MSLback.domain.entity.Post;
+import Maswillaeng.MSLback.domain.entity.RoleType;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.PostRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.Arrays;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -25,41 +26,49 @@ public class DummyDataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        User user1 = User.builder()
-                .email("user1@test.com")
-                .password("password1")
-                .nickname("user1")
-                .phoneNumber("010-1111-1111")
-                .userImage("user1.jpg")
-                .introduction("Hello, I am user1!")
-                .build();
-        userRepository.save(user1);
+        List<User> userList = new ArrayList<>();
+        for(int i = 1; i <= 50; i++) {
+            String email = "user" + i + "@test.com";
+            String password = "password" + i;
+            String nickname = "user" + i;
+            String phoneNumber = "010-" + i + i + i + i + "-" + i + i + i + i;
+            String userImage = "user" + i + ".jpg";
+            String introduction = "Hello, I am user" + i + "!";
 
-        User user2 = User.builder()
-                .email("user2@test.com")
-                .password("password2")
-                .nickname("user2")
-                .phoneNumber("010-2222-2222")
-                .userImage("user2.jpg")
-                .introduction("Hello, I am user2!")
-                .build();
-        userRepository.save(user2);
+            User user = User.builder()
+                    .email(email)
+                    .password(password)
+                    .nickname(nickname)
+                    .phoneNumber(phoneNumber)
+                    .userImage(userImage)
+                    .introduction(introduction)
+                    .build();
+            user.updateRole(RoleType.USER);
+            userList.add(user);
+        }
 
-        Post post1 = Post.builder()
-                .title("Post 1 title")
-                .content("Post 1 content")
-                .thumbnail("post1.jpg")
-                .user(user1)
-                .build();
-        postRepository.save(post1);
+        userRepository.saveAll(userList);
 
-        Post post2 = Post.builder()
-                .title("Post 2 title")
-                .content("Post 2 content")
-                .thumbnail("post2.jpg")
-                .user(user2)
-                .build();
-        postRepository.save(post2);
 
+        for (int i = 1; i <= 300; i++) {
+            int j = i;
+            String title = "Post " + j + " title";
+            String content = "Post " + j + " content";
+            String thumbnail = "post" + j + ".jpg";
+
+            if (j>50){
+                j = j/10;
+            }
+            User user = userRepository.findById((long)j).orElse(null);
+
+            Post post = Post.builder()
+                    .title(title)
+                    .content(content)
+                    .thumbnail(thumbnail)
+                    .user(user)
+                    .build();
+
+            postRepository.save(post);
+        }
     }
 }
