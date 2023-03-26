@@ -20,28 +20,20 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
-
-
-    @GetMapping("/test")
-    public ResponseEntity principalTest(@AuthenticationPrincipal Long userId){
-        System.out.printf(userId.toString());
-        return ResponseEntity.ok(userId);
-    }
-
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponseDto> findByUserId(@PathVariable Long userId){
         UserResponseDto userDto = userService.findByUserId(userId);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequestDto requestDto) {
-        userService.updateUser(id, requestDto);
+    @PutMapping
+    public ResponseEntity<Object> updateUser(@AuthenticationPrincipal Long userId, @RequestBody UserUpdateRequestDto requestDto) {
+        userService.updateUser(userId, requestDto);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Object> deleteByUserId(@PathVariable Long userId) {
+    @DeleteMapping
+    public ResponseEntity<Object> deleteByUserId(@AuthenticationPrincipal Long userId) {
         userService.deleteByUserId(userId);
 
         return ResponseEntity.ok().build();

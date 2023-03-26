@@ -29,7 +29,7 @@ public class PostController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
+    @GetMapping("/posts")
     public ResponseEntity<?> getAllPosts() {
         List<Post> posts = postService.getAllPosts();
         List<PostListResponseDto> postList = posts.stream()

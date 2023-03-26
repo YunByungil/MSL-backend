@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Base64Utils;
 
 import javax.annotation.PostConstruct;
 import java.util.Base64;
@@ -24,10 +25,10 @@ public class TokenProvider{
 
     @Value("${secret.access}")
     private String SECRET_KEY;
-    // 객체 초기화, secretKey를 Base64로 인코딩한다.
     @PostConstruct
     protected void init() {
-        SECRET_KEY = Base64.getEncoder().encodeToString(SECRET_KEY.getBytes());
+//        SECRET_KEY = Base64.getEncoder().encodeToString(SECRET_KEY.getBytes());
+        SECRET_KEY = Base64Utils.encodeToUrlSafeString(SECRET_KEY.getBytes());
     }
     //권한정보를 이용해서 토큰을 생성하는 메소드
     public String createAccessToken(User user) {
@@ -55,8 +56,8 @@ public class TokenProvider{
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + REFRESH_EXPIRE)) // set Expire Time
-                .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), SignatureAlgorithm.HS256)  // 사용할 암호화 알고리즘과
+                .setExpiration(new Date(now.getTime() + REFRESH_EXPIRE))
+                .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), SignatureAlgorithm.HS256)
                 .compact();
     }
     public boolean hasRefreshToken(Long userId) {
