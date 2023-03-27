@@ -1,5 +1,6 @@
 package Maswillaeng.MSLback.domain.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -31,11 +32,11 @@ public class User {
     @Column(name = "PW")
     private String pwd;
 
-    private String nickname;
+    private String nickName;
 
-    private String phonenumber;
+    private String phoneNumber;
 
-    private String userimage;
+    private String userImage;
 
     private String introduction;
 
@@ -62,7 +63,21 @@ public class User {
     private Date withdraw_at;
 
 
-    //------생성로직-------
-
+    @Builder
+    public User(String email
+                , String pwd
+                , String phoneNumber
+                , String nickName
+                , String userImage
+                , String introduction) {
+        this.email = email;
+        this.pwd = pwd;
+        this.phoneNumber = phoneNumber;
+        this.nickName = nickName;
+        this.role = userRole.BASIC;
+        this.userImage = userImage;
+        this.introduction = introduction;
+        this.withdraw_yn = withDraw.N;
+    }
 
 }

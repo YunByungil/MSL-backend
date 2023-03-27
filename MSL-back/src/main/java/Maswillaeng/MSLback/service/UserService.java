@@ -38,15 +38,14 @@ public class UserService {
     }
 
     public void save(UserSignDto signReq) {
-        User signUser = new User();
-             signUser.setEmail(signReq.getEmail());
-             signUser.setPwd(signReq.getPwd());
-             signUser.setNickname(signReq.getNickname());
-             signUser.setPhonenumber(signReq.getPhoneNumber());
-             signUser.setUserimage(signReq.getUserImage());
-             signUser.setIntroduction(signReq.getIntroduction());
-             signUser.setRole(User.userRole.BASIC);
-             signUser.setWithdraw_yn(User.withDraw.N);
+        User signUser = new User(
+                signReq.getEmail()
+                , signReq.getPwd()
+                , signReq.getPhoneNumber()
+                , signReq.getNickname()
+                , signReq.getUserImage()
+                , signReq.getIntroduction()
+        );
         userRepository.save(signUser);
     }
 
@@ -58,6 +57,7 @@ public class UserService {
              updateUser.setPhonenumber(updateReq.getPhoneNumber());
              updateUser.setUserimage(updateReq.getUserImage());
              updateUser.setIntroduction(updateReq.getIntroduction());
+
         userRepository.save(updateUser);
     }
 
