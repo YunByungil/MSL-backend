@@ -28,7 +28,7 @@ public class PostSearchRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    private Page<PostListResponseDto> search(PostSearchCondition condition, Pageable pageable) {
+    public Page<PostListResponseDto> search(PostSearchCondition condition, Pageable pageable) {
         List<PostListResponseDto> content = queryFactory
                 .select(Projections.constructor(PostListResponseDto.class,
                         post.id,
