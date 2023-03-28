@@ -1,6 +1,7 @@
 package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.domain.entity.Post;
+import Maswillaeng.MSLback.domain.repository.post.query.PostSearchRepository;
 import Maswillaeng.MSLback.domain.repository.post.query.PostTestRepository;
 import Maswillaeng.MSLback.dto.post.reponse.PostDetailResponse;
 import Maswillaeng.MSLback.dto.post.reponse.PostListResponse;
@@ -10,6 +11,9 @@ import Maswillaeng.MSLback.dto.post.request.*;
 import Maswillaeng.MSLback.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +29,7 @@ public class PostController {
 
     private final PostService postService;
     private final PostTestRepository postTestRepository;
+    private final PostSearchRepository postSearchRepository;
     @GetMapping()
     public String index() {
         return "index";
@@ -129,5 +134,22 @@ public class PostController {
         Long myId = Long.parseLong(authentication.getName());
         postService.deletePost(postId, myId);
         return new PostResponse(HttpStatus.OK.value());
+    }
+
+    /**
+     * 게시글 검색
+     */
+    @GetMapping("/post/search")
+    public PostListResponse searchPost(PostSearchCondition condition, Pageable pageable) {
+        System.out.println("condition = " + condition.getTitle());
+        System.out.println("pageable = " + pageable.getOffset());
+        System.out.println("pageable = " + pageable.getPageSize());
+        PageRequest page = PageRequest.of(0, 10);
+        Page<PostListResponseDto> searchResult = postSearchRepository.search(condition, pageable);
+        System.out.println("searchResult.getSize() = " + searchResult.getSize());
+        for (PostListResponseDto postListResponseDto : searchResult) {
+            System.out.println("postListResponseDto = " + postListResponseDto);
+        }
+        return new PostListResponse();
     }
 }
