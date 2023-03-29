@@ -2,6 +2,7 @@ package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.Util.AuthenticationPrincipal;
 import Maswillaeng.MSLback.domain.entity.Post;
+import Maswillaeng.MSLback.dto.post.request.PostListRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostsSaveRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostsUpdateRequestDto;
 import Maswillaeng.MSLback.dto.post.response.PostListResponseDto;
@@ -9,6 +10,7 @@ import Maswillaeng.MSLback.dto.post.response.PostResponseDto;
 import Maswillaeng.MSLback.dto.user.reponse.UserResponseDto;
 import Maswillaeng.MSLback.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +32,9 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<?> getAllPosts() {
-        List<Post> posts = postService.getAllPosts();
+    public ResponseEntity<?> getAllPosts(@RequestBody PostListRequestDto requestDto) {
+        System.out.println(requestDto.getPage() + requestDto.getSize());
+        Page<Post> posts = postService.getAllPosts(requestDto);
         List<PostListResponseDto> postList = posts.stream()
                 .map(post -> new PostListResponseDto(post.getId(), post.getUser().getNickname(), post.getThumbnail(), post.getTitle()))
                 .collect(Collectors.toList());
@@ -57,8 +60,8 @@ public class PostController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<?> findPostsByUserId(@PathVariable Long userId){
-        List<Post> posts = postService.findPostsByUserId(userId);
+    public ResponseEntity<?> findPostsByUserId(@PathVariable Long userId, @RequestBody PostListRequestDto requestDto){
+        Page<Post> posts = postService.findPostsByUserId(userId, requestDto);
         List<PostListResponseDto> postList = posts.stream()
                 .map(post -> new PostListResponseDto(post.getId(), post.getUser().getNickname(), post.getThumbnail(), post.getTitle()))
                 .collect(Collectors.toList());

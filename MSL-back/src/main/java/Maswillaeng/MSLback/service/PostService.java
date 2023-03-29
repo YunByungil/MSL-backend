@@ -4,9 +4,13 @@ import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.PostRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
+import Maswillaeng.MSLback.dto.post.request.PostListRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostsSaveRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +33,9 @@ public class PostService {
         postsRepository.save(post);
     }
 
-    public List<Post> getAllPosts(){
-        List<Post> posts = postsRepository.findAll();
+    public Page<Post> getAllPosts(PostListRequestDto requestDto){
+        Pageable pageable = PageRequest.of(requestDto.getPage(), requestDto.getSize());
+        Page<Post> posts = postsRepository.findAll(pageable);
         return posts;
     }
 
@@ -56,10 +61,11 @@ public class PostService {
         postsRepository.delete(post);
     }
 
-    public List<Post> findPostsByUserId(Long userId){
+    public Page<Post> findPostsByUserId(Long userId, PostListRequestDto requestDto){
         userRepository.findById(userId).orElseThrow(
                 () -> new IllegalStateException("회원이 존재하지 않습니다. id=" + userId));
-        List<Post> posts = postsRepository.findAllByUserId(userId);
+        Pageable pageable = PageRequest.of(requestDto.getPage(), requestDto.getSize());
+        Page<Post> posts = postsRepository.findAllByUserId(userId, pageable);
         return posts;
     }
 }
