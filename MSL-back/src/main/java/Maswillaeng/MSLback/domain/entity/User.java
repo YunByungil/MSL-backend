@@ -86,4 +86,7 @@ public class User extends BaseTimeEntity {
     public void deleteRefreshToken() {
         this.refreshToken = null;
     }
+    public void updateProfileImage(String userImage) {
+        this.userImage = userImage;
+    }
 }

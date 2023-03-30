@@ -11,5 +11,4 @@ public class UserUpdateRequestDto {
     private String nickname;
     private String userImage;
     private String introduction;
-
 }

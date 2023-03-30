@@ -11,6 +11,8 @@ public class UserJoinRequestDto {
     private String password;
     private String nickname;
     private String phoneNumber;
+    private String userImage;
+    private String introduction;
 
     public User toEntity(String encryptPw){
         return User.builder()
@@ -18,6 +20,8 @@ public class UserJoinRequestDto {
                 .password(encryptPw)
                 .nickname(nickname)
                 .phoneNumber(phoneNumber)
+                .userImage(userImage)
+                .introduction(introduction)
                 .build();
     }
 }

@@ -7,7 +7,10 @@ import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -17,6 +20,7 @@ public class UserService {
 
 
     private final UserRepository userRepository;
+    private final PostService postService;
 
 
 //    public List<User> findAllUsers(){
@@ -38,5 +42,13 @@ public class UserService {
 
     public void deleteByUserId(Long userId){
         userRepository.deleteById(userId);
+    }
+
+    public Map<String,String> uploadUserImage(Long userId, MultipartFile imageFile) throws IOException {
+        Map<String,String> image = postService.uploadImage(imageFile);
+        User user =userRepository.findById(userId).get();
+        user.updateProfileImage(image.get("img"));
+
+        return image;
     }
 }

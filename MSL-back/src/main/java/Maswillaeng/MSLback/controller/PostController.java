@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,7 +33,7 @@ public class PostController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/posts")
+    @PostMapping("/posts")
     public ResponseEntity<?> getAllPosts(@RequestBody PostListRequestDto requestDto) {
         System.out.println(requestDto.getPage() + requestDto.getSize());
         Page<Post> posts = postService.getAllPosts(requestDto);
@@ -66,6 +68,12 @@ public class PostController {
                 .map(post -> new PostListResponseDto(post.getId(), post.getUser().getNickname(), post.getThumbnail(), post.getTitle()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(postList);
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<?> userImageUpdate(@RequestParam("photo") MultipartFile imageFile) throws IOException {
+
+        return ResponseEntity.ok().body(postService.uploadImage(imageFile));
     }
 }
 

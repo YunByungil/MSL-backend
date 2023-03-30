@@ -32,7 +32,7 @@ public class DummyDataInitializer implements CommandLineRunner {
             String password = "password" + i;
             String nickname = "user" + i;
             String phoneNumber = "010-" + i + i + i + i + "-" + i + i + i + i;
-            String userImage = "user" + i + ".jpg";
+            String userImage = "/upload_img/964929d0-7006-4ee5-a914-15faef6dd3f7_186bac28f874c1ca8.jpeg";
             String introduction = "Hello, I am user" + i + "!";
 
             User user = User.builder()
@@ -54,7 +54,7 @@ public class DummyDataInitializer implements CommandLineRunner {
             int j = i;
             String title = "Post " + j + " title";
             String content = "Post " + j + " content";
-            String thumbnail = "post" + j + ".jpg";
+            String thumbnail = "/upload_img/964929d0-7006-4ee5-a914-15faef6dd3f7_186bac28f874c1ca8.jpeg";
 
             if (j>50){
                 j = j/10;
