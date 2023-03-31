@@ -29,8 +29,8 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity savePost(@AuthenticationPrincipal Long userId, @RequestBody PostsSaveRequestDto requestDto) {
-        postService.savePost(userId, requestDto);
-        return ResponseEntity.ok().build();
+        Long postId = postService.savePost(userId, requestDto);
+        return ResponseEntity.ok().body(postId);
     }
 
     @PostMapping("/posts")

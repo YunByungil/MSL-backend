@@ -29,12 +29,13 @@ public class PostService {
 
     private final PostRepository postsRepository;
     private final UserRepository userRepository;
-    public void savePost(Long userId, PostsSaveRequestDto requestDto) {
+    public Long savePost(Long userId, PostsSaveRequestDto requestDto) {
         User user = userRepository.findById(userId).orElseThrow(
                         () -> new IllegalStateException("회원이 존재하지 않습니다. id=" + userId));
 
         Post post = requestDto.toEntity(user);
         postsRepository.save(post);
+        return post.getId();
     }
 
     public Page<Post> getAllPosts(PostListRequestDto requestDto){
