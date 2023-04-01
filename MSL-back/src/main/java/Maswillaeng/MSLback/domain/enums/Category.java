@@ -2,5 +2,8 @@ package Maswillaeng.MSLback.domain.enums;
 
 
 public enum Category {
-    FREE, information, news
+    레시피,
+    서울,
+    광역시,
+    그_외
 }
