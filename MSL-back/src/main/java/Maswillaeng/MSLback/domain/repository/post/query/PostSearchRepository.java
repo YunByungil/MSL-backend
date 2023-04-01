@@ -1,8 +1,11 @@
 package Maswillaeng.MSLback.domain.repository.post.query;
 
 import Maswillaeng.MSLback.domain.entity.Post;
+import Maswillaeng.MSLback.domain.enums.Category;
+import Maswillaeng.MSLback.dto.post.reponse.PostListResponseDto;
 import Maswillaeng.MSLback.dto.post.reponse.SearchTestDto;
 import Maswillaeng.MSLback.dto.post.request.PostSearchCondition;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -24,6 +27,7 @@ import static com.querydsl.core.types.dsl.Expressions.stringTemplate;
 import static org.springframework.util.StringUtils.*;
 
 @Repository
+@Transactional(readOnly = true)
 public class PostSearchRepository {
 
     private final JPAQueryFactory queryFactory;
@@ -32,7 +36,6 @@ public class PostSearchRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    @Transactional
     public Page<SearchTestDto> testV2(PostSearchCondition condition, Pageable pageable) {
         JPAQuery<Post> test = queryFactory
                 .selectFrom(post)
@@ -69,6 +72,14 @@ public class PostSearchRepository {
                 );
 
         return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchOne());
+    }
+
+    private BooleanExpression categoryEqual(String category) {
+        if (!hasText(category.toString())) {
+            return null;
+        }
+
+        return post.category.eq(Category.valueOf(category));
     }
 
     private BooleanExpression postWriterContain(String postWriter) {
