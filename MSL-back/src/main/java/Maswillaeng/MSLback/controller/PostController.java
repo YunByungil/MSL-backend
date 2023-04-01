@@ -3,10 +3,7 @@ package Maswillaeng.MSLback.controller;
 import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.repository.post.query.PostSearchRepository;
 import Maswillaeng.MSLback.domain.repository.post.query.PostTestRepository;
-import Maswillaeng.MSLback.dto.post.reponse.PostDetailResponse;
-import Maswillaeng.MSLback.dto.post.reponse.PostListResponse;
-import Maswillaeng.MSLback.dto.post.reponse.PostListResponseDto;
-import Maswillaeng.MSLback.dto.post.reponse.PostResponse;
+import Maswillaeng.MSLback.dto.post.reponse.*;
 import Maswillaeng.MSLback.dto.post.request.*;
 import Maswillaeng.MSLback.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -142,14 +139,36 @@ public class PostController {
     @GetMapping("/post/search")
     public PostListResponse searchPost(PostSearchCondition condition, Pageable pageable) {
         System.out.println("condition = " + condition.getTitle());
+        System.out.println("condition.getPostWriter() = " + condition.getPostWriter());
+        System.out.println("condition.getPostContent() = " + condition.getPostContent());
+        System.out.println("condition.getCommentWriter() = " + condition.getCommentWriter());
+        System.out.println("condition.getCommentContent() = " + condition.getCommentContent());
         System.out.println("pageable = " + pageable.getOffset());
         System.out.println("pageable = " + pageable.getPageSize());
-        PageRequest page = PageRequest.of(0, 10);
-        Page<PostListResponseDto> searchResult = postSearchRepository.search(condition, pageable);
+//        Page<searchTest> searchResult = postSearchRepository.searchPageSimple(condition, pageable);
+//        Page<SearchTestDto> searchResult = postSearchRepository.testMethod(condition, pageable);
+        Page<SearchTestDto> searchResult = postSearchRepository.testV2(condition, pageable);
+//        Page<searchTest> searchResult = postSearchRepository.test(condition, pageable);
         System.out.println("searchResult.getSize() = " + searchResult.getSize());
-        for (PostListResponseDto postListResponseDto : searchResult) {
-            System.out.println("postListResponseDto = " + postListResponseDto);
+//        for (searchTest postListResponseDto : searchResult) {
+//            System.out.println("postListResponseDto = " + postListResponseDto);
+//        }
+        for (SearchTestDto searchTestDto : searchResult) {
+            System.out.println("searchTestDto = " + searchTestDto);
         }
-        return new PostListResponse();
+        return new PostListResponse(searchResult.getSize(), HttpStatus.OK.value(), searchResult);
     }
+//    @GetMapping("/post/search")
+//    public PostListResponse searchPost(PostSearchCondition condition, Pageable pageable) {
+//        System.out.println("condition = " + condition.getTitle());
+//        System.out.println("pageable = " + pageable.getOffset());
+//        System.out.println("pageable = " + pageable.getPageSize());
+//        PageRequest page = PageRequest.of(0, 10);
+//        Page<PostListResponseDto> searchResult = postSearchRepository.search(condition, pageable);
+//        System.out.println("searchResult.getSize() = " + searchResult.getSize());
+//        for (PostListResponseDto postListResponseDto : searchResult) {
+//            System.out.println("postListResponseDto = " + postListResponseDto);
+//        }
+//        return new PostListResponse();
+//    }
 }
