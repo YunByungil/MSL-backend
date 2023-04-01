@@ -23,7 +23,7 @@ public class TokenProvider{
 
     private final UserRepository userRepository;
 
-    @Value("${secret.access}")
+    @Value("${secret.key}")
     private String SECRET_KEY;
     @PostConstruct
     protected void init() {

@@ -2,22 +2,20 @@ package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.Util.AuthenticationPrincipal;
 import Maswillaeng.MSLback.domain.entity.Post;
-import Maswillaeng.MSLback.dto.post.request.PostListRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostsSaveRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostsUpdateRequestDto;
 import Maswillaeng.MSLback.dto.post.response.PostListResponseDto;
 import Maswillaeng.MSLback.dto.post.response.PostResponseDto;
-import Maswillaeng.MSLback.dto.user.reponse.UserResponseDto;
 import Maswillaeng.MSLback.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -33,20 +31,24 @@ public class PostController {
         return ResponseEntity.ok().body(postId);
     }
 
-    @PostMapping("/posts")
-    public ResponseEntity<?> getAllPosts(@RequestBody PostListRequestDto requestDto) {
-        System.out.println(requestDto.getPage() + requestDto.getSize());
-        Page<Post> posts = postService.getAllPosts(requestDto);
-        List<PostListResponseDto> postList = posts.stream()
-                .map(post -> new PostListResponseDto(post.getId(), post.getUser().getNickname(), post.getThumbnail(), post.getTitle()))
-                .collect(Collectors.toList());
 
+    @GetMapping("/posts/{page}")
+    public ResponseEntity<?> getAllPosts(@PathVariable int page) {
+        Page<PostListResponseDto> postList = postService.getAllPosts(page);
         return ResponseEntity.ok(postList);
     }
     @GetMapping("/{postId}")
     public ResponseEntity<PostResponseDto> getPostById(@PathVariable Long postId) {
         Post post = postService.getPostById(postId);
-        return ResponseEntity.ok().build();
+        PostResponseDto responseDto = new PostResponseDto(post);
+        return ResponseEntity.ok().body(responseDto);
+    }
+
+    @GetMapping("/{userId}/{page}")
+    public ResponseEntity<?> findPostsByUserId(@PathVariable Long userId, @PathVariable int page){
+        Page<PostListResponseDto> postList = postService.findPostsByUserId(userId, page);
+
+        return ResponseEntity.ok(postList);
     }
 
     @PutMapping("/{postId}")
@@ -59,15 +61,6 @@ public class PostController {
     public ResponseEntity<Object> deletePost(@PathVariable Long postId){
         postService.deletePost(postId);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> findPostsByUserId(@PathVariable Long userId, @RequestBody PostListRequestDto requestDto){
-        Page<Post> posts = postService.findPostsByUserId(userId, requestDto);
-        List<PostListResponseDto> postList = posts.stream()
-                .map(post -> new PostListResponseDto(post.getId(), post.getUser().getNickname(), post.getThumbnail(), post.getTitle()))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(postList);
     }
 
     @PostMapping("/upload")

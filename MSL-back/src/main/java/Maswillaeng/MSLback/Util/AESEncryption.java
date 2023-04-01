@@ -15,7 +15,7 @@ import java.util.Base64;
 public class AESEncryption {
 
     private static final String encryptionAlgo = "AES/CBC/PKCS5Padding";
-    @Value("${secret.access}")
+    @Value("${secret.key}")
     private String SECRET_KEY;
 
     public String encrypt(String password) throws Exception {

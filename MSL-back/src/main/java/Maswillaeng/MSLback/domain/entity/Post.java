@@ -4,6 +4,7 @@ import Maswillaeng.MSLback.dto.post.request.PostsUpdateRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,4 +46,5 @@ public class Post extends BaseTimeEntity{
         this.content = requestDto.getContent();
         this.thumbnail= requestDto.getThumbnail();
     }
+
 }

@@ -8,8 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Configuration
@@ -40,6 +43,11 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/**")
                 .excludePathPatterns("/api/auth/**")
                 .excludePathPatterns("/api/post/posts");
-
+    }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        Path path = Paths.get("MSL-back/src/main/upload/img/");
+        registry.addResourceHandler("/upload_img/**")
+                .addResourceLocations("file:"+ path.toAbsolutePath()+"/");
     }
 }

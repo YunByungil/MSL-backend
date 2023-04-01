@@ -4,11 +4,12 @@ import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.PostRepository;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
-import Maswillaeng.MSLback.dto.post.request.PostListRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostsSaveRequestDto;
 import Maswillaeng.MSLback.dto.post.request.PostsUpdateRequestDto;
+import Maswillaeng.MSLback.dto.post.response.PostListResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,10 +39,26 @@ public class PostService {
         return post.getId();
     }
 
-    public Page<Post> getAllPosts(PostListRequestDto requestDto){
-        Pageable pageable = PageRequest.of(requestDto.getPage(), requestDto.getSize());
+    public Page<PostListResponseDto> getAllPosts(int page){
+        Pageable pageable = PageRequest.of(page, 8);
         Page<Post> posts = postsRepository.findAll(pageable);
-        return posts;
+        List<PostListResponseDto> postList = posts.stream()
+                .map(PostListResponseDto::new)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(postList, pageable, posts.getTotalElements());
+    }
+
+    public Page<PostListResponseDto> findPostsByUserId(Long userId, int page){
+        userRepository.findById(userId).orElseThrow(
+                () -> new IllegalStateException("회원이 존재하지 않습니다. id=" + userId));
+
+        Pageable pageable = PageRequest.of(page, 8);
+        Page<Post> posts = postsRepository.findAllByUserId(userId, pageable);
+        List<PostListResponseDto> postList = posts.stream()
+                .map(PostListResponseDto::new)
+                .collect(Collectors.toList());
+        return new PageImpl<>(postList, pageable, posts.getTotalElements());
     }
 
     public Post getPostById(Long postId){
@@ -64,14 +81,6 @@ public class PostService {
                         () -> new IllegalArgumentException("게시물이 존재하지 않습니다. id=" + postId)
                 );
         postsRepository.delete(post);
-    }
-
-    public Page<Post> findPostsByUserId(Long userId, PostListRequestDto requestDto){
-        userRepository.findById(userId).orElseThrow(
-                () -> new IllegalStateException("회원이 존재하지 않습니다. id=" + userId));
-        Pageable pageable = PageRequest.of(requestDto.getPage(), requestDto.getSize());
-        Page<Post> posts = postsRepository.findAllByUserId(userId, pageable);
-        return posts;
     }
 
     public Map<String,String> uploadImage(MultipartFile imageFile) throws IOException {

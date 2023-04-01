@@ -14,5 +14,13 @@ public class PostListResponseDto {
     private String nickname;
     private String title;
     private String thumbnail;
+    private LocalDateTime createdDate;
 
+    public PostListResponseDto(Post entity) {
+        this.id = entity.getId();
+        this.nickname = entity.getUser().getNickname();
+        this.title = entity.getTitle();
+        this.thumbnail = entity.getThumbnail();
+        this.createdDate = entity.getCreatedDate();
+    }
 }
