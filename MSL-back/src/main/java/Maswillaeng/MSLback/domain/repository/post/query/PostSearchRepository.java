@@ -74,6 +74,31 @@ public class PostSearchRepository {
         return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchOne());
     }
 
+    /**
+     * 카테고리별 게시글 단순 조회
+     */
+    public Page<PostListResponseDto> getPostList(String category, Pageable pageable) {
+        JPAQuery<Post> query = queryFactory
+                .selectFrom(post)
+                .join(post.user, user).fetchJoin()
+                .where(
+                        categoryEqual(category)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize());
+
+        List<PostListResponseDto> content = query.stream()
+                .map(p -> new PostListResponseDto(p, p.getComment().size(), p.getPostLike().size()))
+                .collect(Collectors.toList());
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(post.count())
+                .from(post)
+                .where();
+
+        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchOne());
+    }
+
     private BooleanExpression categoryEqual(String category) {
         if (!hasText(category.toString())) {
             return null;
