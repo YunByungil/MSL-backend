@@ -45,9 +45,10 @@
 ## 게시판 기능 목록
 <hr>
 
-- [ ] QueryDSL 이용해서 카테고리별로 게시글 조회 (상단 메뉴)
-- [x] 게시글 검색 기능 구현
+- [x] QueryDSL 이용해서 카테고리별로 게시글 조회 (상단 메뉴) PostSearchRepository#getPostList()
+- [x] 게시글 검색 기능 구현 PostSearchRepository#testV2
   - [ ] 댓글 검색했을 때, 게시글 여러개 나오는 거 프론트에서 어떻게 할지?
+  - [ ] 변수명, 서비스로 나누기 등 리팩토링 하기
 ## 댓글 기능 목록
 <hr>
 
