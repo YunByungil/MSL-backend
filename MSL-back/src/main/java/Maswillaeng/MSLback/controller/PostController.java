@@ -1,6 +1,7 @@
 package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.domain.entity.Post;
+import Maswillaeng.MSLback.domain.enums.Category;
 import Maswillaeng.MSLback.domain.repository.post.query.PostSearchRepository;
 import Maswillaeng.MSLback.domain.repository.post.query.PostTestRepository;
 import Maswillaeng.MSLback.dto.post.reponse.*;
@@ -111,6 +112,17 @@ public class PostController {
 //
 //        return new PostListResponse(dto.size(), HttpStatus.OK.value(), dto);
 //    }
+
+    /**
+     * 카테고리별 리스트 조회
+     */
+    @GetMapping("/post/list")
+    public PostListResponse getPostList(String category, Pageable pageable) {
+        System.out.println("category = " + category);
+        Page<PostListResponseDto> postList = postSearchRepository.getPostList(category, pageable);
+        return new PostListResponse(postList.getSize(), HttpStatus.OK.value(), postList);
+    }
+
 
     /**
      * 게시글 삭제
