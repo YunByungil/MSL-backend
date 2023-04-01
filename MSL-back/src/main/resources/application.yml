@@ -11,8 +11,8 @@ spring:
     properties:
       hibernate:
         #        show_sql: true
-        format_sql: true
-        default_batch_fetch_size: 1000
+#        format_sql: true
+#        default_batch_fetch_size: 1000
     open-in-view: false
 jwt:
   secret: hello
