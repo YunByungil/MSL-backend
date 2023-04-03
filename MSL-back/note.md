@@ -28,6 +28,7 @@
   - [x] Email 중복검사 api - UserService#checkEmailDuplicate()
   - [x] Nickname 중복검사 api - UserService#checkNicknameDuplicate()
   - [x] PhoneNumber 중복검사 api - UserService#checkPhoneNumberDuplicate()
+- [ ] S3 이미지 업로드 기능 구현
 <hr>
 
 ## 회원가입 예외 목록
