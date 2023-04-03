@@ -44,7 +44,7 @@ public class PostController {
         return ResponseEntity.ok().body(responseDto);
     }
 
-    @GetMapping("/{userId}/{page}")
+    @GetMapping("/posts/{userId}/{page}")
     public ResponseEntity<?> findPostsByUserId(@PathVariable Long userId, @PathVariable int page){
         Page<PostListResponseDto> postList = postService.findPostsByUserId(userId, page);
 
