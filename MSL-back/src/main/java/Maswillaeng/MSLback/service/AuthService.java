@@ -46,6 +46,7 @@ public class AuthService {
     public void join(UserJoinRequestDto requestDto) throws Exception {
         String encryptPw = aesEncryption.encrypt(requestDto.getPassword());
         User user = requestDto.toEntity(encryptPw);
+
         userRepository.save(user);
     }
 

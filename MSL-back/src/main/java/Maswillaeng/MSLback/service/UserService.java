@@ -44,10 +44,8 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    public Map<String,String> uploadUserImage(Long userId, MultipartFile imageFile) throws IOException {
+    public Map<String,String> uploadUserImage(MultipartFile imageFile) throws IOException {
         Map<String,String> image = postService.uploadImage(imageFile);
-        User user =userRepository.findById(userId).get();
-        user.updateProfileImage(image.get("img"));
 
         return image;
     }

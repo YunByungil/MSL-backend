@@ -42,8 +42,8 @@ public class UserController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<?> userImageUpdate(@AuthenticationPrincipal Long userId, @RequestParam("photo") MultipartFile imageFile) throws IOException {
+    public ResponseEntity<?> userImageUpdate(@RequestParam("photo") MultipartFile imageFile) throws IOException {
 
-        return ResponseEntity.ok().body(userService.uploadUserImage(userId, imageFile));
+        return ResponseEntity.ok().body(userService.uploadUserImage(imageFile));
     }
 }

@@ -24,7 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
     private final AuthenticationArgumentResolver authenticationArgumentResolver;
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) { //보안 정책
+    public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000", "http://localhost:8080")
                 .allowedHeaders("*")
@@ -34,20 +34,21 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(jwtTokenInterceptor)
+                .addPathPatterns("/api/**")
+                .excludePathPatterns("/api/user/upload", "/api/auth/**", "/api/post/posts/**");
+    }
+
+    @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(authenticationArgumentResolver);
     }
 
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(jwtTokenInterceptor)
-                .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/auth/**")
-                .excludePathPatterns("/api/post/posts/**");
-    }
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         Path path = Paths.get("MSL-back/src/main/upload/img/");
-        registry.addResourceHandler("/upload_img/**")
+        registry.addResourceHandler("/upload/**")
                 .addResourceLocations("file:"+ path.toAbsolutePath()+"/");
     }
 }
