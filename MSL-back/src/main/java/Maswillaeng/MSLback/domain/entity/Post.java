@@ -23,28 +23,33 @@ public class Post extends BaseTimeEntity{
     private String content;
     private String thumbnail;
 
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post",fetch = FetchType.LAZY)
     private List<Comment> commentList = new ArrayList<>();
 //    private Long viewCount;     //조회수
 //    private String delYn;       //삭제여부
 
     @Builder
-    public Post(String title, String content, String thumbnail, User user) {
+    public Post(String title, String content, String thumbnail, User user, Category category) {
         this.title = title;
         this.content = content;
         this.thumbnail = thumbnail;
         this.user = user;
+        this.category = category;
     }
 
     public void update(PostsUpdateRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.thumbnail= requestDto.getThumbnail();
+        this.category = requestDto.getCategory();
     }
 
 }
