@@ -3,6 +3,7 @@ package Maswillaeng.MSLback.service;
 import Maswillaeng.MSLback.Util.AESEncryption;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
+import Maswillaeng.MSLback.dto.auth.request.UserPasswordCheckRequestDto;
 import Maswillaeng.MSLback.dto.auth.response.TokenResponseDto;
 import Maswillaeng.MSLback.dto.auth.request.UserJoinRequestDto;
 import Maswillaeng.MSLback.dto.auth.request.UserLoginRequestDto;
@@ -46,7 +47,7 @@ public class AuthService {
 
     public TokenResponseDto login(UserLoginRequestDto requestDto) throws Exception {
         User user = userRepository.findByEmail(requestDto.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL입니다."));;
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL입니다."));
         String encryptPw = aesEncryption.encrypt(requestDto.getPassword());
 
         if (encryptPw.equals(user.getPassword())) {

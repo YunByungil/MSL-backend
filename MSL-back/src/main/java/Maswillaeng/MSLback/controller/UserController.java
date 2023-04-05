@@ -52,4 +52,10 @@ public class UserController {
 
         return ResponseEntity.ok().body(userService.uploadUserImage(imageFile));
     }
+
+    @PostMapping("/password")
+    public ResponseEntity<Object> checkPassword(@AuthenticationPrincipal Long userId, @RequestBody String password) throws Exception {
+        userService.checkPassword(userId, password);
+        return ResponseEntity.ok().build();
+    }
 }

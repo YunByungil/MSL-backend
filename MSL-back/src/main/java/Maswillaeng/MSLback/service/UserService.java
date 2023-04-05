@@ -1,7 +1,9 @@
 package Maswillaeng.MSLback.service;
 
+import Maswillaeng.MSLback.Util.AESEncryption;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
+import Maswillaeng.MSLback.dto.auth.request.UserPasswordCheckRequestDto;
 import Maswillaeng.MSLback.dto.user.reponse.UserResponseDto;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PostService postService;
+    private final AESEncryption aesEncryption;
 
 
 //    public List<User> findAllUsers(){
@@ -53,5 +56,16 @@ public class UserService {
         Map<String,String> image = postService.uploadImage(imageFile);
 
         return image;
+    }
+
+    public Boolean checkPassword(Long userId, String password) throws Exception {
+        User user = userRepository
+                .findById(userId).orElseThrow(() -> new IllegalArgumentException("user not found"));
+        String encryptPw = aesEncryption.encrypt(password);
+
+        if (encryptPw.equals(user.getPassword())) {
+            return true;
+        }
+        return false;
     }
 }
