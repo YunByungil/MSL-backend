@@ -10,6 +10,6 @@ import java.util.List;
 @Getter
 public enum Category {
     RECIPE,
-    ITEM,
+    COCKTAIL,
     ETC
 }
