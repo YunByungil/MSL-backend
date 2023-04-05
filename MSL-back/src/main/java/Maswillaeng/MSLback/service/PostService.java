@@ -66,7 +66,7 @@ public class PostService {
                 () -> new IllegalStateException("회원이 존재하지 않습니다. nickname=" + nickname));
 
         Pageable pageable = PageRequest.of(page, 8);
-        Page<Post> posts = postsRepository.findAllByNickname(nickname, pageable);
+        Page<Post> posts = postsRepository.findAllByUser_Nickname(nickname, pageable);
         List<PostListResponseDto> postList = posts.stream()
                 .map(PostListResponseDto::new)
                 .collect(Collectors.toList());
