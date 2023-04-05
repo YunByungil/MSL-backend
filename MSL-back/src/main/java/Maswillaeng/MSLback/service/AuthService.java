@@ -98,6 +98,7 @@ public class AuthService {
         user.updateRefreshToken(refreshToken);
 
         return TokenResponseDto.builder()
+                .userId(user.getId())
                 .accessToken(accessToken)
                 .tokenType(BEARER_PREFIX)
                 .expires_in(ACCESS_EXPIRE)

@@ -9,12 +9,13 @@ import static Maswillaeng.MSLback.Util.AuthConstants.ACCESS_EXPIRE;
 @Getter
 @NoArgsConstructor
 public class TokenResponseDto {
+        private Long userId;
         private String accessToken;
         private String tokenType;
         private Integer expires_in;
         private String refreshToken;
         @Builder
-        public TokenResponseDto(String accessToken, String tokenType, Integer expires_in, String refreshToken) {
+        public TokenResponseDto(Long userId, String accessToken, String tokenType, Integer expires_in, String refreshToken) {
                 this.accessToken = accessToken;
                 this.tokenType = tokenType;
                 this.expires_in = expires_in;
