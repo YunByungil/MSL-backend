@@ -51,6 +51,13 @@ public class PostController {
         return ResponseEntity.ok(postList);
     }
 
+    @GetMapping("/posts/{nickname}/{page}")
+    public ResponseEntity<?> findPostsByNickname(@PathVariable String nickname, @PathVariable int page){
+        Page<PostListResponseDto> postList = postService.findPostsByNickname(nickname, page);
+
+        return ResponseEntity.ok(postList);
+    }
+
     @PutMapping("/{postId}")
     public ResponseEntity<Object> updatePost(@PathVariable Long postId, @RequestBody PostsUpdateRequestDto requestDto) {
         postService.updatePost(postId, requestDto);

@@ -61,6 +61,18 @@ public class PostService {
         return new PageImpl<>(postList, pageable, posts.getTotalElements());
     }
 
+    public Page<PostListResponseDto> findPostsByNickname(String nickname, int page){
+        userRepository.findByNickname(nickname).orElseThrow(
+                () -> new IllegalStateException("회원이 존재하지 않습니다. nickname=" + nickname));
+
+        Pageable pageable = PageRequest.of(page, 8);
+        Page<Post> posts = postsRepository.findAllByNickname(nickname, pageable);
+        List<PostListResponseDto> postList = posts.stream()
+                .map(PostListResponseDto::new)
+                .collect(Collectors.toList());
+        return new PageImpl<>(postList, pageable, posts.getTotalElements());
+    }
+
     public Post getPostById(Long postId){
         Post post = postsRepository.findById(postId)
                 .orElseThrow(() -> new IllegalStateException("게시물이 존재하지 않습니다. id=" +  postId));
