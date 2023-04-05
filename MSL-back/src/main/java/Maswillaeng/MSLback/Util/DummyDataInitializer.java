@@ -1,5 +1,6 @@
 package Maswillaeng.MSLback.Util;
 
+import Maswillaeng.MSLback.domain.entity.Category;
 import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.entity.RoleType;
 import Maswillaeng.MSLback.domain.entity.User;
@@ -55,6 +56,7 @@ public class DummyDataInitializer implements CommandLineRunner {
             String title = "Post " + j + " title";
             String content = "Post " + j + " content";
             String thumbnail = "/upload_img/964929d0-7006-4ee5-a914-15faef6dd3f7_186bac28f874c1ca8.jpeg";
+            Category category = Category.values()[j%3];
 
             if (j>50){
                 j = j/10;
@@ -66,6 +68,7 @@ public class DummyDataInitializer implements CommandLineRunner {
                     .content(content)
                     .thumbnail(thumbnail)
                     .user(user)
+                    .category(category)
                     .build();
 
             postRepository.save(post);
