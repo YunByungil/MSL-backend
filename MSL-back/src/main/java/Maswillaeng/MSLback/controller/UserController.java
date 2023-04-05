@@ -28,6 +28,12 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
+    @GetMapping("/{nickname}")
+    public ResponseEntity<UserResponseDto> findByNickname(@PathVariable String nickname){
+        UserResponseDto userDto = userService.findByNickname(nickname);
+        return ResponseEntity.ok(userDto);
+    }
+
     @PutMapping
     public ResponseEntity<Object> updateUser(@AuthenticationPrincipal Long userId, @RequestBody UserUpdateRequestDto requestDto) {
         userService.updateUser(userId, requestDto);

@@ -34,6 +34,11 @@ public class UserService {
         return UserResponseDto.builder().user(user).build();
     }
 
+    public UserResponseDto findByNickname(String nickname) {
+        User user = userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return UserResponseDto.builder().user(user).build();
+    }
     public void updateUser(Long userId, UserUpdateRequestDto requestDto) {
         User user = userRepository.findById(userId).get();
         user.update(requestDto);

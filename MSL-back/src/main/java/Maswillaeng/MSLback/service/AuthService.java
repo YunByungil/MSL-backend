@@ -1,23 +1,17 @@
 package Maswillaeng.MSLback.service;
 
 import Maswillaeng.MSLback.Util.AESEncryption;
-import Maswillaeng.MSLback.Util.HeaderUtils;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
-import Maswillaeng.MSLback.dto.auth.request.UserTokenRequestDto;
 import Maswillaeng.MSLback.dto.auth.response.TokenResponseDto;
 import Maswillaeng.MSLback.dto.auth.request.UserJoinRequestDto;
 import Maswillaeng.MSLback.dto.auth.request.UserLoginRequestDto;
 import Maswillaeng.MSLback.Util.TokenProvider;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletRequest;
 
 import static Maswillaeng.MSLback.Util.AuthConstants.ACCESS_EXPIRE;
 import static Maswillaeng.MSLback.Util.AuthConstants.BEARER_PREFIX;
