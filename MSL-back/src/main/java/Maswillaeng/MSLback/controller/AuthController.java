@@ -1,6 +1,7 @@
 package Maswillaeng.MSLback.controller;
 
 
+import Maswillaeng.MSLback.Util.AuthenticationPrincipal;
 import Maswillaeng.MSLback.dto.auth.response.TokenResponseDto;
 import Maswillaeng.MSLback.dto.auth.request.UserJoinRequestDto;
 import Maswillaeng.MSLback.dto.auth.request.UserLoginRequestDto;

@@ -16,6 +16,7 @@ public class TokenResponseDto {
         private String refreshToken;
         @Builder
         public TokenResponseDto(Long userId, String accessToken, String tokenType, Integer expires_in, String refreshToken) {
+                this.userId = userId;
                 this.accessToken = accessToken;
                 this.tokenType = tokenType;
                 this.expires_in = expires_in;
