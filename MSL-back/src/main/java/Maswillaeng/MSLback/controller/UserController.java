@@ -28,8 +28,8 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-    @GetMapping("/{nickname}")
-    public ResponseEntity<UserResponseDto> findByNickname(@PathVariable String nickname){
+    @GetMapping("/nickname")
+    public ResponseEntity<UserResponseDto> findByNickname(@RequestParam("nickname") String nickname){
         UserResponseDto userDto = userService.findByNickname(nickname);
         return ResponseEntity.ok(userDto);
     }

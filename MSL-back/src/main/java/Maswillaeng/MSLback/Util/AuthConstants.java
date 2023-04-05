@@ -11,6 +11,6 @@ public class AuthConstants {
 	public final static String PROFILE = "profile";
 	public final static String ACCESS_TOKEN = "accessToken";
 	public static final String TOKEN_REGEX = "\\.";
-	public static final Integer ACCESS_EXPIRE = 1 * 1000 * 60 * 60 * 24; // 1일
+	public static final Integer ACCESS_EXPIRE = 15 * 1000 * 60 * 60 * 24; // 1일
 	public static final Integer REFRESH_EXPIRE = 15 * 1000 * 60 * 60 * 24; // 15일
 }
