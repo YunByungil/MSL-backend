@@ -74,6 +74,10 @@ public class User extends BaseEntity{
         this.refresh_token = refreshToken;
     }
 
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
+
     public void deleteRefreshToken() {
         this.refresh_token = null;
     }
