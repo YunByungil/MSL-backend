@@ -17,6 +17,7 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
+aws.yml
 ### IntelliJ IDEA ###
 .yml
 .idea
