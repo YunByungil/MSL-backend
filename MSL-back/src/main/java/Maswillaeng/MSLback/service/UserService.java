@@ -57,15 +57,4 @@ public class UserService {
 
         return image;
     }
-
-    public Boolean checkPassword(Long userId, String password) throws Exception {
-        User user = userRepository
-                .findById(userId).orElseThrow(() -> new IllegalArgumentException("user not found"));
-        String encryptPw = aesEncryption.encrypt(password);
-
-        if (encryptPw.equals(user.getPassword())) {
-            return true;
-        }
-        return false;
-    }
 }

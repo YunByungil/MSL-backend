@@ -71,4 +71,10 @@ public class AuthController {
             return ResponseEntity.ok().build();
         }
     }
+
+    @PostMapping("/password")
+    public ResponseEntity<?> checkPassword(@AuthenticationPrincipal Long userId, @RequestBody String password) throws Exception {
+        boolean checkPw =  authService.checkPassword(userId, password);
+        return ResponseEntity.ok().body(checkPw);
+    }
 }

@@ -1,8 +1,6 @@
 package Maswillaeng.MSLback.controller;
 
 import Maswillaeng.MSLback.Util.AuthenticationPrincipal;
-import Maswillaeng.MSLback.domain.entity.User;
-import Maswillaeng.MSLback.dto.post.response.PostListResponseDto;
 import Maswillaeng.MSLback.dto.user.reponse.UserResponseDto;
 import Maswillaeng.MSLback.dto.user.request.UserUpdateRequestDto;
 import Maswillaeng.MSLback.service.UserService;
@@ -12,10 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/user")
@@ -51,11 +45,5 @@ public class UserController {
     public ResponseEntity<?> userImageUpdate(@RequestParam("photo") MultipartFile imageFile) throws IOException {
 
         return ResponseEntity.ok().body(userService.uploadUserImage(imageFile));
-    }
-
-    @PostMapping("/password")
-    public ResponseEntity<?> checkPassword(@AuthenticationPrincipal Long userId, @RequestBody String password) throws Exception {
-        boolean checkPw =  userService.checkPassword(userId, password);
-        return ResponseEntity.ok().body(checkPw);
     }
 }
