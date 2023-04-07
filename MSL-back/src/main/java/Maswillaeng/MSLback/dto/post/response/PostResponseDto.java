@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 public class PostResponseDto {
     private Long Id;
+    private String nickname;
     private String thumbnail;
     private String title;
     private String content;
@@ -19,6 +20,7 @@ public class PostResponseDto {
 
     public PostResponseDto(Post entity) {
         this.Id = entity.getId();
+        this.nickname = entity.getUser().getNickname();
         this.thumbnail = entity.getThumbnail();
         this.title = entity.getTitle();
         this.content = entity.getContent();

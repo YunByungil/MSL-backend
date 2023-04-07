@@ -3,6 +3,7 @@ package Maswillaeng.MSLback.service;
 import Maswillaeng.MSLback.Util.PasswordEncoder;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
+import Maswillaeng.MSLback.dto.auth.request.UserPasswordCheckRequestDto;
 import Maswillaeng.MSLback.dto.auth.response.TokenResponseDto;
 import Maswillaeng.MSLback.dto.auth.request.UserJoinRequestDto;
 import Maswillaeng.MSLback.dto.auth.request.UserLoginRequestDto;
@@ -48,21 +49,15 @@ public class AuthService {
         User user = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL입니다."));
         String encryptPw = encryptPassword(requestDto.getPassword());
-        System.out.println("user.getId() = " + user.getId());
-        System.out.println("encryptPw = " + encryptPw);
-        System.out.println("user.getPassword() = " + user.getPassword());
         if (encryptPw.equals(user.getPassword())) {
             return createToken(user);
         } else throw new IllegalAccessException("비밀번호가 일치하지 않습니다.");
     }
 
-    public Boolean checkPassword(Long userId, String password) throws Exception {
+    public Boolean checkPassword(Long userId, UserPasswordCheckRequestDto requestDto) throws Exception {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("user not found"));
-        String encryptPw = encryptPassword(password);
-        System.out.println("user.getId() = " + user.getId());
-        System.out.println("encryptPw = " + encryptPw);
-        System.out.println("user.getPassword() = " + user.getPassword());
+        String encryptPw = encryptPassword(requestDto.getPassword());
         if (encryptPw.equals(user.getPassword())) {
             return true;
         }

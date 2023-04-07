@@ -2,6 +2,7 @@ package Maswillaeng.MSLback.controller;
 
 
 import Maswillaeng.MSLback.Util.AuthenticationPrincipal;
+import Maswillaeng.MSLback.dto.auth.request.UserPasswordCheckRequestDto;
 import Maswillaeng.MSLback.dto.auth.response.TokenResponseDto;
 import Maswillaeng.MSLback.dto.auth.request.UserJoinRequestDto;
 import Maswillaeng.MSLback.dto.auth.request.UserLoginRequestDto;
@@ -73,8 +74,8 @@ public class AuthController {
     }
 
     @PostMapping("/password")
-    public ResponseEntity<?> checkPassword(@AuthenticationPrincipal Long userId, @RequestBody String password) throws Exception {
-        boolean checkPw =  authService.checkPassword(userId, password);
+    public ResponseEntity<?> checkPassword(@AuthenticationPrincipal Long userId, @RequestBody UserPasswordCheckRequestDto requestDto) throws Exception {
+        boolean checkPw =  authService.checkPassword(userId, requestDto);
         return ResponseEntity.ok().body(checkPw);
     }
 }
