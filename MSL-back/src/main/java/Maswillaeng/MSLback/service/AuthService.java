@@ -1,6 +1,5 @@
 package Maswillaeng.MSLback.service;
 
-import Maswillaeng.MSLback.Util.AESEncryption;
 import Maswillaeng.MSLback.Util.PasswordEncoder;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
@@ -23,7 +22,6 @@ import static Maswillaeng.MSLback.Util.AuthConstants.BEARER_PREFIX;
 @Transactional //하나하나 지정하기
 public class AuthService {
     private final UserRepository userRepository;
-    private final AESEncryption aesEncryption;
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
 
@@ -50,7 +48,7 @@ public class AuthService {
         User user = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL입니다."));
         String encryptPw = encryptPassword(requestDto.getPassword());
-
+        System.out.println("user.getId() = " + user.getId());
         System.out.println("encryptPw = " + encryptPw);
         System.out.println("user.getPassword() = " + user.getPassword());
         if (encryptPw.equals(user.getPassword())) {
@@ -58,6 +56,19 @@ public class AuthService {
         } else throw new IllegalAccessException("비밀번호가 일치하지 않습니다.");
     }
 
+    public Boolean checkPassword(Long userId, String password) throws Exception {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("user not found"));
+        String encryptPw = encryptPassword(password);
+        System.out.println("user.getId() = " + user.getId());
+        System.out.println("encryptPw = " + encryptPw);
+        System.out.println("user.getPassword() = " + user.getPassword());
+        if (encryptPw.equals(user.getPassword())) {
+            return true;
+        }
+        return false;
+//        else throw new IllegalAccessException("비밀번호가 일치하지 않습니다.");
+    }
     public void logout(Long userId){
         User user = userRepository.findById(userId).get();
         user.deleteRefreshToken();
@@ -109,17 +120,7 @@ public class AuthService {
         return tokenProvider.createRefreshToken(user);
     }
 
-    public Boolean checkPassword(Long userId, String password) throws Exception {
-        User user = userRepository
-                .findById(userId).orElseThrow(() -> new IllegalArgumentException("user not found"));
-        String encryptPw = encryptPassword(password);
-        System.out.println("encryptPw = " + encryptPw);
-        System.out.println("user.getPassword() = " + user.getPassword());
-        if (encryptPw.equals(user.getPassword())) {
-            return true;
-        }
-        else throw new IllegalAccessException("비밀번호가 일치하지 않습니다.");
-    }
+
 
     public String encryptPassword(String password) throws Exception {
         return passwordEncoder.encode(password);

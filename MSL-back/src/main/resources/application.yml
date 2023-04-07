@@ -22,3 +22,6 @@ spring:
 
 secret:
   key: "6e5162b6d720e12d29458c2d2977be26"
+
+security:
+  salt: maswillaengproject

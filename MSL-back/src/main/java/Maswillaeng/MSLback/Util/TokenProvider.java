@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
 
 import javax.annotation.PostConstruct;
-import java.util.Base64;
 import java.util.Date;
 
 import static Maswillaeng.MSLback.Util.AuthConstants.*;

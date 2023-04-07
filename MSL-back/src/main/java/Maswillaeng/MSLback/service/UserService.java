@@ -1,6 +1,5 @@
 package Maswillaeng.MSLback.service;
 
-import Maswillaeng.MSLback.Util.AESEncryption;
 import Maswillaeng.MSLback.domain.entity.User;
 import Maswillaeng.MSLback.domain.repository.UserRepository;
 import Maswillaeng.MSLback.dto.auth.request.UserPasswordCheckRequestDto;
@@ -23,7 +22,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PostService postService;
-    private final AESEncryption aesEncryption;
 
 
 //    public List<User> findAllUsers(){
