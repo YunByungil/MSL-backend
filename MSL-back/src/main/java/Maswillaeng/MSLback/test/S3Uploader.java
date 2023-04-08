@@ -1,5 +1,7 @@
 package Maswillaeng.MSLback.test;
 
+import Maswillaeng.MSLback.domain.entity.User;
+import Maswillaeng.MSLback.service.UserService;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -23,22 +25,26 @@ import java.util.UUID;
 public class S3Uploader {
 
     private final AmazonS3Client amazonS3Client;
+    private final UserService userService;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String upload(MultipartFile multipartFile, String dirName) throws IOException {
+    public String upload(MultipartFile multipartFile, String dirName, Long userId) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalStateException("Multipart -> File 전환 실패"));
 
-        return upload(uploadFile, dirName);
+        return upload(uploadFile, dirName, userId);
     }
 
-    private String upload(File uploadFile, String dirName) {
+    private String upload(File uploadFile, String dirName, Long userId) {
         System.out.println("dirName = " + dirName);
         UUID uuid = UUID.randomUUID();
         String fileName = dirName + "/" + uuid.toString() + "_" + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
+        
+        User findUser = userService.findOne(userId);
+        findUser.setUserImage(uploadImageUrl);
         removeNewFile(uploadFile);
         return uploadImageUrl;
     }
