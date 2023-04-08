@@ -33,12 +33,12 @@ public class WebConfig implements WebMvcConfigurer {
                 .maxAge(3600);
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(jwtTokenInterceptor).excludePathPatterns("/api/**");
-//                .addPathPatterns("/api/**")
-//                .excludePathPatterns("/api/user/upload", "/api/auth/**", "/api/post/posts/**");
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(jwtTokenInterceptor).excludePathPatterns("/api/**");
+////                .addPathPatterns("/api/**")
+////                .excludePathPatterns("/api/user/upload", "/api/auth/**", "/api/post/posts/**");
+//    }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {

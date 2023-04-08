@@ -12,16 +12,23 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
+
 
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
         show_sql: true
         format_sql: true
+        default_batch_fetch_size: 100
 
 secret:
   key: "6e5162b6d720e12d29458c2d2977be26"
 
 security:
   salt: maswillaengproject
+
+
+logging:
+  level:
+    sql: debug

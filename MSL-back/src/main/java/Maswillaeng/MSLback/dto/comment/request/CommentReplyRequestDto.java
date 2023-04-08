@@ -9,17 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class CommentReplyRequestDto {
-    private User user;
-    private Post post;
+    private Long parentId;
     private String content;
-    private Comment comment;
-
-    public Comment toEntity(Post post, User user, Comment comment) {
-        return Comment.builder()
-                .user(user)
-                .post(post)
-                .content(content)
-                .parent(comment)
-                .build();
-    }
 }

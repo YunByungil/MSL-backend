@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class CommentUpdateRequestDto {
-
-    private Comment comment;
-    private Post post;
+    private Long commentId;
     private String content;
 }

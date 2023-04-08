@@ -31,12 +31,12 @@ public class PostController {
         return ResponseEntity.ok().body(postId);
     }
 
-
     @GetMapping("/posts/{page}")
     public ResponseEntity<?> getAllPosts(@PathVariable int page) {
         Page<PostListResponseDto> postList = postService.getAllPosts(page);
         return ResponseEntity.ok(postList);
     }
+
     @GetMapping("/{postId}")
     public ResponseEntity<PostResponseDto> getPostById(@PathVariable Long postId) {
         Post post = postService.getPostById(postId);

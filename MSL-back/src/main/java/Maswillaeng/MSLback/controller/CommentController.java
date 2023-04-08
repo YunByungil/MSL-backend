@@ -1,51 +1,53 @@
 package Maswillaeng.MSLback.controller;
 
-import Maswillaeng.MSLback.domain.entity.Post;
+import Maswillaeng.MSLback.Util.AuthenticationPrincipal;
+import Maswillaeng.MSLback.domain.entity.Comment;
 import Maswillaeng.MSLback.dto.comment.request.CommentReplyRequestDto;
-import Maswillaeng.MSLback.dto.comment.request.CommentRequestDto;
+import Maswillaeng.MSLback.dto.comment.request.CommentSaveRequestDto;
 import Maswillaeng.MSLback.dto.comment.request.CommentUpdateRequestDto;
-import Maswillaeng.MSLback.dto.post.request.PostsSaveRequestDto;
-import Maswillaeng.MSLback.dto.post.request.PostsUpdateRequestDto;
+import Maswillaeng.MSLback.dto.comment.response.CommentResponseDto;
 import Maswillaeng.MSLback.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
-@RestController("/api/{postId}/comment")
+@RestController
+@RequestMapping("/api/comment")
 public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity saveComment(@PathVariable("postId") Long postId,
-                                      @RequestBody CommentRequestDto requestDto) {
-        commentService.saveComment(requestDto);
+    public ResponseEntity saveComment(@AuthenticationPrincipal Long userId, @RequestBody CommentSaveRequestDto requestDto) {
+        commentService.saveComment(userId, requestDto);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{commentId}")
-    public ResponseEntity saveReply(@PathVariable("postId") Long postId,
-                                    @PathVariable("commentId") Long commentId,
-                                    @RequestBody CommentReplyRequestDto requestDto) {
-        commentService.saveReply(postId, commentId, requestDto);
+    @PostMapping("/reply")
+    public ResponseEntity saveReply(@AuthenticationPrincipal Long userId, @RequestBody CommentReplyRequestDto requestDto) {
+        commentService.saveReply(userId, requestDto);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{commentId}")
-    public ResponseEntity updateComment(@PathVariable("postId") Long postId,
-                                        @PathVariable("commentId") Long commentId,
-                                        @RequestBody CommentUpdateRequestDto requestDto) {
-        commentService.updateComment(postId, commentId, requestDto);
+    @PutMapping
+    public ResponseEntity updateComment(@AuthenticationPrincipal Long userId, @RequestBody CommentUpdateRequestDto requestDto) throws AccessDeniedException {
+        commentService.updateComment(userId, requestDto);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity deleteComment(@PathVariable("commentId") Long commentId) {
-        commentService.deleteComment(commentId);
+    public ResponseEntity deleteComment(@AuthenticationPrincipal Long userId, @PathVariable("commentId") Long commentId) throws AccessDeniedException {
+        commentService.deleteComment(userId, commentId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/reply/{parentId}")
+    public ResponseEntity<?> findAllReplies(@PathVariable Long parentId) {
+        List<CommentResponseDto> findAllReply = commentService.findAllReplies(parentId);
+        return ResponseEntity.ok().body(findAllReply);
     }
 }
