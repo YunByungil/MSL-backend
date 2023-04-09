@@ -30,6 +30,9 @@ public class Post extends BaseTimeEntity{
     private User user;
     @OneToMany(mappedBy = "post",fetch = FetchType.LAZY)
     private List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post",fetch = FetchType.LAZY)
+    private List<Like> likeList = new ArrayList<>();
 //    private Long viewCount;     //조회수
 //    private String delYn;       //삭제여부
 
