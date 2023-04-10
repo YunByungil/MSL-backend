@@ -14,7 +14,7 @@ FROM openjdk:11.0-slim
 WORKDIR /app
 
 # 빌더 이미지에서 jar 파일만 복사
-COPY --from=builder /build/build/libs/Maswillaeng-0.0.1-SNAPSHOT.jar .
+COPY --from=builder /build/build/libs/MSL-back-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 8080
 
@@ -25,5 +25,5 @@ ENTRYPOINT [                                                \
    "-jar",                                                 \
    "-Djava.security.egd=file:/dev/./urandom",              \
    "-Dsun.net.inetaddr.ttl=0",                             \
-   "Maswillaeng-0.0.1-SNAPSHOT.jar"              \
+   "MSL-back-0.0.1-SNAPSHOT.jar"              \
 ]
