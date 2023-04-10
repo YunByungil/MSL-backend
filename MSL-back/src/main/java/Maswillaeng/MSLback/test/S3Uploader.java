@@ -48,8 +48,6 @@ public class S3Uploader {
         String fileName = dirName + "/" + uuid.toString() + "_" + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
         
-        User findUser = userService.findOne(userId);
-        findUser.setUserImage(uploadImageUrl);
         removeNewFile(uploadFile);
         return uploadImageUrl;
     }
