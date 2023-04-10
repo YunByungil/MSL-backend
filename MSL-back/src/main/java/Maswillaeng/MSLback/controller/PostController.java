@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -123,6 +124,16 @@ public class PostController {
     public PostListResponse getPostList(String category, Pageable pageable) {
         System.out.println("category = " + category);
         Page<PostListResponseDto> postList = postSearchRepository.getPostList(category, pageable);
+        return new PostListResponse(postList.getSize(), HttpStatus.OK.value(), postList);
+    }
+    /*
+    테스트
+    카테고리별 리스트 조회 Slice 방식
+     */
+    @GetMapping("/post/list2")
+    public PostListResponse sliceList(String category, Pageable pageable) {
+        System.out.println("category = " + category);
+        Slice<PostListResponseDto> postList = postSearchRepository.sliceList(category, pageable);
         return new PostListResponse(postList.getSize(), HttpStatus.OK.value(), postList);
     }
 

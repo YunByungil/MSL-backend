@@ -11,6 +11,8 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -97,6 +99,36 @@ public class PostSearchRepository {
                 .where();
 
         return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchOne());
+    }
+    /*
+    테스트
+     */
+    public Slice<PostListResponseDto> sliceList(String category, Pageable pageable) {
+        JPAQuery<Post> query = queryFactory
+                .selectFrom(post)
+                .join(post.user, user).fetchJoin()
+                .where(
+                        categoryEqual(category)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1);
+
+        List<PostListResponseDto> content = query.stream()
+                .map(p -> new PostListResponseDto(p, p.getComment().size(), p.getPostLike().size()))
+                .collect(Collectors.toList());
+
+        boolean hasNext = false;
+        if (content.size() > pageable.getPageSize()) {
+            content.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+        JPAQuery<Long> countQuery = queryFactory
+                .select(post.count())
+                .from(post)
+                .where();
+
+//        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchOne());
+        return new SliceImpl<>(content, pageable, hasNext);
     }
 
     private BooleanExpression categoryEqual(String category) {
