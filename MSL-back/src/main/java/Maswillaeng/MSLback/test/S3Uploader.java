@@ -1,6 +1,8 @@
 package Maswillaeng.MSLback.test;
 
+import Maswillaeng.MSLback.domain.entity.Post;
 import Maswillaeng.MSLback.domain.entity.User;
+import Maswillaeng.MSLback.service.PostService;
 import Maswillaeng.MSLback.service.UserService;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -15,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,6 +30,7 @@ public class S3Uploader {
 
     private final AmazonS3Client amazonS3Client;
     private final UserService userService;
+    private final PostService postService;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -73,6 +78,35 @@ public class S3Uploader {
         }
 
         return Optional.empty();
+    }
+    /*
+    여기부터 테스트 다중 파일
+     */
+    public List<String> upload2(List<MultipartFile> multipartFile, String dirName, Long userId) throws IOException {
+        List<String> list = new ArrayList<>();
+        if (!multipartFile.isEmpty()) {
+            for (MultipartFile file : multipartFile) {
+                File uploadFile = convert(file)
+                        .orElseThrow(() -> new IllegalStateException("Multipart -> File 전환 실패"));
+                list.add(upload2(uploadFile, dirName, userId));
+            }
+        }
+        User user = userService.findOne(userId);
+        TestDto dto = new TestDto();
+        Post post = dto.toEntity(user);
+        return list;
+    }
+
+    private String upload2(File uploadFile, String dirName, Long userId) {
+        System.out.println("dirName = " + dirName);
+        UUID uuid = UUID.randomUUID();
+        String fileName = dirName + "/" + uuid.toString() + "_" + uploadFile.getName();
+        String uploadImageUrl = putS3(uploadFile, fileName);
+        System.out.println("uploadImageUrl = " + uploadImageUrl);
+//        User findUser = userService.findOne(userId);
+//        findUser.setUserImage(uploadImageUrl);
+        removeNewFile(uploadFile);
+        return uploadImageUrl;
     }
 }
 

@@ -42,6 +42,21 @@ public class Post extends BaseEntity{
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<HashTag> hashTag = new ArrayList<>();
+    /*
+    테스트
+     */
+//    private List<String> image = new ArrayList<>();
+//    @Builder
+//    public Post(User user, String thumbnail, String title, String content, Category category, List<String> list) {
+//        this.user = user;
+//        this.thumbnail = thumbnail;
+//        this.title = title;
+//        this.content = content;
+//        this.hits = 0L;
+//        this.report = 0;
+//        this.category = category;
+//        this.image = list;
+//    }
 
     @Builder
     public Post(User user, String thumbnail, String title, String content, Category category) {

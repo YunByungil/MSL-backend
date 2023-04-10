@@ -49,6 +49,9 @@ public class PostController {
         Long id = Long.parseLong(authentication.getName());
         log.info("content = {}", postRequestDto.getContent());
         postService.addPost(id, postRequestDto);
+        /*
+        테스트
+         */
 
         return new PostResponse(HttpStatus.OK.value());
     }
